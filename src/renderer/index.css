@@ -1,0 +1,380 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+@config "../../tailwind.config.js";
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+@layer base {
+  :root {
+    /* Premium Surface Palette: Light Mode */
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    /* Rose/Champagne Gold Primary */
+    --primary: 35 45% 45%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Sidebar: Deep Navy Luxe */
+    --sidebar-bg: 224 71% 4%;
+    --sidebar-text: 215 20% 80%;
+    --sidebar-hover: 224 59% 10%;
+    --sidebar-border: 224 59% 2%;
+    
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 222 47% 11%;
+    
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 16% 47%;
+    
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222 47% 11%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 20% 98%;
+    
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 35 45% 45%;
+    
+    --radius: 8px; /* Standardized Windows 11 roundedness */
+  }
+
+  .dark {
+    /* Premium Surface Palette: Dark Mode */
+    --background: 224 71% 4%;
+    --foreground: 210 20% 98%;
+    
+    --card: 222 47% 7%;
+    --card-foreground: 210 20% 98%;
+    
+    --popover: 222 47% 7%;
+    --popover-foreground: 210 20% 98%;
+    
+    --primary: 38 55% 65%; /* Soft Champagne Gold */
+    --primary-foreground: 222 47% 11%;
+    
+    --secondary: 222 47% 15%;
+    --secondary-foreground: 210 20% 98%;
+    
+    --muted: 222 47% 15%;
+    --muted-foreground: 217 10% 65%;
+    
+    --accent: 222 47% 15%;
+    --accent-foreground: 210 20% 98%;
+    
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 20% 98%;
+    
+    --border: 217 33% 12%;
+    --input: 217 33% 12%;
+    --ring: 38 55% 65%;
+
+    --sidebar-bg: 224 71% 2%;
+    --sidebar-text: 215 20% 75%;
+    --sidebar-hover: 222 47% 8%;
+    --sidebar-border: 222 47% 1%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Redesigned Form Elements: Modern Desktop Height & Depth */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  background-color: hsl(var(--card));
+  border: 1.5px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  border-radius: var(--radius);
+  font-size: 13px;
+  padding: 6px 12px;
+  height: 32px; /* Redesigned for standard desktop ergonomics */
+  line-height: 1.5;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+select option {
+  background-color: hsl(var(--card));
+  color: hsl(var(--foreground));
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15);
+}
+
+input[type="text"]:disabled,
+input[type="number"]:disabled,
+input[type="date"]:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.5;
+  background-color: hsl(var(--muted) / 0.5);
+  cursor: not-allowed;
+  border-style: dashed;
+}
+
+/* Custom Scrollbar Styles: Minimalist Windows 11 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--foreground) / 0.1);
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--foreground) / 0.2);
+}
+
+/* Premium Keyboard Shortcuts Display */
+.keyboard-key {
+  border: 1px solid hsl(var(--border));
+  background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--secondary) / 0.5) 100%);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: hsl(var(--foreground) / 0.8);
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.font-luxury {
+  font-family: 'Cinzel', serif;
+}
+
+.font-data {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Dropdown Menu styling for Desktop Top Bar */
+.menu-dropdown {
+  position: relative;
+}
+
+.menu-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  border-radius: var(--radius);
+  padding: 6px;
+  margin-top: 4px;
+  backdrop-filter: blur(8px);
+}
+
+.menu-dropdown:hover .menu-dropdown-content {
+  display: block;
+}
+
+.menu-dropdown-item {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  border-radius: calc(var(--radius) - 2px);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-dropdown-item:hover {
+  background-color: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+}
+
+.menu-divider {
+  height: 1px;
+  background-color: hsl(var(--border));
+  margin: 6px 4px;
+}
+
+/* Redesigned ERP Table: Scan-first High Density */
+.erp-table-container {
+  @apply rounded-lg border border-border bg-card overflow-hidden;
+}
+
+.ag-grid-dense-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.ag-grid-dense-table th {
+  @apply bg-slate-50/50 dark:bg-slate-900/50 text-foreground/75 font-semibold;
+  border-bottom: 1px solid hsl(var(--border));
+  padding: 10px 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+}
+
+.ag-grid-dense-table td {
+  border-bottom: 0.5px solid hsl(var(--border) / 0.5);
+  padding: 8px 16px;
+  vertical-align: middle;
+  color: hsl(var(--foreground));
+  transition: all 0.1s ease;
+}
+
+.ag-grid-dense-table tr:last-child td {
+  border-bottom: none;
+}
+
+.ag-grid-dense-table tr:hover td {
+  background-color: hsl(var(--primary) / 0.03);
+}
+
+.ag-grid-dense-table tr.selected td {
+  background-color: hsl(var(--primary) / 0.08);
+  @apply font-semibold;
+}
+
+/* Modern ERP Typography Utilities */
+.erp-label {
+  @apply text-xxs font-bold text-muted-foreground uppercase tracking-wider mb-1.5 block;
+}
+
+.erp-input {
+  background-color: hsl(var(--card));
+  border: 1.5px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  border-radius: var(--radius);
+  font-size: 13px;
+  padding: 6px 12px;
+  height: 32px;
+  line-height: 1.5;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.erp-input:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15);
+}
+
+.erp-input-dense {
+  height: 28px !important;
+  padding: 2px 8px !important;
+  font-size: 11px !important;
+}
+
+/* Smooth Interactive Elements */
+button, a, input, select, textarea, tr {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Premium Surface Shadows */
+.surface-premium {
+  @apply bg-card border border-border shadow-premium rounded-lg;
+}
+
+.surface-elevated {
+  @apply bg-card border border-border shadow-elevated rounded-xl;
+}
+
+.no-print {
+  @media print {
+    display: none !important;
+  }
+}
+
+/* Print Media Styles for Jewellery Tag Labels & Stickers */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  /* Suppress browser headers, footers and margins */
+  @page {
+    margin: 0 !important;
+    size: auto;
+  }
+
+  /* Jewellery Tag layout styles */
+  .jewellery-tag-container {
+    width: 90mm;
+    height: 12mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+    page-break-inside: avoid;
+    background: white;
+  }
+
+  .jewellery-tag-left-flap {
+    width: 42mm;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px dashed #ccc;
+  }
+
+  .jewellery-tag-right-flap {
+    width: 42mm;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Hide everything else during printing if printing in Tag Mode */
+  body.print-tag-mode .no-print {
+    display: none !important;
+  }
+}
