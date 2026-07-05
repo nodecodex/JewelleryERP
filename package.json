@@ -1,14 +1,38 @@
 {
   "name": "temp-app",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Jewellery ERP System",
+  "author": "Antigravity",
   "type": "module",
   "main": "dist/main/index.js",
   "scripts": {
     "dev": "node scripts/start.js",
-    "build": "tsc -p tsconfig.electron.json && vite build",
+    "build": "vite build && tsc -p tsconfig.electron.json",
+    "dist": "npm run build && electron-builder",
     "lint": "eslint .",
     "preview": "vite preview"
+  },
+  "build": {
+    "appId": "com.jewelleryerp.app",
+    "productName": "Jewellery ERP",
+    "directories": {
+      "output": "C:/Users/jagji/Desktop/JewelleryERP_Build"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "type": "commonjs"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "dependencies": {
     "better-sqlite3": "^12.10.0",
@@ -29,6 +53,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.5.0",
     "electron": "^31.0.0",
+    "electron-builder": "^26.15.3",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
