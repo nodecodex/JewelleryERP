@@ -12,6 +12,45 @@ export default function App() {
 
   useEffect(() => {
     checkLicense();
+
+    const unsubscribe = (window as any).api.onLicenseInvalidated?.(() => {
+      setLicense({ activated: false, statusMessage: 'License was revoked or suspended by Administrator.' });
+    });
+
+    // Global restrictions for all number inputs
+    const handleNumberInputRestrictions = (e: KeyboardEvent) => {
+      const target = e.target as HTMLInputElement;
+      if (target && target.tagName === 'INPUT' && target.type === 'number') {
+        if (['-', '+', 'e', 'E'].includes(e.key)) {
+          e.preventDefault();
+        }
+        if (e.key === 'ArrowDown') {
+          const val = parseFloat(target.value);
+          if (isNaN(val) || val <= 0) {
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    const handleNumberPaste = (e: ClipboardEvent) => {
+      const target = e.target as HTMLInputElement;
+      if (target && target.tagName === 'INPUT' && target.type === 'number') {
+        const pastedData = e.clipboardData?.getData('text');
+        if (pastedData && (pastedData.includes('-') || pastedData.includes('+') || pastedData.toLowerCase().includes('e'))) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleNumberInputRestrictions);
+    document.addEventListener('paste', handleNumberPaste);
+
+    return () => {
+      unsubscribe?.();
+      document.removeEventListener('keydown', handleNumberInputRestrictions);
+      document.removeEventListener('paste', handleNumberPaste);
+    };
   }, []);
 
   const checkLicense = async () => {
@@ -39,8 +78,8 @@ export default function App() {
     );
   }
 
-  // Force licensing screen if not activated
-  if (!license || !license.activated) {
+  // Force licensing screen if not activated and not in active trial
+  if (!license || (!license.activated && !license.isTrialActive)) {
     return (
       <div className="h-screen bg-background text-foreground flex items-center justify-center p-4 select-none transition-colors duration-200">
         <div className="w-full max-w-lg bg-card border border-border rounded-lg overflow-hidden shadow-premium">

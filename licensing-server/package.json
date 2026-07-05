@@ -1,0 +1,33 @@
+{
+  "name": "jerp-licensing-server",
+  "version": "1.0.0",
+  "description": "Enterprise Licensing & Trial Backend for Jewellery ERP",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc && copy src\\admin-dashboard.html dist\\admin-dashboard.html",
+    "start": "node dist/server.js",
+    "dev": "nodemon --watch src -e ts --exec ts-node src/server.ts",
+    "generate-keys": "ts-node src/keys/generateKeys.ts"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.12.12",
+    "@types/pg": "^8.11.6",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
