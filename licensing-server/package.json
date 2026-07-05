@@ -4,7 +4,7 @@
   "description": "Enterprise Licensing & Trial Backend for Jewellery ERP",
   "main": "dist/server.js",
   "scripts": {
-    "build": "tsc && copy src\\admin-dashboard.html dist\\admin-dashboard.html",
+    "build": "tsc && copyfiles src/admin-dashboard.html dist",
     "start": "node dist/server.js",
     "dev": "nodemon --watch src -e ts --exec ts-node src/server.ts",
     "generate-keys": "ts-node src/keys/generateKeys.ts"
@@ -26,6 +26,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.12.12",
     "@types/pg": "^8.11.6",
+    "copyfiles": "^2.4.1",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
