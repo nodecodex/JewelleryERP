@@ -57,6 +57,16 @@ const api: IpcApi = {
   getDeviceId: () => ipcRenderer.invoke('getDeviceId'),
   getLicenseStatus: () => ipcRenderer.invoke('getLicenseStatus'),
   activateLicense: (key) => ipcRenderer.invoke('activateLicense', key),
+  startTrial: () => ipcRenderer.invoke('startTrial'),
+  recoverLicense: (key, mobile) => ipcRenderer.invoke('recoverLicense', key, mobile),
+  requestTransfer: (key, reason) => ipcRenderer.invoke('requestTransfer', key, reason),
+  onLicenseInvalidated: (callback) => {
+    const listener = () => callback();
+    ipcRenderer.on('license-invalidated', listener);
+    return () => {
+      ipcRenderer.removeListener('license-invalidated', listener);
+    };
+  },
 
   // Backup
   createBackup: (destPath) => ipcRenderer.invoke('createBackup', destPath),

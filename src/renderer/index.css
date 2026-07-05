@@ -96,48 +96,60 @@
   }
 }
 
-/* Redesigned Form Elements: Modern Desktop Height & Depth */
-input[type="text"],
-input[type="number"],
-input[type="date"],
-select,
-textarea {
-  background-color: hsl(var(--card));
-  border: 1.5px solid hsl(var(--border));
-  color: hsl(var(--foreground));
-  border-radius: var(--radius);
-  font-size: 13px;
-  padding: 6px 12px;
-  height: 32px; /* Redesigned for standard desktop ergonomics */
-  line-height: 1.5;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+@layer base {
+  /* Redesigned Form Elements: Modern Desktop Height & Depth */
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select,
+  textarea {
+    background-color: hsl(var(--card));
+    border: 1.5px solid hsl(var(--border));
+    color: hsl(var(--foreground));
+    border-radius: var(--radius);
+    font-size: 13px;
+    padding: 6px 12px;
+    height: 32px; /* Redesigned for standard desktop ergonomics */
+    line-height: 1.5;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  select option {
+    background-color: hsl(var(--card));
+    color: hsl(var(--foreground));
+  }
+
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  input[type="date"]:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15);
+  }
+
+  input[type="text"]:disabled,
+  input[type="number"]:disabled,
+  input[type="date"]:disabled,
+  select:disabled,
+  textarea:disabled {
+    opacity: 0.5;
+    background-color: hsl(var(--muted) / 0.5);
+    cursor: not-allowed;
+    border-style: dashed;
+  }
 }
 
-select option {
-  background-color: hsl(var(--card));
-  color: hsl(var(--foreground));
+/* Hide spin buttons for number inputs */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
-
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="date"]:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15);
-}
-
-input[type="text"]:disabled,
-input[type="number"]:disabled,
-input[type="date"]:disabled,
-select:disabled,
-textarea:disabled {
-  opacity: 0.5;
-  background-color: hsl(var(--muted) / 0.5);
-  cursor: not-allowed;
-  border-style: dashed;
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 /* Custom Scrollbar Styles: Minimalist Windows 11 */

@@ -163,6 +163,7 @@ export interface LicenseStatus {
   licenseKey?: string;
   activationDate?: string;
   expiryDate?: string;
+  isTrialActive?: boolean;
   statusMessage: string;
 }
 
@@ -229,6 +230,10 @@ export interface IpcApi {
   getDeviceId: () => Promise<string>;
   getLicenseStatus: () => Promise<LicenseStatus>;
   activateLicense: (key: string) => Promise<LicenseStatus>;
+  startTrial: () => Promise<LicenseStatus>;
+  recoverLicense: (licenseKey?: string, mobileNumber?: string) => Promise<LicenseStatus>;
+  requestTransfer: (licenseKey: string, reason: string) => Promise<LicenseStatus>;
+  onLicenseInvalidated?: (callback: () => void) => () => void;
 
   // Backup & Restore
   createBackup: (destPath?: string) => Promise<BackupResult>;

@@ -105,7 +105,7 @@ const CellInput = ({
     disabled={disabled}
     readOnly={readOnly}
     className={[
-      'w-full h-[22px] px-1.5 border-0 focus:outline-none focus:ring-1 focus:ring-orange-400 focus:bg-yellow-50',
+      'w-full h-[22px] py-0 leading-none px-1.5 border-0 focus:outline-none focus:ring-1 focus:ring-orange-400 focus:bg-yellow-50',
       'bg-transparent text-[11px]',
       align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left',
       mono ? 'font-mono' : '',

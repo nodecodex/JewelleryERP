@@ -213,6 +213,18 @@ export function registerIpcHandlers(): void {
     return licenseService.activateLicense(key);
   });
 
+  ipcMain.handle('startTrial', async () => {
+    return licenseService.startTrial();
+  });
+
+  ipcMain.handle('recoverLicense', async (_, key, mobile) => {
+    return licenseService.recoverLicense(key, mobile);
+  });
+
+  ipcMain.handle('requestTransfer', async (_, key, reason) => {
+    return licenseService.requestTransfer(key, reason);
+  });
+
   // Backup & Restore API
   ipcMain.handle('createBackup', async (_, destPath) => {
     return backupService.createBackup(destPath);

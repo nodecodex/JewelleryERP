@@ -432,11 +432,16 @@ CREATE TABLE IF NOT EXISTS purchase_diamonds (
 
 CREATE TABLE IF NOT EXISTS license_info (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    license_key TEXT NOT NULL,
+    license_key TEXT,
     device_id TEXT NOT NULL,
-    activation_date TEXT NOT NULL,
+    activation_date TEXT,
     expiry_date TEXT,
-    license_payload_signature TEXT,
+    license_type TEXT DEFAULT 'trial',
+    activation_token TEXT,
+    trial_started_at TEXT,
+    trial_expiry_at TEXT,
+    last_verified_at TEXT,
+    last_active_time TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -514,17 +519,104 @@ export function runMigrations(db: any) {
     db.exec(`
       CREATE TABLE IF NOT EXISTS license_info (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        license_key TEXT NOT NULL,
+        license_key TEXT,
         device_id TEXT NOT NULL,
-        activation_date TEXT NOT NULL,
+        activation_date TEXT,
         expiry_date TEXT,
-        license_payload_signature TEXT,
+        license_type TEXT DEFAULT 'trial',
+        activation_token TEXT,
+        trial_started_at TEXT,
+        trial_expiry_at TEXT,
+        last_verified_at TEXT,
+        last_active_time TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log("Migration: Created license_info table if not existed.");
-  } catch (err) {
-    console.error('Failed to create license_info table during migration:', err);
+
+    // Check and add new columns to license_info if it already existed
+    const info = db.prepare("PRAGMA table_info(license_info)").all() as Array<{ name: string; notnull: number }>;
+    const cols = info.map(i => i.name);
+
+    const newCols = [
+      { name: 'license_type', type: "TEXT DEFAULT 'trial'" },
+      { name: 'activation_token', type: 'TEXT' },
+      { name: 'trial_started_at', type: 'TEXT' },
+      { name: 'trial_expiry_at', type: 'TEXT' },
+      { name: 'last_verified_at', type: 'TEXT' },
+      { name: 'last_active_time', type: 'TEXT' }
+    ];
+
+    for (const c of newCols) {
+      if (!cols.includes(c.name)) {
+        console.log(`Migration: Adding column '${c.name}' to table 'license_info'...`);
+        db.exec(`ALTER TABLE license_info ADD COLUMN ${c.name} ${c.type}`);
+      }
+    }
+
+    // Recreate table if license_key is NOT NULL (to support trial mode where key is empty) OR if legacy license_payload_signature column exists
+    const licenseKeyCol = info.find(i => i.name === 'license_key');
+    const hasPayloadSig = cols.includes('license_payload_signature');
+    if ((licenseKeyCol && licenseKeyCol.notnull === 1) || hasPayloadSig) {
+      console.log("Migration: Recreating license_info to sanitize constraints and fields...");
+      db.exec("PRAGMA foreign_keys = OFF");
+      db.transaction(() => {
+        db.exec("ALTER TABLE license_info RENAME TO _license_info_old");
+        db.exec(`
+          CREATE TABLE license_info (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            license_key TEXT,
+            device_id TEXT NOT NULL,
+            activation_date TEXT,
+            expiry_date TEXT,
+            license_type TEXT DEFAULT 'trial',
+            activation_token TEXT,
+            trial_started_at TEXT,
+            trial_expiry_at TEXT,
+            last_verified_at TEXT,
+            last_active_time TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          )
+        `);
+        
+        // Dynamically copy columns that exist in the old table to avoid errors like "no such column"
+        const targetCols = [
+          'id', 'license_key', 'device_id', 'activation_date', 'expiry_date',
+          'license_type', 'activation_token', 'trial_started_at', 'trial_expiry_at',
+          'last_verified_at', 'last_active_time', 'created_at'
+        ];
+        const commonCols = cols.filter(c => targetCols.includes(c));
+        const colsStr = commonCols.join(', ');
+        
+        db.exec(`
+          INSERT INTO license_info (${colsStr})
+          SELECT ${colsStr} FROM _license_info_old
+        `);
+        db.exec("DROP TABLE _license_info_old");
+      })();
+      db.exec("PRAGMA foreign_keys = ON");
+      console.log("Migration: license_info table successfully upgraded.");
+    }
+  } catch (err: any) {
+    console.error('Failed to create or upgrade license_info table during migration:', err?.message || err);
+    // Fallback: force-drop any NOT NULL constraint on license_key by recreating with a safe schema
+    try {
+      db.exec(`
+        CREATE TABLE IF NOT EXISTS license_info (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          license_key TEXT,
+          device_id TEXT NOT NULL,
+          activation_date TEXT,
+          expiry_date TEXT,
+          license_type TEXT DEFAULT 'trial',
+          activation_token TEXT,
+          trial_started_at TEXT,
+          trial_expiry_at TEXT,
+          last_verified_at TEXT,
+          last_active_time TEXT,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+    } catch (e2) { /* table may already exist with correct schema */ }
   }
 
   // Dynamically check and migrate customer_id foreign key referencing customers to parties
