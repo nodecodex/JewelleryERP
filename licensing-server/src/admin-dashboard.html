@@ -143,9 +143,91 @@
     .tab-pane.active { display: block; }
     .loader { text-align: center; padding: 40px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
     .session-badge { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); color: var(--emerald); font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.8px; }
+
+    /* ── GLOBAL LOADING OVERLAY ─────────────────────────────────── */
+    #page-loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 20px; transition: opacity 0.4s ease;
+    }
+    #page-loader.fade-out { opacity: 0; pointer-events: none; }
+    #page-loader.hidden { display: none; }
+    .loader-logo { background: var(--amber); color: #000; font-weight: 900; font-size: 22px; padding: 12px 20px; border-radius: 14px; letter-spacing: 2px; }
+    .loader-text { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+    .loader-spinner {
+      width: 36px; height: 36px;
+      border: 3px solid rgba(245,158,11,0.15);
+      border-top-color: var(--amber);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── TOPBAR PROGRESS BAR ────────────────────────────────────── */
+    #api-progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--amber), #fde68a);
+      z-index: 1000; transition: width 0.3s ease, opacity 0.4s ease;
+      box-shadow: 0 0 8px rgba(245,158,11,0.6);
+      opacity: 0;
+    }
+    #api-progress.active { opacity: 1; }
+
+    /* ── LOGIN SPINNER ──────────────────────────────────────────── */
+    .btn-login-inner { display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-spinner {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(0,0,0,0.25);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .btn-login.loading .btn-spinner { display: block; }
+
+    /* ── SKELETON SHIMMER ───────────────────────────────────────── */
+    @keyframes shimmer {
+      0% { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg, var(--card) 25%, rgba(255,255,255,0.04) 50%, var(--card) 75%);
+      background-size: 800px 100%;
+      animation: shimmer 1.5s infinite linear;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .skeleton-row { display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); align-items: center; }
+    .skeleton-cell { height: 10px; border-radius: 4px; }
+
+    /* ── ACTION BUTTON LOADING ──────────────────────────────────── */
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-loading { position: relative; color: transparent !important; pointer-events: none; }
+    .btn-loading::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 13px; height: 13px;
+      margin: -6.5px 0 0 -6.5px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
   </style>
 </head>
 <body>
+
+<!-- ═══ PAGE LOAD OVERLAY ═══════════════════════════════════════════ -->
+<div id="page-loader">
+  <div class="loader-logo">JERP</div>
+  <div class="loader-spinner"></div>
+  <div class="loader-text">Loading Portal...</div>
+</div>
+
+<!-- ═══ API PROGRESS BAR ══════════════════════════════════════════════ -->
+<div id="api-progress"></div>
 
 <!-- ═══ LOGIN SCREEN ═══════════════════════════════════════════════ -->
 <div id="login-screen">
@@ -168,7 +250,12 @@
       <label>Password</label>
       <input type="password" id="login-password" placeholder="Enter admin password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <button class="btn-login" id="login-btn" onclick="doLogin()">Sign In to Portal</button>
+    <button class="btn-login" id="login-btn" onclick="doLogin()">
+      <span class="btn-login-inner">
+        <span class="btn-spinner" id="login-spinner"></span>
+        <span id="login-btn-text">Sign In to Portal</span>
+      </span>
+    </button>
     <div class="login-error" id="login-error"></div>
     <div class="login-footer">Session expires in 8 hours &nbsp;|&nbsp; Rate limited: 10 attempts / 15 min</div>
   </div>
@@ -312,16 +399,85 @@
   // ── Auth ────────────────────────────────────────────────────────────
   let SESSION_TOKEN = sessionStorage.getItem('jerp_admin_token') || null;
   let adminNotes = {};
+  let _apiPendingCount = 0;
 
+  // ── Progress Bar ────────────────────────────────────────────────────
+  function progressStart() {
+    _apiPendingCount++;
+    const bar = document.getElementById('api-progress');
+    bar.classList.add('active');
+    bar.style.width = '30%';
+    // Animate toward 85% while pending
+    clearTimeout(bar._timer);
+    bar._timer = setTimeout(() => { bar.style.width = '85%'; }, 100);
+  }
+  function progressDone() {
+    _apiPendingCount = Math.max(0, _apiPendingCount - 1);
+    if (_apiPendingCount > 0) return;
+    const bar = document.getElementById('api-progress');
+    bar.style.width = '100%';
+    clearTimeout(bar._timer);
+    bar._timer = setTimeout(() => {
+      bar.classList.remove('active');
+      bar.style.width = '0%';
+    }, 350);
+  }
+
+  // ── Page Loader ─────────────────────────────────────────────────────
+  function hidePageLoader() {
+    const el = document.getElementById('page-loader');
+    el.classList.add('fade-out');
+    setTimeout(() => el.classList.add('hidden'), 450);
+  }
+  function showPageLoader(text = 'Loading Portal...') {
+    const el = document.getElementById('page-loader');
+    el.querySelector('.loader-text').textContent = text;
+    el.classList.remove('hidden', 'fade-out');
+  }
+
+  // ── Skeleton HTML ───────────────────────────────────────────────────
+  function skeletonRows(cols, n = 5) {
+    const widths = ['60%','80%','50%','70%','40%','65%','75%'];
+    return Array.from({length: n}, (_, i) =>
+      `<tr>${Array.from({length: cols}, (_, j) =>
+        `<td><span class="skeleton skeleton-cell" style="width:${widths[(i*cols+j)%widths.length]};height:10px"></span></td>`
+      ).join('')}</tr>`
+    ).join('');
+  }
+  function skeletonList(n = 4) {
+    return Array.from({length: n}, (_, i) => `
+      <div class="skeleton-row">
+        <span class="skeleton skeleton-cell" style="width:${30+i*12}%;height:10px"></span>
+        <span class="skeleton skeleton-cell" style="width:${20+i*8}%;height:10px;margin-left:auto"></span>
+      </div>`
+    ).join('');
+  }
+
+  // ── Show skeletons immediately when entering app ─────────────────────
+  function showSkeletons() {
+    document.getElementById('customers-tbody').innerHTML = skeletonRows(4);
+    document.getElementById('licenses-tbody').innerHTML  = skeletonRows(5);
+    document.getElementById('transfers-list').innerHTML  = skeletonList(3);
+    document.getElementById('dash-transfers-list').innerHTML = skeletonList(2);
+    document.getElementById('trials-tbody').innerHTML    = skeletonRows(5);
+    document.getElementById('audit-list').innerHTML      = skeletonList(5);
+  }
+
+  // ── Login ────────────────────────────────────────────────────────────
   async function doLogin() {
     const username = document.getElementById('login-username').value.trim();
     const password = document.getElementById('login-password').value;
     const btn      = document.getElementById('login-btn');
+    const spinner  = document.getElementById('login-spinner');
+    const btnText  = document.getElementById('login-btn-text');
     const errEl    = document.getElementById('login-error');
     if (!username || !password) { showLoginError('Please enter username and password.'); return; }
     btn.disabled = true;
-    btn.textContent = 'Signing in...';
+    btn.classList.add('loading');
+    spinner.style.display = 'block';
+    btnText.textContent = 'Signing in...';
     errEl.style.display = 'none';
+    progressStart();
     try {
       const r = await fetch('/admin/login', {
         method: 'POST',
@@ -334,13 +490,18 @@
       } else {
         SESSION_TOKEN = data.token;
         sessionStorage.setItem('jerp_admin_token', SESSION_TOKEN);
+        sessionStorage.setItem('jerp_admin_user', username);
         showApp(username);
       }
     } catch(e) {
       showLoginError('Cannot connect to licensing server. Is it running?');
+    } finally {
+      progressDone();
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      spinner.style.display = 'none';
+      btnText.textContent = 'Sign In to Portal';
     }
-    btn.disabled = false;
-    btn.textContent = 'Sign In to Portal';
   }
 
   function showLoginError(msg) {
@@ -354,11 +515,13 @@
     document.getElementById('app').classList.add('visible');
     document.getElementById('admin-name-display').textContent = username;
     document.getElementById('topbar-admin').textContent = username;
+    showSkeletons();
     loadAllData();
   }
 
   function doLogout() {
     sessionStorage.removeItem('jerp_admin_token');
+    sessionStorage.removeItem('jerp_admin_user');
     SESSION_TOKEN = null;
     document.getElementById('app').classList.remove('visible');
     document.getElementById('login-screen').style.display = 'flex';
@@ -367,17 +530,32 @@
   }
 
   // ── Restore session if already logged in ────────────────────────────
-  if (SESSION_TOKEN) {
-    // Verify token is still valid
-    fetch('/api/v1/admin/dashboard-stats', { headers: { Authorization: 'Bearer ' + SESSION_TOKEN } })
-      .then(r => {
-        if (r.status === 401) { doLogout(); }
-        else { showApp(sessionStorage.getItem('jerp_admin_user') || 'Admin'); }
-      }).catch(() => {});
-  }
+  (async function initSession() {
+    if (SESSION_TOKEN) {
+      showPageLoader('Restoring Session...');
+      try {
+        const r = await fetch('/api/v1/admin/dashboard-stats', {
+          headers: { Authorization: 'Bearer ' + SESSION_TOKEN }
+        });
+        if (r.status === 401) {
+          doLogout();
+          hidePageLoader();
+        } else {
+          const username = sessionStorage.getItem('jerp_admin_user') || 'Admin';
+          hidePageLoader();
+          showApp(username);
+        }
+      } catch(e) {
+        hidePageLoader();
+      }
+    } else {
+      hidePageLoader();
+    }
+  })();
 
-  // ── API helper (always includes auth token) ─────────────────────────
+  // ── API helper (always includes auth token + progress bar) ───────────
   async function api(url, method = 'GET', body = null) {
+    progressStart();
     const opts = {
       method,
       headers: {
@@ -386,9 +564,13 @@
       }
     };
     if (body) opts.body = JSON.stringify(body);
-    const r = await fetch(url, opts);
-    if (r.status === 401) { doLogout(); throw new Error('Session expired. Please log in again.'); }
-    return r.json();
+    try {
+      const r = await fetch(url, opts);
+      if (r.status === 401) { doLogout(); throw new Error('Session expired. Please log in again.'); }
+      return await r.json();
+    } finally {
+      progressDone();
+    }
   }
 
   // ── Tab Switching ───────────────────────────────────────────────────
@@ -472,8 +654,8 @@
         </div>
         ${t.status==='pending'?`<div class="transfer-actions">
           <input class="transfer-note" type="text" placeholder="Admin review note..." oninput="adminNotes['${t.id}']=this.value">
-          <button class="btn btn-green" onclick="approveTransfer('${t.id}')">&#10003; Approve</button>
-          <button class="btn btn-red" onclick="rejectTransfer('${t.id}')">&#10007; Reject</button>
+          <button class="btn btn-green" onclick="approveTransfer('${t.id}')">&check; Approve</button>
+          <button class="btn btn-red" onclick="rejectTransfer('${t.id}')">&times; Reject</button>
         </div>`:`<div style="font-size:10px;color:var(--muted)">${t.admin_note?'Note: '+esc(t.admin_note):''}</div>`}
       </div>`).join('');
   }
@@ -496,8 +678,8 @@
         </div>
         <div class="transfer-actions">
           <input class="transfer-note" type="text" placeholder="Admin note..." oninput="adminNotes['${t.id}']=this.value">
-          <button class="btn btn-green" onclick="approveTransfer('${t.id}')">&#10003; Approve</button>
-          <button class="btn btn-red" onclick="rejectTransfer('${t.id}')">&#10007; Reject</button>
+          <button class="btn btn-green" onclick="approveTransfer('${t.id}')">&check; Approve</button>
+          <button class="btn btn-red" onclick="rejectTransfer('${t.id}')">&times; Reject</button>
         </div>
       </div>`).join('');
   }
@@ -531,39 +713,51 @@
   async function createCustomer() {
     const name=document.getElementById('cust-name').value.trim(), mobile=document.getElementById('cust-mobile').value.trim(), email=document.getElementById('cust-email').value.trim();
     const res=document.getElementById('cust-result');
+    const btn=document.querySelector('[onclick="createCustomer()"]');
     if (!name||!mobile){res.innerHTML='<div class="alert alert-error">Name and mobile are required.</div>';return;}
+    if(btn){btn.classList.add('btn-loading');btn.disabled=true;}
     try {
       const data=await api('/api/v1/admin/customers','POST',{name,mobile,email});
       if (data.id){res.innerHTML='<div class="alert alert-success">Customer saved!</div>';document.getElementById('cust-name').value='';document.getElementById('cust-mobile').value='';document.getElementById('cust-email').value='';await fetchCustomers();renderCustomers();}
       else res.innerHTML=`<div class="alert alert-error">${data.error||'Failed.'}</div>`;
     } catch(e){res.innerHTML=`<div class="alert alert-error">${e.message}</div>`;}
+    finally{if(btn){btn.classList.remove('btn-loading');btn.disabled=false;}}
   }
 
   async function generateLicense() {
     const customerId=document.getElementById('gen-customer').value,licenseType=document.getElementById('gen-type').value,maxDevices=document.getElementById('gen-devices').value,expiryDays=document.getElementById('gen-expiry').value;
     const res=document.getElementById('gen-result');
+    const btn=document.querySelector('[onclick="generateLicense()"]');
     if (!customerId){res.innerHTML='<div class="alert alert-error">Please select a customer.</div>';return;}
+    if(btn){btn.classList.add('btn-loading');btn.disabled=true;}
     try {
       const data=await api('/api/v1/admin/licenses/generate','POST',{customerId,licenseType,maxDevices:parseInt(maxDevices),expiryDays});
       if (data.license_key){res.innerHTML=`<div class="alert alert-success">&#128273; Key:<br><strong style="font-family:monospace;color:var(--amber);user-select:all">${data.license_key}</strong></div>`;await fetchLicenses();renderLicenses();await fetchStats();renderStats();}
       else res.innerHTML=`<div class="alert alert-error">${data.error||'Failed.'}</div>`;
     } catch(e){res.innerHTML=`<div class="alert alert-error">${e.message}</div>`;}
+    finally{if(btn){btn.classList.remove('btn-loading');btn.disabled=false;}}
   }
 
   async function suspendLicense(id) {
     if (!confirm('Suspend this license? Customer app will lock on next check.')) return;
+    const btn=event.target;
+    if(btn){btn.classList.add('btn-loading');btn.disabled=true;}
     try {await api('/api/v1/admin/licenses/deactivate','POST',{licenseId:id});await fetchLicenses();renderLicenses();await fetchStats();renderStats();}
-    catch(e){alert('Error: '+e.message);}
+    catch(e){alert('Error: '+e.message);if(btn){btn.classList.remove('btn-loading');btn.disabled=false;}}
   }
 
   async function approveTransfer(id) {
     const note=adminNotes[id]||'Approved via Admin Portal';
+    const btn=event.target;
+    if(btn){btn.classList.add('btn-loading');btn.disabled=true;}
     try {const data=await api('/api/v1/admin/transfers/approve','POST',{requestId:id,adminNote:note});if(data.success){await fetchTransfers();fetchStats();renderTransfers();renderDashTransfers();renderStats();}else alert(data.error||'Failed');}
-    catch(e){alert('Error: '+e.message);}
+    catch(e){alert('Error: '+e.message);if(btn){btn.classList.remove('btn-loading');btn.disabled=false;}}
   }
 
   async function rejectTransfer(id) {
     const note=adminNotes[id]||'Rejected via Admin Portal';
+    const btn=event.target;
+    if(btn){btn.classList.add('btn-loading');btn.disabled=true;}
     try {const data=await api('/api/v1/admin/transfers/reject','POST',{requestId:id,adminNote:note});if(data.success){await fetchTransfers();fetchStats();renderTransfers();renderDashTransfers();renderStats();}else alert(data.error||'Failed');}
     catch(e){alert('Error: '+e.message);}
   }

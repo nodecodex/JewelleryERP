@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, session } from 'electron';
 import * as path from 'path';
 import { initDatabase, closeDatabase } from './db/connection';
 import { registerIpcHandlers } from './ipc/handlers';
@@ -38,12 +38,35 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, '../index.html'));
   }
 
+  // Security Hardening: Disable navigation and new window creation
+  mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {
+    const parsedUrl = new URL(navigationUrl);
+    // Allow local file navigation only, or dev server if in dev
+    if (parsedUrl.protocol !== 'file:' && !(isDev && parsedUrl.hostname === 'localhost')) {
+      event.preventDefault();
+    }
+  });
+
+  mainWindow.webContents.setWindowOpenHandler((details) => {
+    return { action: 'deny' }; // Prevent all new windows (target="_blank")
+  });
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
 
 app.whenReady().then(() => {
+  // Set strict Content Security Policy
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data:; connect-src 'self' http://localhost:3003;"]
+      }
+    });
+  });
+
   createWindow();
 
   app.on('activate', () => {

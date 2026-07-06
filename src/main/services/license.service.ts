@@ -35,40 +35,28 @@ export class LicenseService extends BaseRepository {
 
     try {
       if (process.platform === 'win32') {
-        // 1. Get CPU Processor ID
+        const execOpts = { timeout: 2000, stdio: 'pipe' as const };
         try {
-          const cpuOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty ProcessorId"').toString().trim();
+          const cpuOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty ProcessorId"', execOpts).toString().trim();
           if (cpuOut) cpuId = cpuOut;
-        } catch (e) {
-          console.warn('Failed to retrieve CPU ID via PowerShell, using generic.');
-        }
+        } catch (e) {}
 
-        // 2. Get Motherboard Serial Number
         try {
-          const mbOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_BaseBoard | Select-Object -ExpandProperty SerialNumber"').toString().trim();
+          const mbOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_BaseBoard | Select-Object -ExpandProperty SerialNumber"', execOpts).toString().trim();
           if (mbOut) mbSerial = mbOut;
-        } catch (e) {
-          console.warn('Failed to retrieve Motherboard Serial via PowerShell, using generic.');
-        }
+        } catch (e) {}
 
-        // 3. Get Disk Serial Number
         try {
-          const diskOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_DiskDrive | Where-Object { $_.Index -eq 0 } | Select-Object -ExpandProperty SerialNumber"').toString().trim();
+          const diskOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_DiskDrive | Where-Object { $_.Index -eq 0 } | Select-Object -ExpandProperty SerialNumber"', execOpts).toString().trim();
           if (diskOut) diskSerial = diskOut;
-        } catch (e) {
-          console.warn('Failed to retrieve Disk Serial via PowerShell, using generic.');
-        }
+        } catch (e) {}
 
-        // 4. Get Machine GUID from Registry
         try {
-          const guidOut = execSync('REG QUERY HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid').toString();
+          const guidOut = execSync('REG QUERY HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid', execOpts).toString();
           const match = guidOut.match(/MachineGuid\s+REG_SZ\s+([a-fA-F0-9-]+)/);
           if (match && match[1]) machineGuid = match[1];
-        } catch (e) {
-          console.warn('Failed to retrieve Machine GUID registry key.');
-        }
+        } catch (e) {}
       } else {
-        // Fallback for development on mac/linux
         const interfaces = require('os').networkInterfaces();
         for (const name of Object.keys(interfaces)) {
           for (const net of interfaces[name] || []) {
@@ -134,7 +122,8 @@ export class LicenseService extends BaseRepository {
    */
   private encryptToken(token: string, deviceId: string): string {
     const algorithm = 'aes-256-gcm';
-    const key = crypto.scryptSync(deviceId, 'local-salt-jewel-erp', 32);
+    const envSalt = process.env.APP_SECRET_SALT || 'fallback-secure-salt-39dk!$x';
+    const key = crypto.scryptSync(deviceId, envSalt, 32);
     const iv = crypto.randomBytes(12);
     const cipher = crypto.createCipheriv(algorithm, key, iv);
 
@@ -150,7 +139,8 @@ export class LicenseService extends BaseRepository {
    */
   private decryptToken(encryptedData: string, deviceId: string): string {
     const algorithm = 'aes-256-gcm';
-    const key = crypto.scryptSync(deviceId, 'local-salt-jewel-erp', 32);
+    const envSalt = process.env.APP_SECRET_SALT || 'fallback-secure-salt-39dk!$x';
+    const key = crypto.scryptSync(deviceId, envSalt, 32);
     const parts = encryptedData.split(':');
 
     if (parts.length !== 3) {

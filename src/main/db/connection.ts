@@ -1,9 +1,11 @@
-import Database from 'better-sqlite3';
+import Database from 'better-sqlite3-multiple-ciphers';
 import * as path from 'path';
 import * as fs from 'fs';
 import { runMigrations } from './schema';
 
 let dbInstance: Database.Database | null = null;
+
+const DB_ENCRYPTION_KEY = 'jewel-erp-secure-db-key-2024';
 
 export function getDatabasePath(): string {
   let userDataPath = '';
@@ -33,6 +35,10 @@ export function initDatabase(): Database.Database {
 
   const dbPath = getDatabasePath();
   const db = new Database(dbPath, { verbose: console.log });
+  
+  // Set Encryption key for SQLCipher
+  db.pragma(`key = '${DB_ENCRYPTION_KEY}'`);
+
   
   // Enable foreign keys
   db.pragma('foreign_keys = ON');
