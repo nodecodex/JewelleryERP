@@ -15,6 +15,7 @@ udmyEt0CVUtqtvV1LG9y4f/u5FFxGEw3WMuZWQQOC47uU4CV8NQc7wI1OyyT0XQh
 -----END PUBLIC KEY-----`;
 
 const SERVER_BASE_URL = 'http://localhost:3003';
+// const SERVER_BASE_URL = 'https://jewellery-erp-two.vercel.app';
 
 export class LicenseService extends BaseRepository {
   private cachedDeviceId: string | null = null;
@@ -98,14 +99,14 @@ export class LicenseService extends BaseRepository {
 
     try {
       if (process.platform === 'win32') {
-        try { cpuId = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty ProcessorId"').toString().trim(); } catch (e) {}
-        try { mbSerial = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_BaseBoard | Select-Object -ExpandProperty SerialNumber"').toString().trim(); } catch (e) {}
-        try { diskSerial = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_DiskDrive | Where-Object { $_.Index -eq 0 } | Select-Object -ExpandProperty SerialNumber"').toString().trim(); } catch (e) {}
+        try { cpuId = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty ProcessorId"').toString().trim(); } catch (e) { }
+        try { mbSerial = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_BaseBoard | Select-Object -ExpandProperty SerialNumber"').toString().trim(); } catch (e) { }
+        try { diskSerial = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_DiskDrive | Where-Object { $_.Index -eq 0 } | Select-Object -ExpandProperty SerialNumber"').toString().trim(); } catch (e) { }
         try {
           const guidOut = execSync('REG QUERY HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid').toString();
           const match = guidOut.match(/MachineGuid\s+REG_SZ\s+([a-fA-F0-9-]+)/);
           if (match && match[1]) machineGuid = match[1];
-        } catch (e) {}
+        } catch (e) { }
       } else {
         const interfaces = require('os').networkInterfaces();
         for (const name of Object.keys(interfaces)) {
@@ -117,7 +118,7 @@ export class LicenseService extends BaseRepository {
           }
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     return {
       cpuId,
@@ -136,11 +137,11 @@ export class LicenseService extends BaseRepository {
     const key = crypto.scryptSync(deviceId, 'local-salt-jewel-erp', 32);
     const iv = crypto.randomBytes(12);
     const cipher = crypto.createCipheriv(algorithm, key, iv);
-    
+
     let encrypted = cipher.update(token, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     const authTag = cipher.getAuthTag().toString('hex');
-    
+
     return `${iv.toString('hex')}:${encrypted}:${authTag}`;
   }
 
@@ -151,21 +152,21 @@ export class LicenseService extends BaseRepository {
     const algorithm = 'aes-256-gcm';
     const key = crypto.scryptSync(deviceId, 'local-salt-jewel-erp', 32);
     const parts = encryptedData.split(':');
-    
+
     if (parts.length !== 3) {
       throw new Error('Invalid encrypted token format');
     }
-    
+
     const iv = Buffer.from(parts[0], 'hex');
     const encryptedText = parts[1];
     const authTag = Buffer.from(parts[2], 'hex');
-    
+
     const decipher = crypto.createDecipheriv(algorithm, key, iv);
     decipher.setAuthTag(authTag);
-    
+
     let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
-    
+
     return decrypted;
   }
 
@@ -180,10 +181,10 @@ export class LicenseService extends BaseRepository {
       const [headerB64, payloadB64, signatureB64] = parts;
       const verify = crypto.createVerify('SHA256');
       verify.update(`${headerB64}.${payloadB64}`);
-      
+
       const signature = Buffer.from(signatureB64, 'base64url');
       const isValid = verify.verify(BUNDLED_PUBLIC_KEY, signature);
-      
+
       if (!isValid) return { isValid: false };
 
       const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
@@ -198,7 +199,7 @@ export class LicenseService extends BaseRepository {
    */
   public getLicenseStatus(): LicenseStatus {
     const deviceId = this.getDeviceId();
-    
+
     try {
       const row = this.db.prepare('SELECT * FROM license_info ORDER BY id DESC LIMIT 1').get() as {
         license_key: string | null;
@@ -340,7 +341,7 @@ export class LicenseService extends BaseRepository {
 
       // Save trial locally
       const nowStr = new Date().toISOString();
-      
+
       this.db.prepare('DELETE FROM license_info').run();
       this.db.prepare(`
         INSERT INTO license_info (license_key, device_id, license_type, trial_started_at, trial_expiry_at, last_active_time)
@@ -462,7 +463,7 @@ export class LicenseService extends BaseRepository {
       const decryptedToken = this.decryptToken(encryptedToken, this.getDeviceId());
       const response = await fetch(`${SERVER_BASE_URL}/api/v1/license/verify`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${decryptedToken}`
         }
@@ -478,7 +479,7 @@ export class LicenseService extends BaseRepository {
         // License was suspended or key deleted
         console.warn('Background check returned invalid or revoked license key:', data.message);
         this.db.prepare('DELETE FROM license_info').run();
-        
+
         // Notify renderer to immediately lock out the application
         for (const win of BrowserWindow.getAllWindows()) {
           win.webContents.send('license-invalidated');
