@@ -1,8 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as zlib from 'zlib';
+import * as crypto from 'crypto';
 import { getDatabasePath, closeDatabase, initDatabase } from '../db/connection';
 import type { BackupResult } from '../../shared/ipc-api';
+
+const BACKUP_ENCRYPTION_KEY = Buffer.from('8f3k2!xZ9qP7mNvL8f3k2!xZ9qP7mNvL', 'utf8'); // 32 bytes for AES-256
 
 export class BackupService {
   /**
@@ -32,16 +35,32 @@ export class BackupService {
       const backupFileName = `jewellery_erp_backup_${timestamp}.db.gz`;
       const backupPath = path.join(targetDir, backupFileName);
 
-      // Perform compression using stream pipelines
+      // Path Traversal Prevention
+      if (path.relative(targetDir, backupPath).startsWith('..')) {
+        throw new Error('Invalid backup destination path');
+      }
+
+      // Perform compression and encryption using stream pipelines
       const rawStream = fs.createReadStream(dbPath);
       const gzipStream = zlib.createGzip();
+      
+      const iv = crypto.randomBytes(12);
+      const cipher = crypto.createCipheriv('aes-256-gcm', BACKUP_ENCRYPTION_KEY, iv);
       const writeStream = fs.createWriteStream(backupPath);
+
+      // Write IV first so we can decrypt later
+      writeStream.write(iv);
 
       await new Promise<void>((resolve, reject) => {
         rawStream
           .pipe(gzipStream)
+          .pipe(cipher)
           .pipe(writeStream)
-          .on('finish', () => resolve())
+          .on('finish', () => {
+             // Append Auth Tag at the end of the file for integrity verification
+             fs.appendFileSync(backupPath, cipher.getAuthTag());
+             resolve();
+          })
           .on('error', (err) => reject(err));
       });
 
@@ -72,17 +91,30 @@ export class BackupService {
       // 1. Temporarily close any active database connection pool to unlock the file
       closeDatabase();
 
-      // 2. Perform decompression
-      const readStream = fs.createReadStream(zipPath);
+      // 2. Perform decompression and decryption
+      // Read IV (first 12 bytes) and Auth Tag (last 16 bytes)
+      const fileBuffer = fs.readFileSync(zipPath);
+      if (fileBuffer.length < 28) throw new Error('Invalid backup file');
+      
+      const iv = fileBuffer.slice(0, 12);
+      const authTag = fileBuffer.slice(fileBuffer.length - 16);
+      
+      const decipher = crypto.createDecipheriv('aes-256-gcm', BACKUP_ENCRYPTION_KEY, iv);
+      decipher.setAuthTag(authTag);
+      
+      // We pipe from a slice of the buffer skipping IV and AuthTag
+      const encryptedDataStream = require('stream').Readable.from(fileBuffer.slice(12, fileBuffer.length - 16));
+      
       const gunzipStream = zlib.createGunzip();
       const writeStream = fs.createWriteStream(dbPath);
 
       await new Promise<void>((resolve, reject) => {
-        readStream
+        encryptedDataStream
+          .pipe(decipher)
           .pipe(gunzipStream)
           .pipe(writeStream)
           .on('finish', () => resolve())
-          .on('error', (err) => reject(err));
+          .on('error', (err: Error) => reject(new Error('Integrity check failed or file corrupted.')));
       });
 
       // 3. Re-initialize the connection

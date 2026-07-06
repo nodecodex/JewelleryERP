@@ -1,9 +1,25 @@
 import { ipcMain, BrowserWindow } from 'electron';
+import type { IpcMainInvokeEvent } from 'electron';
+import { z } from 'zod';
 
 function notifyRendererOfDbUpdate(): void {
   for (const win of BrowserWindow.getAllWindows()) {
     win.webContents.send('database-updated');
   }
+}
+
+// Security: Verify IPC sender is allowed
+function verifySender(event: IpcMainInvokeEvent): void {
+  const isDev = process.env.NODE_ENV === 'development';
+  const url = event.senderFrame?.url;
+  
+  if (!url) throw new Error('Unauthorized IPC: No sender frame url');
+  
+  const parsed = new URL(url);
+  if (isDev && parsed.hostname === 'localhost') return;
+  if (parsed.protocol === 'file:' && parsed.pathname.endsWith('index.html')) return;
+  
+  throw new Error('Unauthorized IPC sender');
 }
 import { CompanyRepository } from '../repositories/company.repository';
 import { ProductRepository } from '../repositories/product.repository';
@@ -52,359 +68,425 @@ export function registerIpcHandlers(): void {
   const syncService = new SyncService();
 
   // Company API
-  ipcMain.handle('getCompanies', async () => {
+  ipcMain.handle('getCompanies', async (event) => {
+    verifySender(event);
     return companyRepo.getCompanies();
   });
 
-  ipcMain.handle('createCompany', async (_, company) => {
+  ipcMain.handle('createCompany', async (event, company) => {
+    verifySender(event);
     const res = await companyRepo.createCompany(company);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('updateCompany', async (_, company) => {
+  ipcMain.handle('updateCompany', async (event, company) => {
+    verifySender(event);
     const res = await companyRepo.updateCompany(company);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('deleteCompany', async (_, id) => {
+  ipcMain.handle('deleteCompany', async (event, id) => {
+    verifySender(event);
     const res = await companyRepo.deleteCompany(id);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Product API
-  ipcMain.handle('getProducts', async (_, companyId) => {
+  ipcMain.handle('getProducts', async (event, companyId) => {
+    verifySender(event);
     return productRepo.getProducts(companyId);
   });
 
-  ipcMain.handle('getProductByBarcode', async (_, companyId, barcode) => {
+  ipcMain.handle('getProductByBarcode', async (event, companyId, barcode) => {
+    verifySender(event);
     return productRepo.getProductByBarcode(companyId, barcode);
   });
 
-  ipcMain.handle('createProduct', async (_, product) => {
+  ipcMain.handle('createProduct', async (event, product) => {
+    verifySender(event);
     const res = await productRepo.createProduct(product);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('updateProduct', async (_, product) => {
+  ipcMain.handle('updateProduct', async (event, product) => {
+    verifySender(event);
     const res = await productRepo.updateProduct(product);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('deleteProduct', async (_, id) => {
+  ipcMain.handle('deleteProduct', async (event, id) => {
+    verifySender(event);
     const res = await productRepo.deleteProduct(id);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Customer API
-  ipcMain.handle('getCustomers', async (_, companyId) => {
+  ipcMain.handle('getCustomers', async (event, companyId) => {
+    verifySender(event);
     return customerRepo.getCustomers(companyId);
   });
 
-  ipcMain.handle('createCustomer', async (_, customer) => {
+  ipcMain.handle('createCustomer', async (event, customer) => {
+    verifySender(event);
     const res = await customerRepo.createCustomer(customer);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('updateCustomer', async (_, customer) => {
+  ipcMain.handle('updateCustomer', async (event, customer) => {
+    verifySender(event);
     const res = await customerRepo.updateCustomer(customer);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Supplier API
-  ipcMain.handle('getSuppliers', async (_, companyId) => {
+  ipcMain.handle('getSuppliers', async (event, companyId) => {
+    verifySender(event);
     return supplierRepo.getSuppliers(companyId);
   });
 
-  ipcMain.handle('createSupplier', async (_, supplier) => {
+  ipcMain.handle('createSupplier', async (event, supplier) => {
+    verifySender(event);
     const res = await supplierRepo.createSupplier(supplier);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('updateSupplier', async (_, supplier) => {
+  ipcMain.handle('updateSupplier', async (event, supplier) => {
+    verifySender(event);
     const res = await supplierRepo.updateSupplier(supplier);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Invoice API
-  ipcMain.handle('createInvoice', async (_, invoice, items) => {
+  ipcMain.handle('createInvoice', async (event, invoice, items) => {
+    verifySender(event);
     const res = await invoiceRepo.createInvoice(invoice, items);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('getInvoices', async (_, companyId) => {
+  ipcMain.handle('getInvoices', async (event, companyId) => {
+    verifySender(event);
     return invoiceRepo.getInvoices(companyId);
   });
 
-  ipcMain.handle('getNextInvoiceNumber', async (_, companyId, type) => {
+  ipcMain.handle('getNextInvoiceNumber', async (event, companyId, type) => {
+    verifySender(event);
     return invoiceRepo.getNextInvoiceNumber(companyId, type);
   });
 
-  ipcMain.handle('deleteInvoice', async (_, id) => {
+  ipcMain.handle('deleteInvoice', async (event, id) => {
+    verifySender(event);
     const res = await invoiceRepo.deleteInvoice(id);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('getTagStockReport', async (_, companyId) => {
+  ipcMain.handle('getTagStockReport', async (event, companyId) => {
+    verifySender(event);
     return ledrReportRepo.getTagStockReport(companyId);
   });
 
-  ipcMain.handle('getTagAccessories', async (_, source, voucherId, tagId) => {
+  ipcMain.handle('getTagAccessories', async (event, source, voucherId, tagId) => {
+    verifySender(event);
     return ledrReportRepo.getTagAccessories(source, voucherId, tagId);
   });
 
   // Vouchers / Accounting API
-  ipcMain.handle('getAccounts', async (_, companyId) => {
+  ipcMain.handle('getAccounts', async (event, companyId) => {
+    verifySender(event);
     return ledgerRepo.getAccounts(companyId);
   });
 
-  ipcMain.handle('createAccount', async (_, account) => {
+  ipcMain.handle('createAccount', async (event, account) => {
+    verifySender(event);
     const res = await ledgerRepo.createAccount(account);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('createVoucher', async (_, voucher, items) => {
+  ipcMain.handle('createVoucher', async (event, voucher, items) => {
+    verifySender(event);
     const res = await voucherRepo.createVoucher(voucher, items);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('getVouchers', async (_, companyId) => {
+  ipcMain.handle('getVouchers', async (event, companyId) => {
+    verifySender(event);
     return voucherRepo.getVouchers(companyId);
   });
 
-  ipcMain.handle('getLedgerReport', async (_, companyId, accountId, startDate, endDate) => {
+  ipcMain.handle('getLedgerReport', async (event, companyId, accountId, startDate, endDate) => {
+    verifySender(event);
     return ledgerRepo.getLedgerReport(companyId, accountId, startDate, endDate);
   });
 
   // Daily Metal Rates
-  ipcMain.handle('getDailyRates', async (_, companyId) => {
+  ipcMain.handle('getDailyRates', async (event, companyId) => {
+    verifySender(event);
     return rateRepo.getDailyRates(companyId);
   });
 
-  ipcMain.handle('saveDailyRates', async (_, rate) => {
+  ipcMain.handle('saveDailyRates', async (event, rate) => {
+    verifySender(event);
     const res = await rateRepo.saveDailyRates(rate);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Licensing API
-  ipcMain.handle('getDeviceId', async () => {
+  ipcMain.handle('getDeviceId', async (event) => {
+    verifySender(event);
     return licenseService.getDeviceId();
   });
 
-  ipcMain.handle('getLicenseStatus', async () => {
+  ipcMain.handle('getLicenseStatus', async (event) => {
+    verifySender(event);
     return licenseService.getLicenseStatus();
   });
 
-  ipcMain.handle('activateLicense', async (_, key) => {
+  ipcMain.handle('activateLicense', async (event, key) => {
+    verifySender(event);
     return licenseService.activateLicense(key);
   });
 
-  ipcMain.handle('startTrial', async () => {
+  ipcMain.handle('startTrial', async (event) => {
+    verifySender(event);
     return licenseService.startTrial();
   });
 
-  ipcMain.handle('recoverLicense', async (_, key, mobile) => {
+  ipcMain.handle('recoverLicense', async (event, key, mobile) => {
+    verifySender(event);
     return licenseService.recoverLicense(key, mobile);
   });
 
-  ipcMain.handle('requestTransfer', async (_, key, reason) => {
+  ipcMain.handle('requestTransfer', async (event, key, reason) => {
+    verifySender(event);
     return licenseService.requestTransfer(key, reason);
   });
 
   // Backup & Restore API
-  ipcMain.handle('createBackup', async (_, destPath) => {
+  ipcMain.handle('createBackup', async (event, destPath) => {
+    verifySender(event);
     return backupService.createBackup(destPath);
   });
 
-  ipcMain.handle('restoreBackup', async (_, zipPath) => {
+  ipcMain.handle('restoreBackup', async (event, zipPath) => {
+    verifySender(event);
     const res = await backupService.restoreBackup(zipPath);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Cloud Sync
-  ipcMain.handle('syncWithCloud', async (_, companyId) => {
+  ipcMain.handle('syncWithCloud', async (event, companyId) => {
+    verifySender(event);
     const res = await syncService.syncWithCloud(companyId);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Users Management API
-  ipcMain.handle('getUsers', async (_, companyId) => {
+  ipcMain.handle('getUsers', async (event, companyId) => {
+    verifySender(event);
     return userRepo.getUsers(companyId);
   });
 
-  ipcMain.handle('createUser', async (_, user) => {
+  ipcMain.handle('createUser', async (event, user) => {
+    verifySender(event);
     const res = await userRepo.createUser(user);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('updateUserPermissions', async (_, id, permissionsJson) => {
+  ipcMain.handle('updateUserPermissions', async (event, id, permissionsJson) => {
+    verifySender(event);
     const res = await userRepo.updateUserPermissions(id, permissionsJson);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('updateUserPassword', async (_, id, oldPassword, newPassword) => {
+  ipcMain.handle('updateUserPassword', async (event, id, oldPassword, newPassword) => {
+    verifySender(event);
     const res = await userRepo.updateUserPassword(id, oldPassword, newPassword);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('deleteUser', async (_, id) => {
+  ipcMain.handle('deleteUser', async (event, id) => {
+    verifySender(event);
     const res = await userRepo.deleteUser(id);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Parties Management API
-  ipcMain.handle('getParties', async (_, companyId) => {
+  ipcMain.handle('getParties', async (event, companyId) => {
+    verifySender(event);
     return partyRepo.getParties(companyId);
   });
 
-  ipcMain.handle('createParty', async (_, party) => {
+  ipcMain.handle('createParty', async (event, party) => {
+    verifySender(event);
     const res = await partyRepo.createParty(party);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('updateParty', async (_, party) => {
+  ipcMain.handle('updateParty', async (event, party) => {
+    verifySender(event);
     const res = await partyRepo.updateParty(party);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('deleteParty', async (_, id) => {
+  ipcMain.handle('deleteParty', async (event, id) => {
+    verifySender(event);
     const res = await partyRepo.deleteParty(id);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Taxes Management API
-  ipcMain.handle('getTaxes', async (_, companyId) => {
+  ipcMain.handle('getTaxes', async (event, companyId) => {
+    verifySender(event);
     return taxRepo.getTaxes(companyId);
   });
 
-  ipcMain.handle('createTax', async (_, tax) => {
+  ipcMain.handle('createTax', async (event, tax) => {
+    verifySender(event);
     const res = await taxRepo.createTax(tax);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('updateTax', async (_, tax) => {
+  ipcMain.handle('updateTax', async (event, tax) => {
+    verifySender(event);
     const res = await taxRepo.updateTax(tax);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('deleteTax', async (_, id) => {
+  ipcMain.handle('deleteTax', async (event, id) => {
+    verifySender(event);
     const res = await taxRepo.deleteTax(id);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Tag Opening API
-  ipcMain.handle('getTagOpeningVouchers', async (_, companyId) => {
+  ipcMain.handle('getTagOpeningVouchers', async (event, companyId) => {
+    verifySender(event);
     return tagOpeningRepo.getTagOpeningVouchers(companyId);
   });
 
-  ipcMain.handle('createTagOpeningVoucher', async (_, voucher, items, accessories) => {
+  ipcMain.handle('createTagOpeningVoucher', async (event, voucher, items, accessories) => {
+    verifySender(event);
     const res = await tagOpeningRepo.createTagOpeningVoucher(voucher, items, accessories);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('updateTagOpeningVoucher', async (_, voucher, items, accessories) => {
+  ipcMain.handle('updateTagOpeningVoucher', async (event, voucher, items, accessories) => {
+    verifySender(event);
     const res = await tagOpeningRepo.updateTagOpeningVoucher(voucher, items, accessories);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('deleteTagOpeningVoucher', async (_, id) => {
+  ipcMain.handle('deleteTagOpeningVoucher', async (event, id) => {
+    verifySender(event);
     const res = await tagOpeningRepo.deleteTagOpeningVoucher(id);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Party Wise Labour API
-  ipcMain.handle('getPartyWiseLabour', async (_, companyId, partyId) => {
+  ipcMain.handle('getPartyWiseLabour', async (event, companyId, partyId) => {
+    verifySender(event);
     return labourRepo.getPartyWiseLabour(companyId, partyId);
   });
 
-  ipcMain.handle('savePartyWiseLabour', async (_, companyId, partyId, entries) => {
+  ipcMain.handle('savePartyWiseLabour', async (event, companyId, partyId, entries) => {
+    verifySender(event);
     const res = await labourRepo.savePartyWiseLabour(companyId, partyId, entries);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('deletePartyWiseLabour', async (_, companyId, partyId) => {
+  ipcMain.handle('deletePartyWiseLabour', async (event, companyId, partyId) => {
+    verifySender(event);
     const res = await labourRepo.deletePartyWiseLabour(companyId, partyId);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Item Stock Limit API
-  ipcMain.handle('getItemStockLimits', async (_, companyId) => {
+  ipcMain.handle('getItemStockLimits', async (event, companyId) => {
+    verifySender(event);
     return itstkLimitRepo.getItemStockLimits(companyId);
   });
 
-  ipcMain.handle('saveItemStockLimit', async (_, companyId, limit, details) => {
+  ipcMain.handle('saveItemStockLimit', async (event, companyId, limit, details) => {
+    verifySender(event);
     const res = await itstkLimitRepo.saveItemStockLimit(companyId, limit, details);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('deleteItemStockLimit', async (_, id) => {
+  ipcMain.handle('deleteItemStockLimit', async (event, id) => {
+    verifySender(event);
     const res = await itstkLimitRepo.deleteItemStockLimit(id);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Purchase API
-  ipcMain.handle('getPurchaseVouchers', async (_, companyId) => {
+  ipcMain.handle('getPurchaseVouchers', async (event, companyId) => {
+    verifySender(event);
     return purchaseRepo.getPurchaseVouchers(companyId);
   });
 
-  ipcMain.handle('createPurchaseVoucher', async (_, voucher, items, tags, diamonds) => {
+  ipcMain.handle('createPurchaseVoucher', async (event, voucher, items, tags, diamonds) => {
+    verifySender(event);
     const res = await purchaseRepo.createPurchaseVoucher(voucher, items, tags, diamonds);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('updatePurchaseVoucher', async (_, voucher, items, tags, diamonds) => {
+  ipcMain.handle('updatePurchaseVoucher', async (event, voucher, items, tags, diamonds) => {
+    verifySender(event);
     const res = await purchaseRepo.updatePurchaseVoucher(voucher, items, tags, diamonds);
     notifyRendererOfDbUpdate();
     return res;
   });
 
-  ipcMain.handle('deletePurchaseVoucher', async (_, id) => {
+  ipcMain.handle('deletePurchaseVoucher', async (event, id) => {
+    verifySender(event);
     const res = await purchaseRepo.deletePurchaseVoucher(id);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Stock Report API
-  ipcMain.handle('getStockReport', async (_, companyId, dateFrom, dateTo) => {
+  ipcMain.handle('getStockReport', async (event, companyId, dateFrom, dateTo) => {
+    verifySender(event);
     return ledrReportRepo.getStockReport(companyId, dateFrom, dateTo);
   });
 
   // Native PDF Export API
   ipcMain.handle('save-to-pdf', async (event, fileName) => {
+    verifySender(event);
     try {
       const win = BrowserWindow.fromWebContents(event.sender);
       if (!win) return { success: false, message: 'No active window found' };
@@ -440,47 +522,56 @@ export function registerIpcHandlers(): void {
   });
 
   // Scanner configurations API
-  ipcMain.handle('getDeviceConfigurations', async (_, companyId) => {
+  ipcMain.handle('getDeviceConfigurations', async (event, companyId) => {
+    verifySender(event);
     return scannerRepo.getDeviceConfigurations(companyId);
   });
 
-  ipcMain.handle('saveDeviceConfiguration', async (_, config) => {
+  ipcMain.handle('saveDeviceConfiguration', async (event, config) => {
+    verifySender(event);
     const res = scannerRepo.saveDeviceConfiguration(config);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Printer configurations API
-  ipcMain.handle('getPrinterConfigurations', async (_, companyId) => {
+  ipcMain.handle('getPrinterConfigurations', async (event, companyId) => {
+    verifySender(event);
     return scannerRepo.getPrinterConfigurations(companyId);
   });
 
-  ipcMain.handle('savePrinterConfiguration', async (_, config) => {
+  ipcMain.handle('savePrinterConfiguration', async (event, config) => {
+    verifySender(event);
     const res = scannerRepo.savePrinterConfiguration(config);
     notifyRendererOfDbUpdate();
     return res;
   });
 
   // Scan logging API
-  ipcMain.handle('logScan', async (_, log) => {
+  ipcMain.handle('logScan', async (event, log) => {
+    verifySender(event);
     return scannerRepo.logScan(log);
   });
 
-  ipcMain.handle('getScanHistory', async (_, companyId, limit) => {
+  ipcMain.handle('getScanHistory', async (event, companyId, limit) => {
+    verifySender(event);
     return scannerRepo.getScanHistory(companyId, limit);
   });
 
   // Uniqueness validation API
-  ipcMain.handle('isBarcodeUnique', async (_, companyId, barcode) => {
+  ipcMain.handle('isBarcodeUnique', async (event, companyId, barcode) => {
+    verifySender(event);
     return scannerRepo.isBarcodeUnique(companyId, barcode);
   });
 
-  ipcMain.handle('isQRUnique', async (_, companyId, qrCode) => {
+  ipcMain.handle('isQRUnique', async (event, companyId, qrCode) => {
+    verifySender(event);
     return scannerRepo.isQRUnique(companyId, qrCode);
   });
 
   // Cross-DB Search API
-  ipcMain.handle('searchScannedValue', async (_, companyId, value) => {
+  ipcMain.handle('searchScannedValue', async (event, companyId, value) => {
+    verifySender(event);
     return scannerRepo.searchScannedValue(companyId, value);
   });
 }

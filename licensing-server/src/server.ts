@@ -9,13 +9,20 @@ import * as path from 'path';
 import pool, { initDatabase } from './db';
 import { generateKeyPair } from './keys/generateKeys';
 import { DeviceFingerprintSchema, DeviceFingerprint } from './types';
+import helmet from 'helmet';
+import hpp from 'hpp';
+import argon2 from 'argon2';
 
 // ── Admin Portal Credentials (from .env) ──────────────────────────
-const ADMIN_USERNAME   = process.env.ADMIN_USERNAME   || 'admin';
-const ADMIN_PASSWORD   = process.env.ADMIN_PASSWORD   || 'JerpAdmin@2024';
-const ADMIN_JWT_SECRET = process.env.ADMIN_JWT_SECRET || 'jerpAdminSecret_fallback';
+const ADMIN_USERNAME   = process.env.ADMIN_USERNAME;
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH;
+const ADMIN_JWT_SECRET = process.env.ADMIN_JWT_SECRET;
 
-// Enforce RSA key pair generation on startup if not present
+if (!ADMIN_USERNAME || !ADMIN_PASSWORD_HASH || !ADMIN_JWT_SECRET) {
+  console.error('CRITICAL: Admin portal credentials (ADMIN_USERNAME, ADMIN_PASSWORD_HASH, ADMIN_JWT_SECRET) must be set in .env');
+  process.exit(1);
+}
+
 const keysDir = path.join(__dirname, 'keys');
 const privateKeyPath = path.join(keysDir, 'private.pem');
 const publicKeyPath = path.join(keysDir, 'public.pem');
@@ -29,8 +36,30 @@ const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
 const publicKey = fs.readFileSync(publicKeyPath, 'utf8');
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.use((req, res, next) => {
+  // Allow inline JS/CSS for the admin portal HTML page
+  if (req.path === '/admin') {
+    return helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'"],
+          scriptSrcAttr: ["'unsafe-inline'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          connectSrc: ["'self'"],
+        }
+      }
+    })(req, res, next);
+  }
+  return helmet()(req, res, next);
+});
+app.use(cors({
+  origin: ['http://localhost:5173', 'app://.', 'file://'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(express.json({ limit: '10kb' }));
+app.use(hpp()); // Prevent HTTP Parameter Pollution
 
 // Port definition
 const PORT = process.env.PORT || 3003;
@@ -519,7 +548,7 @@ function adminAuth(req: Request, res: Response, next: NextFunction): void {
   }
   const token = authHeader.split(' ')[1];
   try {
-    const payload = jwt.verify(token, ADMIN_JWT_SECRET) as any;
+    const payload = jwt.verify(token, ADMIN_JWT_SECRET!) as any;
     if (payload.role !== 'admin') {
       res.status(403).json({ error: 'FORBIDDEN', message: 'Insufficient privileges.' });
       return;
@@ -537,17 +566,24 @@ const loginLimiter = rateLimit({
   message: { error: 'RATE_LIMITED', message: 'Too many login attempts. Try again in 15 minutes.' }
 });
 
-app.post('/admin/login', loginLimiter, (req: Request, res: Response): void => {
+app.post('/admin/login', loginLimiter, async (req: Request, res: Response): Promise<void> => {
   const { username, password } = req.body;
   if (!username || !password) {
     res.status(400).json({ error: 'INVALID_INPUT', message: 'Username and password are required.' });
     return;
   }
-  if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
+  if (username !== ADMIN_USERNAME) {
     res.status(401).json({ error: 'INVALID_CREDENTIALS', message: 'Incorrect username or password.' });
     return;
   }
-  const token = jwt.sign({ role: 'admin', sub: username }, ADMIN_JWT_SECRET, { expiresIn: '8h' });
+  
+  const validPassword = await argon2.verify(ADMIN_PASSWORD_HASH, password);
+  if (!validPassword) {
+    res.status(401).json({ error: 'INVALID_CREDENTIALS', message: 'Incorrect username or password.' });
+    return;
+  }
+  
+  const token = jwt.sign({ role: 'admin', sub: username }, ADMIN_JWT_SECRET!, { expiresIn: '8h' });
   res.json({ success: true, token, expiresIn: '8h' });
 });
 
