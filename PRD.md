@@ -1,12 +1,12 @@
-Aap Antigravity IDE / Claude Code / Codex ko niche wala professional PRD + Master Prompt de sakte ho. Is prompt ka purpose hai ki AI aapko screenshot ke basis par step-by-step enterprise-grade Electron.js Jewellery ERP software banakar de.
+Aap Antigravity IDE / Claude Code / Codex ko niche wala professional PRD + Master Prompt de sakte ho. Is prompt ka purpose hai ki AI aapko screenshot ke basis par step-by-step enterprise-grade Electron.js SwarnPro ERP software banakar de.
 
 ---
 
-# 💎 Jewellery ERP Desktop Software (Electron.js) - Complete Product Requirement Document
+# 💎 SwarnPro ERP Desktop Software (Electron.js) - Complete Product Requirement Document
 
 ## Project Overview
 
-Build a professional desktop-based Jewellery ERP Software using Electron.js for Windows.
+Build a professional desktop-based SwarnPro ERP Software using Electron.js for Windows.
 
 The software will be primarily designed for Jewellery Shops, Gold Traders, Silver Traders, and Jewellery Manufacturers.
 
@@ -516,7 +516,7 @@ Follow these rules:
 
 # Expected Output
 
-Build a production-ready Jewellery ERP Desktop Software capable of:
+Build a production-ready SwarnPro ERP Desktop Software capable of:
 
 * Offline operation
 * Barcode scanning

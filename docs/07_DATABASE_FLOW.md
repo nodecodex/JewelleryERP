@@ -1,6 +1,6 @@
 # 07 - Database Architecture & Transaction Flows
 
-This document details the SQLite database architecture for the Jewellery ERP system, mapping out table structures, relationships, and the data flow between UI screens and database tables.
+This document details the SQLite database architecture for the SwarnPro ERP system, mapping out table structures, relationships, and the data flow between UI screens and database tables.
 
 ---
 

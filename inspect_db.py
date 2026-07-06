@@ -3,10 +3,10 @@ import os
 import glob
 
 def main():
-    # Find all jewellery_erp.db files in AppData/Roaming
+    # Find all swarnpro_erp.db files in AppData/Roaming
     appdata = os.environ.get('APPDATA')
     if appdata:
-        search_pattern = os.path.join(appdata, '**', 'jewellery_erp.db')
+        search_pattern = os.path.join(appdata, '**', 'swarnpro_erp.db')
         print(f"Searching in AppData: {search_pattern}")
         db_files = glob.glob(search_pattern, recursive=True)
         print("Found DB files:", db_files)

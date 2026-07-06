@@ -25,7 +25,7 @@ export function getDatabasePath(): string {
     fs.mkdirSync(userDataPath, { recursive: true });
   }
 
-  return path.join(userDataPath, 'jewellery_erp.db');
+  return path.join(userDataPath, 'swarnpro_erp.db');
 }
 
 export function initDatabase(): Database.Database {

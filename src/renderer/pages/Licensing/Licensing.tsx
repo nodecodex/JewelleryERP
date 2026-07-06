@@ -272,7 +272,7 @@ export default function LicensingView() {
                     <input
                       type="text"
                       required
-                      placeholder="Paste your JERP-XXXX-... key here..."
+                      placeholder="Paste your SPERP-XXXX-... key here..."
                       className="w-full text-xs font-mono outline-none font-medium text-slate-200 bg-transparent placeholder-slate-600"
                       value={keyInput}
                       onChange={e => setKeyInput(e.target.value)}
@@ -325,7 +325,7 @@ export default function LicensingView() {
                     <label className="font-bold text-slate-300 text-xs tracking-wide">Enter Original License Key</label>
                     <input
                       type="text"
-                      placeholder="JERP-XXXX-XXXX-XXXX-XXXX"
+                      placeholder="SPERP-XXXX-XXXX-XXXX-XXXX"
                       className="w-full bg-slate-900/80 border border-slate-700/80 px-3 py-2 font-mono text-xs text-slate-200 outline-none rounded-lg focus:ring-1 focus:ring-amber-500/50 transition-all placeholder-slate-600"
                       value={recoveryKey}
                       onChange={e => setRecoveryKey(e.target.value)}
@@ -368,7 +368,7 @@ export default function LicensingView() {
                     <input
                       type="text"
                       required
-                      placeholder="JERP-XXXX-XXXX-XXXX-XXXX"
+                      placeholder="SPERP-XXXX-XXXX-XXXX-XXXX"
                       className="w-full border border-slate-250 px-2.5 py-1.5 font-mono text-xs outline-none rounded"
                       value={transferKey}
                       onChange={e => setTransferKey(e.target.value)}
@@ -413,7 +413,7 @@ export default function LicensingView() {
                     <div className="bg-blue-500/20 p-1.5 rounded-md">
                       <Mail className="h-4 w-4 text-blue-400 shrink-0" />
                     </div>
-                    <span className="text-slate-400">Support Email: <strong className="text-slate-200 tracking-wide ml-1">licensing@jewelleryerp.com</strong></span>
+                    <span className="text-slate-400">Support Email: <strong className="text-slate-200 tracking-wide ml-1">licensing@SwarnProERP.com</strong></span>
                   </div>
                   <div className="py-2.5 flex items-center space-x-3 px-2 hover:bg-slate-700/30 transition-colors rounded-b-lg">
                     <div className="bg-emerald-500/20 p-1.5 rounded-md">

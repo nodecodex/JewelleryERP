@@ -1,8 +1,8 @@
 {
-  "name": "temp-app",
+  "name": "swarnpro-erp",
   "private": true,
   "version": "1.0.0",
-  "description": "Jewellery ERP System",
+  "description": "SwarnPro ERP System",
   "author": "Antigravity",
   "type": "module",
   "main": "dist/main/index.js",
@@ -14,10 +14,10 @@
     "preview": "vite preview"
   },
   "build": {
-    "appId": "com.jewelleryerp.app",
-    "productName": "Jewellery ERP",
+    "appId": "com.SwarnProERP.app",
+    "productName": "SwarnPro ERP",
     "directories": {
-      "output": "C:/Users/jagji/Desktop/JewelleryERP_Build"
+      "output": "C:/Users/jagji/Desktop/SwarnProERP_Build"
     },
     "files": [
       "dist/**/*",

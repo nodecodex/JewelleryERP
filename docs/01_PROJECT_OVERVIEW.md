@@ -1,6 +1,6 @@
-# 01 - Jewellery ERP Project Overview
+# 01 - SwarnPro ERP Project Overview
 
-Welcome to the **Jewellery ERP Desktop Client (v1.0.0-PRO)** documentation. This desktop application is built to handle offline-first retail billing, purchase logging, tag catalog stock tracking, double-entry accounting ledger posting, barcode diagnostics, backup, recovery, and optional cloud synchronizations.
+Welcome to the **SwarnPro ERP Desktop Client (v1.0.0-PRO)** documentation. This desktop application is built to handle offline-first retail billing, purchase logging, tag catalog stock tracking, double-entry accounting ledger posting, barcode diagnostics, backup, recovery, and optional cloud synchronizations.
 
 ---
 
@@ -23,7 +23,7 @@ The client utilizes a modern, hybrid desktop stack optimized for high performanc
 Below is the layout of the codebase, organized to enforce a strict boundary between main process repositories/services and the renderer process UI view canvas.
 
 ```
-JewelleryERP/
+SwarnProERP/
 ├── .agents/                 # AI Assistant skills and prompts
 ├── dist/                    # Compiled assets for production Electron packaging
 ├── docs/                    # [NEW] Master ERP System Documentation
@@ -96,7 +96,7 @@ sequenceDiagram
     Note over IPCMain,ReactUI: Main posts 'database-updated' event to notify all windows
 ```
 
-### 🔐 Context Isolation Bridge ([preload/index.ts](file:///d:/JewelleryERP/src/preload/index.ts))
+### 🔐 Context Isolation Bridge ([preload/index.ts](file:///d:/SwarnProERP/src/preload/index.ts))
 By disabling Node integration inside the frontend browser windows, the application prevents client scripts from running raw OS commands. Access is limited to the channels defined on `window.api`:
 - **Transactional APIs**: `createInvoice`, `createPurchaseVoucher`, `createVoucher`, `saveDailyRates`.
 - **Administrative APIs**: `getLicenseStatus`, `activateLicense`, `createBackup`, `restoreBackup`, `syncWithCloud`.

@@ -656,10 +656,10 @@ app.get('/api/v1/admin/licenses', adminAuth, async (req: Request, res: Response)
 app.post('/api/v1/admin/licenses/generate', adminAuth, async (req: Request, res: Response) => {
   const { customerId, licenseType, maxDevices, expiryDays } = req.body;
   try {
-    // Generate unique license key JERP-XXXX-XXXX-XXXX-XXXX
+    // Generate unique license key SPERP-XXXX-XXXX-XXXX-XXXX
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Avoid ambiguous chars
     const blockGen = () => Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-    const licenseKey = `JERP-${blockGen()}-${blockGen()}-${blockGen()}-${blockGen()}`;
+    const licenseKey = `SPERP-${blockGen()}-${blockGen()}-${blockGen()}-${blockGen()}`;
 
     let expiryDate = null;
     if (expiryDays) {

@@ -1,4 +1,4 @@
--- PostgreSQL Database Initialization Script for Jewellery ERP Licensing System
+-- PostgreSQL Database Initialization Script for SwarnPro ERP Licensing System
 
 -- Create Tables
 CREATE TABLE IF NOT EXISTS customers (

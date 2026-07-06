@@ -16,9 +16,9 @@ This document lists common errors, error codes, database issues, licensing error
 ### Error: `SQLITE_CORRUPT: database disk image is malformed`
 * **Why it occurs**: Severe filesystem errors, sudden power outages during write transactions, or disk write failures have corrupted the SQLite file database header.
 * **Resolution**:
-  1. Go to the backup directory: `C:\Users\<Username>\Documents\JewelleryERP_Backups`.
-  2. Identify the latest backup file (e.g. `jewellery_erp_backup_2026-06-22.db.gz`).
-  3. Close the application. Decompress the backup file using a utility like 7-Zip, rename the file to `jewellery_erp.db`, and use it to replace the corrupted database file in AppData: `C:\Users\<Username>\AppData\Roaming\JewelleryERP\db\jewellery_erp.db`.
+  1. Go to the backup directory: `C:\Users\<Username>\Documents\SwarnProERP_Backups`.
+  2. Identify the latest backup file (e.g. `swarnpro_erp_backup_2026-06-22.db.gz`).
+  3. Close the application. Decompress the backup file using a utility like 7-Zip, rename the file to `swarnpro_erp.db`, and use it to replace the corrupted database file in AppData: `C:\Users\<Username>\AppData\Roaming\SwarnProERP\db\swarnpro_erp.db`.
 
 ---
 

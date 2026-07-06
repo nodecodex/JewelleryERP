@@ -24,7 +24,7 @@ export class BackupService {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const { app } = require('electron');
         const rootPath = app ? app.getPath('documents') : process.cwd();
-        targetDir = path.join(rootPath, 'JewelleryERP_Backups');
+        targetDir = path.join(rootPath, 'SwarnProERP_Backups');
       }
 
       if (!fs.existsSync(targetDir)) {
@@ -32,7 +32,7 @@ export class BackupService {
       }
 
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const backupFileName = `jewellery_erp_backup_${timestamp}.db.gz`;
+      const backupFileName = `swarnpro_erp_backup_${timestamp}.db.gz`;
       const backupPath = path.join(targetDir, backupFileName);
 
       // Path Traversal Prevention

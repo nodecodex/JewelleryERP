@@ -1,7 +1,7 @@
 {
-  "name": "jerp-licensing-server",
+  "name": "SPERP-licensing-server",
   "version": "1.0.0",
-  "description": "Enterprise Licensing & Trial Backend for Jewellery ERP",
+  "description": "Enterprise Licensing & Trial Backend for SwarnPro ERP",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc && cp src/admin-dashboard.html dist/index.html",

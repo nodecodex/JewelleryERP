@@ -7,7 +7,7 @@ import os from 'os';
 const DB_ENCRYPTION_KEY = 'jewel-erp-secure-db-key-2024';
 // Use process.env.APPDATA on Windows
 const appDataPath = process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming');
-const dbPath = path.join(appDataPath, 'temp-app', 'jewellery_erp.db');
+const dbPath = path.join(appDataPath, 'SwarnPro ERP', 'swarnpro_erp.db');
 
 console.log(`Connecting to database at ${dbPath}`);
 const db = new Database(dbPath, { verbose: console.log });

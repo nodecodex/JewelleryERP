@@ -1,6 +1,6 @@
 # 09 - Feature Training & Role Onboarding Guide
 
-This guide is designed to train new employees on the Jewellery ERP. It is structured by user role and provides step-by-step guides for each module.
+This guide is designed to train new employees on the SwarnPro ERP. It is structured by user role and provides step-by-step guides for each module.
 
 ---
 
@@ -229,7 +229,7 @@ This guide is designed to train new employees on the Jewellery ERP. It is struct
 * **Business Use Case**: Activating newly installed ERP checkout terminals, ensuring commercial nodes are registered and preventing software piracy.
 * **Required Setup**: Open the secure lock screen to generate a hardware-bound Device ID.
 * **Step-by-Step Usage**:
-  1. Install and boot the Jewellery ERP software. If unactivated, the application blocks navigation and displays the **System Secure Lock** screen.
+  1. Install and boot the SwarnPro ERP software. If unactivated, the application blocks navigation and displays the **System Secure Lock** screen.
   2. Click **Copy Device ID** to copy the machine's hardware fingerprint (SHA-256 hash of the CPU, Motherboard, and Disk IDs) to the clipboard.
   3. Send the copied Device ID fingerprint to the ERP administrator.
   4. The administrator generates a machine-bound License Key using the AES-256-CBC cipher with the shared secret key.

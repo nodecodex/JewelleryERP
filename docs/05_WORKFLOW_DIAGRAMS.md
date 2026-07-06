@@ -1,6 +1,6 @@
 # 05 - Visual Workflow Documentation
 
-This document contains Mermaid diagrams that map out the processes, workflows, and journeys inside the Jewellery ERP system.
+This document contains Mermaid diagrams that map out the processes, workflows, and journeys inside the SwarnPro ERP system.
 
 ---
 
