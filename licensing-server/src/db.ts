@@ -19,7 +19,7 @@ const pool = new Pool({
   port: connectionString ? undefined : parseInt(process.env.DB_PORT || '5432'),
   user: connectionString ? undefined : (process.env.DB_USER || 'postgres'),
   password: connectionString ? undefined : (process.env.DB_PASSWORD || 'postgres'),
-  database: connectionString ? undefined : (process.env.DB_NAME || 'jewellery_erp_licensing'),
+  database: connectionString ? undefined : (process.env.DB_NAME || 'swarnpro_erp_licensing'),
   ssl: sslEnabled ? { rejectUnauthorized: false } : undefined
 });
 

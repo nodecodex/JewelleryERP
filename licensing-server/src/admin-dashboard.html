@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>💎 JERP Licensing Portal</title>
+  <title>💎 SPERP Licensing Portal</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -221,7 +221,7 @@
 
 <!-- ═══ PAGE LOAD OVERLAY ═══════════════════════════════════════════ -->
 <div id="page-loader">
-  <div class="loader-logo">JERP</div>
+  <div class="loader-logo">SPERP</div>
   <div class="loader-spinner"></div>
   <div class="loader-text">Loading Portal...</div>
 </div>
@@ -233,7 +233,7 @@
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
-      <span class="login-badge">JERP</span>
+      <span class="login-badge">SPERP</span>
       <div class="login-title-wrap">
         <div class="login-title">Licensing Portal</div>
         <div class="login-subtitle">Enterprise Management System</div>
@@ -267,7 +267,7 @@
   <div class="sidebar">
     <div class="sidebar-header">
       <div class="logo">
-        <span class="logo-badge">JERP</span>
+        <span class="logo-badge">SPERP</span>
         <span class="logo-title">Licensing</span>
       </div>
       <div class="logo-sub">Enterprise Management Portal</div>
@@ -397,7 +397,7 @@
 
 <script>
   // ── Auth ────────────────────────────────────────────────────────────
-  let SESSION_TOKEN = sessionStorage.getItem('jerp_admin_token') || null;
+  let SESSION_TOKEN = sessionStorage.getItem('SPERP_admin_token') || null;
   let adminNotes = {};
   let _apiPendingCount = 0;
 
@@ -489,8 +489,8 @@
         showLoginError(data.message || 'Invalid credentials. Access denied.');
       } else {
         SESSION_TOKEN = data.token;
-        sessionStorage.setItem('jerp_admin_token', SESSION_TOKEN);
-        sessionStorage.setItem('jerp_admin_user', username);
+        sessionStorage.setItem('SPERP_admin_token', SESSION_TOKEN);
+        sessionStorage.setItem('SPERP_admin_user', username);
         showApp(username);
       }
     } catch(e) {
@@ -520,8 +520,8 @@
   }
 
   function doLogout() {
-    sessionStorage.removeItem('jerp_admin_token');
-    sessionStorage.removeItem('jerp_admin_user');
+    sessionStorage.removeItem('SPERP_admin_token');
+    sessionStorage.removeItem('SPERP_admin_user');
     SESSION_TOKEN = null;
     document.getElementById('app').classList.remove('visible');
     document.getElementById('login-screen').style.display = 'flex';
@@ -541,7 +541,7 @@
           doLogout();
           hidePageLoader();
         } else {
-          const username = sessionStorage.getItem('jerp_admin_user') || 'Admin';
+          const username = sessionStorage.getItem('SPERP_admin_user') || 'Admin';
           hidePageLoader();
           showApp(username);
         }

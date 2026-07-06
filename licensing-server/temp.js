@@ -1,6 +1,6 @@
 
   // ── Auth ────────────────────────────────────────────────────────────
-  let SESSION_TOKEN = sessionStorage.getItem('jerp_admin_token') || null;
+  let SESSION_TOKEN = sessionStorage.getItem('SPERP_admin_token') || null;
   let adminNotes = {};
 
   async function doLogin() {
@@ -23,7 +23,7 @@
         showLoginError(data.message || 'Invalid credentials. Access denied.');
       } else {
         SESSION_TOKEN = data.token;
-        sessionStorage.setItem('jerp_admin_token', SESSION_TOKEN);
+        sessionStorage.setItem('SPERP_admin_token', SESSION_TOKEN);
         showApp(username);
       }
     } catch(e) {
@@ -48,7 +48,7 @@
   }
 
   function doLogout() {
-    sessionStorage.removeItem('jerp_admin_token');
+    sessionStorage.removeItem('SPERP_admin_token');
     SESSION_TOKEN = null;
     document.getElementById('app').classList.remove('visible');
     document.getElementById('login-screen').style.display = 'flex';
@@ -62,7 +62,7 @@
     fetch('/api/v1/admin/dashboard-stats', { headers: { Authorization: 'Bearer ' + SESSION_TOKEN } })
       .then(r => {
         if (r.status === 401) { doLogout(); }
-        else { showApp(sessionStorage.getItem('jerp_admin_user') || 'Admin'); }
+        else { showApp(sessionStorage.getItem('SPERP_admin_user') || 'Admin'); }
       }).catch(() => {});
   }
 

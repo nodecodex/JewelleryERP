@@ -1,6 +1,6 @@
 # 03 - System Administrator & Deployment Guide
 
-This guide is written for IT managers, system administrators, and deployment engineers. It explains how to deploy, license, back up, restore, configure cloud sync, and manage user authorization sets in the Jewellery ERP application.
+This guide is written for IT managers, system administrators, and deployment engineers. It explains how to deploy, license, back up, restore, configure cloud sync, and manage user authorization sets in the SwarnPro ERP application.
 
 ---
 
@@ -65,7 +65,7 @@ The Admin generates the license key using a utility. The key is an AES-256-CBC e
   "created": "2026-06-22T00:00:00Z"
 }
 ```
-The client decrypts this string using the secret key derived from `LICENSE_SECRET_KEY` ('JEWELLERY_ERP_ENTERPRISE_SECRET_KEY_2026'). If the decrypted `deviceId` matches the machine's active Device ID, the license is saved to `license_info` and access is granted.
+The client decrypts this string using the secret key derived from `LICENSE_SECRET_KEY` ('swarnpro_erp_ENTERPRISE_SECRET_KEY_2026'). If the decrypted `deviceId` matches the machine's active Device ID, the license is saved to `license_info` and access is granted.
 
 ---
 
@@ -73,8 +73,8 @@ The client decrypts this string using the secret key derived from `LICENSE_SECRE
 
 The database is built on SQLite. SQLite offers low latency, zero configuration, and transactional safety (ACID compliance) for offline-first installations.
 
-* **Database Path**: The database file `jewellery_erp.db` is stored locally in the user's home app directory (usually `C:\Users\<Username>\AppData\Roaming\JewelleryERP\db\jewellery_erp.db`).
-* **Migrations Framework**: The migration scripts are located in [schema.ts](file:///d:/JewelleryERP/src/main/db/schema.ts#L508-L700). On startup, the application verifies the schema and runs database migrations:
+* **Database Path**: The database file `swarnpro_erp.db` is stored locally in the user's home app directory (usually `C:\Users\<Username>\AppData\Roaming\SwarnProERP\db\swarnpro_erp.db`).
+* **Migrations Framework**: The migration scripts are located in [schema.ts](file:///d:/SwarnProERP/src/main/db/schema.ts#L508-L700). On startup, the application verifies the schema and runs database migrations:
   - Validates `companies` table fields.
   - Adds missing columns, such as `permissions_json` to `users` and `rates_json`/`employee` to `daily_rates`.
   - Migrates foreign key references dynamically (e.g., updating `sales_invoices.customer_id` from `customers(id)` to reference `parties(id)`).
@@ -86,13 +86,13 @@ The database is built on SQLite. SQLite offers low latency, zero configuration, 
 
 Database backups use compressed Gzip streams to minimize file size and avoid resource locks.
 
-### Backup Process ([backup.service.ts](file:///d:/JewelleryERP/src/main/services/backup.service.ts#L11-L59))
+### Backup Process ([backup.service.ts](file:///d:/SwarnProERP/src/main/services/backup.service.ts#L11-L59))
 1. Checks if the source SQLite database file exists.
-2. Locates or creates the backup folder (default is `C:\Users\<Username>\Documents\JewelleryERP_Backups`).
-3. Appends a timestamp to the file name: `jewellery_erp_backup_YYYY-MM-DDTHH-MM-SS-MS.db.gz`.
+2. Locates or creates the backup folder (default is `C:\Users\<Username>\Documents\SwarnProERP_Backups`).
+3. Appends a timestamp to the file name: `swarnpro_erp_backup_YYYY-MM-DDTHH-MM-SS-MS.db.gz`.
 4. Opens a read stream on the SQLite file, pipes it through a Gzip compression stream, and writes the output as a `.db.gz` file.
 
-### Restore Process ([backup.service.ts](file:///d:/JewelleryERP/src/main/services/backup.service.ts#L64-L107))
+### Restore Process ([backup.service.ts](file:///d:/SwarnProERP/src/main/services/backup.service.ts#L64-L107))
 1. Verifies that the backup file exists.
 2. **Closes the active database connection pool** (`closeDatabase()`) to unlock the SQLite file.
 3. Decompresses the backup file and overwrites the active database file:

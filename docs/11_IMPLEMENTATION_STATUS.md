@@ -1,6 +1,6 @@
 # 11 - ERP Implementation Status & Functional Audit
 
-This audit logs the development status of all modules in the Jewellery ERP client. It categorizes features as **Fully Implemented**, **Partially Implemented**, or **Stubbed/Mocked**.
+This audit logs the development status of all modules in the SwarnPro ERP client. It categorizes features as **Fully Implemented**, **Partially Implemented**, or **Stubbed/Mocked**.
 
 ---
 
@@ -31,22 +31,22 @@ This audit logs the development status of all modules in the Jewellery ERP clien
 
 ## 🔍 Detailed Codebase Audit
 
-### 1. Licensing Engine ([license.service.ts](file:///d:/JewelleryERP/src/main/services/license.service.ts))
+### 1. Licensing Engine ([license.service.ts](file:///d:/SwarnProERP/src/main/services/license.service.ts))
 * **Status**: **Fully Implemented**.
 * **Validation**: Code retrieves Windows CPU, motherboard, and disk descriptors using PowerShell, hashes them to create a Device ID, and decrypts the license key to verify access.
 
-### 2. Database connection and Migrations ([connection.ts](file:///d:/JewelleryERP/src/main/db/connection.ts), [schema.ts](file:///d:/JewelleryERP/src/main/db/schema.ts))
+### 2. Database connection and Migrations ([connection.ts](file:///d:/SwarnProERP/src/main/db/connection.ts), [schema.ts](file:///d:/SwarnProERP/src/main/db/schema.ts))
 * **Status**: **Fully Implemented**.
 * **Validation**: Database initialization queries and schema migration scripts run on startup, adding missing columns and seeding default tax rates if the tables are empty.
 
-### 3. Backups and recovery ([backup.service.ts](file:///d:/JewelleryERP/src/main/services/backup.service.ts))
+### 3. Backups and recovery ([backup.service.ts](file:///d:/SwarnProERP/src/main/services/backup.service.ts))
 * **Status**: **Fully Implemented**.
 * **Validation**: The backup service opens a read stream on the SQLite file, pipes it through a Gzip compression stream, and writes the output as a `.db.gz` file. The restore service decompress the backup file and overwrites the active database file.
 
-### 4. Cloud Synchronizations ([sync.service.ts](file:///d:/JewelleryERP/src/main/services/sync.service.ts))
+### 4. Cloud Synchronizations ([sync.service.ts](file:///d:/SwarnProERP/src/main/services/sync.service.ts))
 * **Status**: **Partially Implemented**.
 * **Validation**: The sync service checks the internet connection and compiles a JSON payload of all company records to push to the cloud. Merging remote updates and resolving data conflicts locally is mocked.
 
-### 5. Sales POS Desk ([Sales.tsx](file:///d:/JewelleryERP/src/renderer/pages/Sales/Sales.tsx))
+### 5. Sales POS Desk ([Sales.tsx](file:///d:/SwarnProERP/src/renderer/pages/Sales/Sales.tsx))
 * **Status**: **Fully Implemented**.
 * **Validation**: POS screen processes sales invoices, validates barcode scans, handles trade-in return metal credits, and auto-calculates invoice totals, GST, and outstanding balances.

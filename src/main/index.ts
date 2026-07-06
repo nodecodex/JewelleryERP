@@ -26,7 +26,7 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
     },
-    title: 'Jewellery ERP Desktop Client'
+    title: 'SwarnPro ERP Desktop Client'
   });
 
   // Load URL depending on dev/prod

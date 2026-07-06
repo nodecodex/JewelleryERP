@@ -36,7 +36,7 @@ export class SyncService extends BaseRepository {
       }
 
       const settings = JSON.parse(company.settings_json || '{}');
-      const syncEndpoint = settings.cloudSyncUrl || 'https://api.jewelleryerp-cloud.com/sync';
+      const syncEndpoint = settings.cloudSyncUrl || 'https://api.SwarnProERP-cloud.com/sync';
 
       // 2. Fetch local records to sync
       const users = this.db.prepare('SELECT * FROM users WHERE company_id = ?').all(companyId);

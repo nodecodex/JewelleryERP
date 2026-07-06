@@ -1,6 +1,6 @@
 # 06 - Feature Dependency & Initialization Map
 
-This document defines the functional dependencies of the Jewellery ERP system. Certain screens and operations are locked or will fail if their prerequisites are not configured first.
+This document defines the functional dependencies of the SwarnPro ERP system. Certain screens and operations are locked or will fail if their prerequisites are not configured first.
 
 ---
 

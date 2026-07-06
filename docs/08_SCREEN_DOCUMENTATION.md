@@ -1,6 +1,6 @@
 # 08 - UI Screen & Form Fields Documentation
 
-This document provides field-by-field UI and UX documentation for all 20 screens in the Jewellery ERP client.
+This document provides field-by-field UI and UX documentation for all 20 screens in the SwarnPro ERP client.
 
 ---
 

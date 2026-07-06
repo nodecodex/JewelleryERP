@@ -1,6 +1,6 @@
 # 02 - Master User Manual & Calculation Guide
 
-This manual defines the business concepts and calculation policies used by the Jewellery ERP. A consistent understanding of these calculations is required to prevent inventory discrepancies, tax audits, and ledger imbalances.
+This manual defines the business concepts and calculation policies used by the SwarnPro ERP. A consistent understanding of these calculations is required to prevent inventory discrepancies, tax audits, and ledger imbalances.
 
 ---
 

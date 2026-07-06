@@ -2,7 +2,7 @@ import sqlite3
 import os
 
 def run_migration():
-    db_path = r"C:\Users\jagji\AppData\Roaming\Electron\jewellery_erp.db"
+    db_path = r"C:\Users\jagji\AppData\Roaming\Electron\swarnpro_erp.db"
     if not os.path.exists(db_path):
         print("DB file not found.")
         return
