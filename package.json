@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "SwarnPro ERP System",
-  "author": "Antigravity",
+  "author": "AsyncroZ Technologies",
   "type": "module",
   "main": "dist/main/index.js",
   "scripts": {
