@@ -26,7 +26,8 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
     },
-    title: 'SwarnPro ERP Desktop Client'
+    title: 'SwarnPro ERP Desktop Client',
+    icon: path.join(__dirname, '../../build/icon.png')
   });
 
   // Load URL depending on dev/prod
