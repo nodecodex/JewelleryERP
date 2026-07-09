@@ -23,7 +23,10 @@ if (!ADMIN_USERNAME || !ADMIN_PASSWORD_HASH || !ADMIN_JWT_SECRET) {
   process.exit(1);
 }
 
-const keysDir = path.join(__dirname, 'keys');
+let keysDir = path.join(__dirname, 'keys');
+if (!fs.existsSync(keysDir) && fs.existsSync(path.join(__dirname, '../src/keys'))) {
+  keysDir = path.join(__dirname, '../src/keys');
+}
 const privateKeyPath = path.join(keysDir, 'private.pem');
 const publicKeyPath = path.join(keysDir, 'public.pem');
 
