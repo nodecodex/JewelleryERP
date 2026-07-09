@@ -39,6 +39,7 @@ const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
 const publicKey = fs.readFileSync(publicKeyPath, 'utf8');
 
 const app = express();
+app.set('trust proxy', 1);
 app.use((req, res, next) => {
   // Allow inline JS/CSS for the admin portal HTML page
   if (req.path === '/admin') {
