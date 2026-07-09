@@ -4,7 +4,7 @@
   "description": "Enterprise Licensing & Trial Backend for SwarnPro ERP",
   "main": "dist/server.js",
   "scripts": {
-    "build": "tsc && cp src/admin-dashboard.html dist/index.html",
+    "build": "tsc && cp src/admin-dashboard.html dist/admin-dashboard.html",
     "start": "node dist/server.js",
     "dev": "nodemon --watch src -e ts --exec ts-node src/server.ts",
     "generate-keys": "ts-node src/keys/generateKeys.ts"
