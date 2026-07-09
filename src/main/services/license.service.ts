@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 import { execSync } from 'child_process';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, app } from 'electron';
 import type { LicenseStatus } from '../../shared/ipc-api';
 import { BaseRepository } from '../repositories/base.repository';
 
@@ -14,7 +14,7 @@ udmyEt0CVUtqtvV1LG9y4f/u5FFxGEw3WMuZWQQOC47uU4CV8NQc7wI1OyyT0XQh
 1QIDAQAB
 -----END PUBLIC KEY-----`;
 
-const SERVER_BASE_URL = 'http://localhost:3003';
+const SERVER_BASE_URL = app.isPackaged ? 'https://jewelleryerp-85xu.onrender.com' : 'http://localhost:3003';
 // const SERVER_BASE_URL = 'https://jewellery-erp-two.vercel.app';
 
 export class LicenseService extends BaseRepository {
@@ -87,11 +87,12 @@ export class LicenseService extends BaseRepository {
 
     try {
       if (process.platform === 'win32') {
-        try { cpuId = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty ProcessorId"').toString().trim(); } catch (e) { }
-        try { mbSerial = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_BaseBoard | Select-Object -ExpandProperty SerialNumber"').toString().trim(); } catch (e) { }
-        try { diskSerial = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_DiskDrive | Where-Object { $_.Index -eq 0 } | Select-Object -ExpandProperty SerialNumber"').toString().trim(); } catch (e) { }
+        const execOpts = { timeout: 2000, stdio: 'pipe' as const };
+        try { const cpuOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty ProcessorId"', execOpts).toString().trim(); if (cpuOut) cpuId = cpuOut; } catch (e) { }
+        try { const mbOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_BaseBoard | Select-Object -ExpandProperty SerialNumber"', execOpts).toString().trim(); if (mbOut) mbSerial = mbOut; } catch (e) { }
+        try { const diskOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_DiskDrive | Where-Object { $_.Index -eq 0 } | Select-Object -ExpandProperty SerialNumber"', execOpts).toString().trim(); if (diskOut) diskSerial = diskOut; } catch (e) { }
         try {
-          const guidOut = execSync('REG QUERY HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid').toString();
+          const guidOut = execSync('REG QUERY HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid', execOpts).toString();
           const match = guidOut.match(/MachineGuid\s+REG_SZ\s+([a-fA-F0-9-]+)/);
           if (match && match[1]) machineGuid = match[1];
         } catch (e) { }
@@ -109,11 +110,11 @@ export class LicenseService extends BaseRepository {
     } catch (e) { }
 
     return {
-      cpuId,
-      motherboardSerial: mbSerial,
-      diskSerial,
-      machineGuid,
-      osPlatform: process.platform
+      cpuId: cpuId || 'CPU-GENERIC',
+      motherboardSerial: mbSerial || 'MB-GENERIC',
+      diskSerial: diskSerial || 'DISK-GENERIC',
+      machineGuid: machineGuid || 'GUID-GENERIC',
+      osPlatform: process.platform || 'unknown'
     };
   }
 

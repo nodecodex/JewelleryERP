@@ -63,7 +63,7 @@ app.whenReady().then(() => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data:; connect-src 'self' http://localhost:3003;"]
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data:; connect-src 'self' http://localhost:3003 https://jewelleryerp-85xu.onrender.com;"]
       }
     });
   });

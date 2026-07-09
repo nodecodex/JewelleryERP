@@ -419,7 +419,7 @@ export default function LicensingView() {
                     <div className="bg-emerald-500/20 p-1.5 rounded-md">
                       <Laptop className="h-4 w-4 text-emerald-400 shrink-0" />
                     </div>
-                    <span className="text-slate-400">Verification Server: <strong className="text-emerald-400/90 font-mono tracking-wide ml-1">http://localhost:3003</strong></span>
+                    <span className="text-slate-400">Verification Server: <strong className="text-emerald-400/90 font-mono tracking-wide ml-1">https://jewelleryerp-85xu.onrender.com</strong></span>
                   </div>
                 </div>
               </div>
