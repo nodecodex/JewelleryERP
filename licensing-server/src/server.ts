@@ -126,6 +126,40 @@ async function matchOrCreateDevice(fp: DeviceFingerprint) {
 }
 
 // -------------------------------------------------------------
+// HEALTH CHECK ENDPOINT
+// -------------------------------------------------------------
+
+app.get('/api/v1/health', async (_req: Request, res: Response): Promise<any> => {
+  try {
+    // Verify database connectivity
+    const dbCheck = await pool.query('SELECT NOW() AS server_time');
+    const dbTime = dbCheck.rows[0]?.server_time;
+
+    return res.status(200).json({
+      success: true,
+      status: 'healthy',
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+      database: {
+        connected: true,
+        serverTime: dbTime
+      }
+    });
+  } catch (err: any) {
+    return res.status(503).json({
+      success: false,
+      status: 'unhealthy',
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+      database: {
+        connected: false,
+        error: err.message || 'Database connection failed'
+      }
+    });
+  }
+});
+
+// -------------------------------------------------------------
 // CLIENT LICENSING ENDPOINTS
 // -------------------------------------------------------------
 

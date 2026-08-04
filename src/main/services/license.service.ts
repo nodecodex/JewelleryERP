@@ -14,7 +14,7 @@ udmyEt0CVUtqtvV1LG9y4f/u5FFxGEw3WMuZWQQOC47uU4CV8NQc7wI1OyyT0XQh
 1QIDAQAB
 -----END PUBLIC KEY-----`;
 
-const SERVER_BASE_URL = app.isPackaged ? 'https://jewelleryerp-85xu.onrender.com' : 'http://localhost:3003';
+const SERVER_BASE_URL = app.isPackaged ? 'https://jewelleryerp-8l4k.onrender.com' : 'http://localhost:3003';
 // const SERVER_BASE_URL = 'https://jewellery-erp-two.vercel.app';
 
 export class LicenseService extends BaseRepository {
@@ -39,23 +39,23 @@ export class LicenseService extends BaseRepository {
         try {
           const cpuOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -ExpandProperty ProcessorId"', execOpts).toString().trim();
           if (cpuOut) cpuId = cpuOut;
-        } catch (e) {}
+        } catch (e) { }
 
         try {
           const mbOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_BaseBoard | Select-Object -ExpandProperty SerialNumber"', execOpts).toString().trim();
           if (mbOut) mbSerial = mbOut;
-        } catch (e) {}
+        } catch (e) { }
 
         try {
           const diskOut = execSync('powershell -NoProfile -Command "Get-CimInstance Win32_DiskDrive | Where-Object { $_.Index -eq 0 } | Select-Object -ExpandProperty SerialNumber"', execOpts).toString().trim();
           if (diskOut) diskSerial = diskOut;
-        } catch (e) {}
+        } catch (e) { }
 
         try {
           const guidOut = execSync('REG QUERY HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid', execOpts).toString();
           const match = guidOut.match(/MachineGuid\s+REG_SZ\s+([a-fA-F0-9-]+)/);
           if (match && match[1]) machineGuid = match[1];
-        } catch (e) {}
+        } catch (e) { }
       } else {
         const interfaces = require('os').networkInterfaces();
         for (const name of Object.keys(interfaces)) {
