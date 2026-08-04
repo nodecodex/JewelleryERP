@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
 import { useTabStore } from '../../store/useTabStore';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useCompanyStore } from '../../store/useCompanyStore';
@@ -11,6 +11,7 @@ import { useVoucherStore } from '../../store/useVoucherStore';
 import { useRateStore } from '../../store/useRateStore';
 import { useTagOpeningStore } from '../../store/useTagOpeningStore';
 import { useItStkLimitStore } from '../../store/useItStkLimitStore';
+import { debounce } from '../../utils/debounce';
 
 // Views
 import Dashboard from '../../pages/Dashboard/Dashboard';
@@ -67,6 +68,20 @@ import {
   Plus
 } from 'lucide-react';
 
+// Isolated clock component to prevent Layout re-renders every second
+const StatusBarClock = memo(function StatusBarClock() {
+  const [systemTime, setSystemTime] = useState(new Date().toLocaleTimeString());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSystemTime(new Date().toLocaleTimeString());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return <span className="font-data text-primary/80 font-bold">{systemTime}</span>;
+});
+
 export default function Layout() {
   const { theme, toggleTheme } = useThemeStore();
   const { tabs, activeTabId, setActiveTab, closeTab, addTab } = useTabStore();
@@ -85,7 +100,6 @@ export default function Layout() {
   const loadItStkLimits = useItStkLimitStore((state) => state.loadLimits);
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [systemTime, setSystemTime] = useState(new Date().toLocaleTimeString());
   const [workspaceDropdownOpen, setWorkspaceDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -99,7 +113,8 @@ export default function Layout() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const reloadAllData = () => {
+  // Memoize reloadAllData to prevent stale closure issues
+  const reloadAllData = useCallback(() => {
     if (selectedCompany) {
       const compId = selectedCompany.id;
       loadProducts(compId);
@@ -113,27 +128,32 @@ export default function Layout() {
       loadTagOpeningVouchers(compId);
       loadItStkLimits(compId);
     }
-  };
+  }, [selectedCompany, loadProducts, loadParties, loadTaxes, loadCustomers, loadInvoices, loadVouchers, loadAccounts, loadRates, loadTagOpeningVouchers, loadItStkLimits]);
 
+  // Use ref to always access latest reloadAllData without re-subscribing the IPC listener
+  const reloadAllDataRef = useRef(reloadAllData);
+  reloadAllDataRef.current = reloadAllData;
+
+  // Debounced database-updated handler: prevents cascading 11 parallel reloads
+  // when rapid writes happen (e.g., saving a form triggers notifyRendererOfDbUpdate)
   useEffect(() => {
     if (!(window as any).api?.onDatabaseUpdated) return;
-    const unsubscribe = (window as any).api.onDatabaseUpdated(() => {
+
+    const debouncedReload = debounce(() => {
       loadCompanies();
-      reloadAllData();
-    });
-    return () => unsubscribe();
-  }, [selectedCompany]);
+      reloadAllDataRef.current();
+    }, 300);
+
+    const unsubscribe = (window as any).api.onDatabaseUpdated(debouncedReload);
+    return () => {
+      debouncedReload.cancel();
+      unsubscribe();
+    };
+  }, []); // Stable listener — uses ref internally
 
   useEffect(() => {
     reloadAllData();
-  }, [selectedCompany]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSystemTime(new Date().toLocaleTimeString());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  }, [reloadAllData]);
 
   const handleCompanyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const comp = companies.find((c) => c.id === e.target.value);
@@ -452,7 +472,7 @@ export default function Layout() {
           </div>
           <div className="flex items-center gap-2 text-[11px] text-muted-foreground border-l border-border pl-4">
             <Clock className="h-3.5 w-3.5" />
-            <span className="font-data text-primary/80 font-bold">{systemTime}</span>
+            <StatusBarClock />
           </div>
         </div>
 
