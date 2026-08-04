@@ -34,7 +34,9 @@ export function initDatabase(): Database.Database {
   }
 
   const dbPath = getDatabasePath();
-  const db = new Database(dbPath, { verbose: console.log });
+  // Only enable verbose SQL logging in development to avoid blocking main process in production
+  const isDev = process.env.NODE_ENV === 'development' || (() => { try { return !require('electron').app.isPackaged; } catch { return true; } })();
+  const db = new Database(dbPath, isDev ? { verbose: console.log } : {});
   
   // Set Encryption key for SQLCipher
   db.pragma(`key = '${DB_ENCRYPTION_KEY}'`);

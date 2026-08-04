@@ -292,8 +292,9 @@ export class LicenseService extends BaseRepository {
         }
       }
 
-      // Background verification attempt (every 30 days)
-      this.attemptBackgroundVerification(row.license_key, row.activation_token, row.last_verified_at);
+      // Background verification attempt (every 30 days) — fire-and-forget with error safety
+      this.attemptBackgroundVerification(row.license_key, row.activation_token, row.last_verified_at)
+        .catch((err) => console.warn('Background license verification failed silently:', err));
 
       return {
         activated: true,
