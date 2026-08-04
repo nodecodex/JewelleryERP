@@ -168,10 +168,10 @@ export default function LicensingView() {
 
       {/* Alert banner */}
       <div className={`p-4 rounded-xl border flex items-start gap-3.5 backdrop-blur-md transition-all duration-300 ${licenseStatus.activated
-          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-          : licenseStatus.isTrialActive
-            ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
-            : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+        ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+        : licenseStatus.isTrialActive
+          ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+          : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
         }`}>
         {licenseStatus.activated ? (
           <ShieldCheck className="h-5 w-5 shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
@@ -238,8 +238,8 @@ export default function LicensingView() {
               key={tab.id}
               onClick={() => { setActiveTab(tab.id as any); clearMessages(); }}
               className={`flex-1 px-3 py-2 text-[10px] font-bold uppercase tracking-wider rounded-md transition-all duration-300 whitespace-nowrap ${activeTab === tab.id
-                  ? 'bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
+                ? 'bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
                 }`}
             >
               {tab.label}
@@ -419,7 +419,7 @@ export default function LicensingView() {
                     <div className="bg-emerald-500/20 p-1.5 rounded-md">
                       <Laptop className="h-4 w-4 text-emerald-400 shrink-0" />
                     </div>
-                    <span className="text-slate-400">Verification Server: <strong className="text-emerald-400/90 font-mono tracking-wide ml-1">https://jewelleryerp-85xu.onrender.com</strong></span>
+                    <span className="text-slate-400">Verification Server: <strong className="text-emerald-400/90 font-mono tracking-wide ml-1">https://jewelleryerp-8l4k.onrender.com</strong></span>
                   </div>
                 </div>
               </div>
