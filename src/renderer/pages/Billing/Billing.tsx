@@ -94,14 +94,14 @@ export default function BillingView() {
           defaultRate = metalRate;
         }
 
-        const subtotal = (prod.net_weight * defaultRate) + (prod.making_charges_type === 'fixed' ? prod.making_charges : prod.making_charges * prod.net_weight);
+        const subtotal = (prod.fine * defaultRate) + (prod.making_charges_type === 'fixed' ? prod.making_charges : prod.making_charges * prod.fine);
         const taxAmount = (subtotal * (prod.gst_rate / 100));
 
         setCart([...cart, {
           product: prod,
           product_name: prod.name,
           weight: prod.weight,
-          net_weight: prod.net_weight,
+          net_weight: prod.fine,
           gross_weight: prod.gross_weight,
           purity: prod.purity || '22K',
           making_charges: prod.making_charges,

@@ -622,10 +622,10 @@ export default function StockReportView() {
                     <span className="font-mono font-bold text-slate-800">{scannedItemDetails.details.weight || scannedItemDetails.details.gr_wt} g</span>
                   </div>
                 )}
-                {scannedItemDetails.details.net_weight !== undefined && (
-                  <div className="flex justify-between border-b border-slate-100 pb-1">
-                    <span className="text-slate-400 font-bold uppercase text-[9.5px]">Net Weight</span>
-                    <span className="font-mono font-bold text-slate-800">{scannedItemDetails.details.net_weight || scannedItemDetails.details.net_wt} g</span>
+                {scannedItemDetails.details.fine !== undefined && (
+                  <div className="flex justify-between items-center py-2 border-b border-border/50">
+                    <span className="text-muted-foreground font-medium">Fine Weight</span>
+                    <span className="font-mono font-bold text-slate-800">{scannedItemDetails.details.fine || scannedItemDetails.details.net_wt} g</span>
                   </div>
                 )}
                 {scannedItemDetails.details.purity && (

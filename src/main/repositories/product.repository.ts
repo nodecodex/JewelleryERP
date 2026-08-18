@@ -21,10 +21,10 @@ export class ProductRepository extends BaseRepository {
     const insert = this.db.prepare(`
       INSERT INTO products (
         id, company_id, name, sku, barcode, qr_code, category,
-        weight, net_weight, gross_weight, purity, stone_weight,
+        weight, tounch, gross_weight, purity, stone_weight,
         making_charges, making_charges_type, hsn_code, gst_rate,
-        purchase_price, selling_price, current_stock
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        purchase_price, selling_price, current_stock, fine
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     insert.run(
@@ -36,7 +36,7 @@ export class ProductRepository extends BaseRepository {
       qrCode,
       product.category,
       product.weight,
-      product.net_weight,
+      product.tounch,
       product.gross_weight,
       product.purity || null,
       product.stone_weight,
@@ -46,7 +46,8 @@ export class ProductRepository extends BaseRepository {
       product.gst_rate,
       product.purchase_price,
       product.selling_price,
-      product.current_stock
+      product.current_stock,
+      product.fine
     );
 
     const created = this.db.prepare('SELECT * FROM products WHERE id = ?').get(id) as Product;
@@ -62,7 +63,7 @@ export class ProductRepository extends BaseRepository {
         qr_code = ?,
         category = ?,
         weight = ?,
-        net_weight = ?,
+        tounch = ?,
         gross_weight = ?,
         purity = ?,
         stone_weight = ?,
@@ -73,6 +74,7 @@ export class ProductRepository extends BaseRepository {
         purchase_price = ?,
         selling_price = ?,
         current_stock = ?,
+        fine = ?,
         updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
@@ -84,7 +86,7 @@ export class ProductRepository extends BaseRepository {
       product.qr_code || null,
       product.category,
       product.weight,
-      product.net_weight,
+      product.tounch,
       product.gross_weight,
       product.purity || null,
       product.stone_weight,
@@ -95,6 +97,7 @@ export class ProductRepository extends BaseRepository {
       product.purchase_price,
       product.selling_price,
       product.current_stock,
+      product.fine,
       product.id
     );
   }

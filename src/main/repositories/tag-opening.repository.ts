@@ -64,9 +64,9 @@ export class TagOpeningRepository extends BaseRepository {
     
     const insertProduct = this.db.prepare(`
       INSERT INTO products (
-        id, company_id, name, sku, barcode, qr_code, category, weight, net_weight, gross_weight,
-        purity, stone_weight, making_charges, making_charges_type, hsn_code, gst_rate, purchase_price, selling_price, current_stock
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        id, company_id, name, sku, barcode, qr_code, category, weight, tounch, gross_weight,
+        purity, stone_weight, making_charges, making_charges_type, hsn_code, gst_rate, purchase_price, selling_price, current_stock, fine
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const updateProduct = this.db.prepare(`
@@ -75,7 +75,7 @@ export class TagOpeningRepository extends BaseRepository {
         sku = ?,
         category = ?,
         weight = ?,
-        net_weight = ?,
+        tounch = ?,
         gross_weight = ?,
         purity = ?,
         stone_weight = ?,
@@ -84,6 +84,7 @@ export class TagOpeningRepository extends BaseRepository {
         purchase_price = ?,
         selling_price = ?,
         current_stock = ?,
+        fine = ?,
         updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
@@ -151,7 +152,7 @@ export class TagOpeningRepository extends BaseRepository {
             item.it_code,
             prodCat,
             item.net_wt,
-            item.net_wt,
+            100.0,
             item.gr_wt,
             item.it_code.replace(/[^0-9]/g, '') || null, // try to extract purity number
             item.ls_wt,
@@ -160,6 +161,7 @@ export class TagOpeningRepository extends BaseRepository {
             item.pr_cost || 0.0,
             item.mrp || 0.0,
             item.pcs,
+            item.net_wt,
             prod.id
           );
         } else {
@@ -173,7 +175,7 @@ export class TagOpeningRepository extends BaseRepository {
             item.tag_no,
             prodCat,
             item.net_wt,
-            item.net_wt,
+            100.0,
             item.gr_wt,
             item.it_code.replace(/[^0-9]/g, '') || null,
             item.ls_wt,
@@ -183,7 +185,8 @@ export class TagOpeningRepository extends BaseRepository {
             3.0,    // default GST
             item.pr_cost || 0.0,
             item.mrp || 0.0,
-            item.pcs
+            item.pcs,
+            item.net_wt
           );
         }
       }
@@ -273,9 +276,9 @@ export class TagOpeningRepository extends BaseRepository {
     const selectProduct = this.db.prepare('SELECT id FROM products WHERE company_id = ? AND barcode = ?');
     const insertProduct = this.db.prepare(`
       INSERT INTO products (
-        id, company_id, name, sku, barcode, qr_code, category, weight, net_weight, gross_weight,
-        purity, stone_weight, making_charges, making_charges_type, hsn_code, gst_rate, purchase_price, selling_price, current_stock
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        id, company_id, name, sku, barcode, qr_code, category, weight, tounch, gross_weight,
+        purity, stone_weight, making_charges, making_charges_type, hsn_code, gst_rate, purchase_price, selling_price, current_stock, fine
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     const updateProduct = this.db.prepare(`
       UPDATE products SET
@@ -367,7 +370,7 @@ export class TagOpeningRepository extends BaseRepository {
             item.it_code,
             prodCat,
             item.net_wt,
-            item.net_wt,
+            100.0,
             item.gr_wt,
             item.it_code.replace(/[^0-9]/g, '') || null,
             item.ls_wt,
@@ -376,6 +379,7 @@ export class TagOpeningRepository extends BaseRepository {
             item.pr_cost || 0.0,
             item.mrp || 0.0,
             item.pcs,
+            item.net_wt,
             prod.id
           );
         } else {
@@ -389,7 +393,7 @@ export class TagOpeningRepository extends BaseRepository {
             item.tag_no,
             prodCat,
             item.net_wt,
-            item.net_wt,
+            100.0,
             item.gr_wt,
             item.it_code.replace(/[^0-9]/g, '') || null,
             item.ls_wt,
@@ -399,7 +403,8 @@ export class TagOpeningRepository extends BaseRepository {
             3.0,
             item.pr_cost || 0.0,
             item.mrp || 0.0,
-            item.pcs
+            item.pcs,
+            item.net_wt
           );
         }
       }
