@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS products (
     qr_code TEXT,
     category TEXT NOT NULL CHECK(category IN ('Gold Jewellery', 'Silver Jewellery', 'Diamond Jewellery', 'Platinum Jewellery', 'Loose Diamonds', 'Coins', 'Custom Products')),
     weight REAL NOT NULL DEFAULT 0.0,
-    net_weight REAL NOT NULL DEFAULT 0.0,
+    tounch REAL NOT NULL DEFAULT 100.0,
     gross_weight REAL NOT NULL DEFAULT 0.0,
     purity TEXT,
     stone_weight REAL NOT NULL DEFAULT 0.0,
@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS products (
     purchase_price REAL NOT NULL DEFAULT 0.0,
     selling_price REAL NOT NULL DEFAULT 0.0,
     current_stock INTEGER NOT NULL DEFAULT 0,
+    fine REAL NOT NULL DEFAULT 0.0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(company_id, barcode),
@@ -727,6 +728,76 @@ export function runMigrations(db: any) {
     }
   } catch (err) {
     console.error('Failed to execute daily_rates table auto-migration:', err);
+  }
+
+  // Dynamically check and migrate products table (net_weight -> tounch, add fine)
+  try {
+    const tableInfo = db.prepare("PRAGMA table_info(products)").all() as Array<{ name: string }>;
+    const columns = tableInfo.map(info => info.name);
+
+    if (columns.includes('net_weight')) {
+      console.log("Migration: Updating products table schema (net_weight -> tounch, fine)...");
+      db.exec("PRAGMA foreign_keys = OFF");
+      
+      db.transaction(() => {
+        // Rename old table
+        db.exec("ALTER TABLE products RENAME TO _products_old");
+        
+        // Create new table
+        db.exec(`
+          CREATE TABLE products (
+              id TEXT PRIMARY KEY,
+              company_id TEXT REFERENCES companies(id) ON DELETE CASCADE,
+              name TEXT NOT NULL,
+              sku TEXT NOT NULL,
+              barcode TEXT,
+              qr_code TEXT,
+              category TEXT NOT NULL CHECK(category IN ('Gold Jewellery', 'Silver Jewellery', 'Diamond Jewellery', 'Platinum Jewellery', 'Loose Diamonds', 'Coins', 'Custom Products')),
+              weight REAL NOT NULL DEFAULT 0.0,
+              tounch REAL NOT NULL DEFAULT 100.0,
+              gross_weight REAL NOT NULL DEFAULT 0.0,
+              purity TEXT,
+              stone_weight REAL NOT NULL DEFAULT 0.0,
+              making_charges REAL NOT NULL DEFAULT 0.0,
+              making_charges_type TEXT CHECK(making_charges_type IN ('fixed', 'per_gram')) DEFAULT 'fixed',
+              hsn_code TEXT,
+              gst_rate REAL NOT NULL DEFAULT 0.0,
+              purchase_price REAL NOT NULL DEFAULT 0.0,
+              selling_price REAL NOT NULL DEFAULT 0.0,
+              current_stock INTEGER NOT NULL DEFAULT 0,
+              fine REAL NOT NULL DEFAULT 0.0,
+              created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+              UNIQUE(company_id, barcode),
+              UNIQUE(company_id, qr_code)
+          )
+        `);
+        
+        // Copy data: Option A - existing net_weight becomes fine, tounch defaults to 100
+        db.exec(`
+          INSERT INTO products (
+            id, company_id, name, sku, barcode, qr_code, category, weight, 
+            tounch, gross_weight, purity, stone_weight, making_charges, 
+            making_charges_type, hsn_code, gst_rate, purchase_price, 
+            selling_price, current_stock, fine, created_at, updated_at
+          )
+          SELECT 
+            id, company_id, name, sku, barcode, qr_code, category, weight, 
+            100.0, gross_weight, purity, stone_weight, making_charges, 
+            making_charges_type, hsn_code, gst_rate, purchase_price, 
+            selling_price, current_stock, net_weight, created_at, updated_at
+          FROM _products_old
+        `);
+        
+        // Drop old table
+        db.exec("DROP TABLE _products_old");
+      })();
+      
+      db.exec("PRAGMA foreign_keys = ON");
+      console.log("Migration: products table schema updated successfully.");
+    }
+  } catch (err) {
+    console.error('Failed to migrate products table:', err);
   }
 
   // Seed default taxes if empty

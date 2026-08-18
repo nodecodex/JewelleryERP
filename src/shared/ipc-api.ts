@@ -35,8 +35,9 @@ export interface Product {
   qr_code?: string;
   category: 'Gold Jewellery' | 'Silver Jewellery' | 'Diamond Jewellery' | 'Platinum Jewellery' | 'Loose Diamonds' | 'Coins' | 'Custom Products';
   weight: number;
-  net_weight: number;
+  tounch: number;
   gross_weight: number;
+  fine: number;
   purity?: string;
   stone_weight: number;
   making_charges: number;

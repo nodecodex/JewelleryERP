@@ -19,7 +19,7 @@ export default function InventoryView() {
 
   const [formData, setFormData] = useState({
     name: '', sku: '', barcode: '', qr_code: '', category: 'Gold Jewellery' as any,
-    weight: 0, net_weight: 0, gross_weight: 0, purity: '22K (916)', stone_weight: 0,
+    weight: 0, tounch: 100, gross_weight: 0, purity: '22K', stone_weight: 0,
     making_charges: 0, making_charges_type: 'fixed' as 'fixed' | 'per_gram',
     hsn_code: '7113', gst_rate: 3.0, purchase_price: 0, selling_price: 0, current_stock: 1,
   });
@@ -33,7 +33,7 @@ export default function InventoryView() {
     setEditingProduct(null);
     setFormData({
       name: '', sku: `SKU-${Date.now().toString().slice(-6)}`, barcode: defaultBarcode, qr_code: defaultBarcode,
-      category: 'Gold Jewellery', weight: 0, net_weight: 0, gross_weight: 0, purity: '22K (916)', stone_weight: 0,
+      category: 'Gold Jewellery', weight: 0, tounch: 100, gross_weight: 0, purity: '22K', stone_weight: 0,
       making_charges: 0, making_charges_type: 'fixed', hsn_code: '7113', gst_rate: 3.0, purchase_price: 0, selling_price: 0, current_stock: 1,
     });
     setIsFormOpen(true);
@@ -43,7 +43,7 @@ export default function InventoryView() {
     setEditingProduct(prod);
     setFormData({
       name: prod.name, sku: prod.sku, barcode: prod.barcode || '', qr_code: prod.qr_code || '',
-      category: prod.category, weight: prod.weight, net_weight: prod.net_weight, gross_weight: prod.gross_weight,
+      category: prod.category, weight: prod.weight, tounch: prod.tounch || 100, gross_weight: prod.gross_weight,
       purity: prod.purity || '', stone_weight: prod.stone_weight, making_charges: prod.making_charges,
       making_charges_type: prod.making_charges_type, hsn_code: prod.hsn_code || '', gst_rate: prod.gst_rate,
       purchase_price: prod.purchase_price, selling_price: prod.selling_price, current_stock: prod.current_stock,
@@ -54,9 +54,12 @@ export default function InventoryView() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCompany) return;
+    const fine_weight = (formData.gross_weight - formData.stone_weight) * (formData.tounch / 100);
+    const dataToSave = { ...formData, fine: fine_weight };
+
     try {
-      if (editingProduct) await updateProduct({ ...editingProduct, ...formData });
-      else await createProduct({ company_id: selectedCompany.id, ...formData });
+      if (editingProduct) await updateProduct({ ...editingProduct, ...dataToSave });
+      else await createProduct({ company_id: selectedCompany.id, ...dataToSave });
       setIsFormOpen(false);
     } catch (e) { alert('Error saving product.'); }
   };
@@ -112,21 +115,31 @@ export default function InventoryView() {
               <div className="p-8 space-y-8 overflow-y-auto flex-1">
                 {/* PRIMARY DETAILS */}
                 <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-8">
+                  <div className="col-span-3">
+                    <label className="erp-label">Short Code (GR/FR)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. GR"
+                      className="w-full font-bold text-base px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 uppercase"
+                      value={formData.sku}
+                      onChange={(e) => setFormData({ ...formData, sku: e.target.value.toUpperCase() })}
+                    />
+                  </div>
+                  <div className="col-span-5">
                     <label className="erp-label">Description / Item Name *</label>
-                    <input 
-                      type="text" 
-                      required 
-                      className="w-full font-bold text-base px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20" 
-                      value={formData.name} 
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                    <input
+                      type="text"
+                      required
+                      className="w-full font-bold text-base px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     />
                   </div>
                   <div className="col-span-4">
                     <label className="erp-label">Category Group</label>
-                    <select 
-                      className="w-full font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 cursor-pointer" 
-                      value={formData.category} 
+                    <select
+                      className="w-full font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 cursor-pointer"
+                      value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
                     >
                       {['Gold Jewellery', 'Silver Jewellery', 'Diamond Jewellery', 'Platinum Jewellery', 'Coins', 'Custom'].map(cat => <option key={cat}>{cat}</option>)}
@@ -137,35 +150,45 @@ export default function InventoryView() {
                 {/* WEIGHT PARAMETERS CARD */}
                 <div className="bg-secondary/20 rounded-xl border border-border p-6 shadow-sm">
                   <span className="text-[10px] font-extrabold text-primary uppercase tracking-[0.2em] block mb-6 select-none">Weight Parameters (Grams)</span>
-                  <div className="grid grid-cols-3 gap-8">
+                  <div className="grid grid-cols-4 gap-6">
                     <div>
                       <label className="erp-label">Gross Weight</label>
-                      <input 
-                        type="number" 
-                        step="0.001" 
-                        className="w-full text-right font-data text-lg font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20" 
-                        value={formData.gross_weight || ''} 
-                        onChange={(e) => setFormData({ ...formData, gross_weight: parseFloat(e.target.value) || 0 })} 
-                      />
-                    </div>
-                    <div>
-                      <label className="erp-label">Net Weight</label>
-                      <input 
-                        type="number" 
-                        step="0.001" 
-                        className="w-full text-right font-data text-lg font-bold text-primary px-3 py-1.5 border border-border rounded-md bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20" 
-                        value={formData.net_weight || ''} 
-                        onChange={(e) => setFormData({ ...formData, net_weight: parseFloat(e.target.value) || 0 })} 
+                      <input
+                        type="number"
+                        step="0.001"
+                        className="w-full text-right font-data text-lg font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                        value={formData.gross_weight || ''}
+                        onChange={(e) => setFormData({ ...formData, gross_weight: parseFloat(e.target.value) || 0 })}
                       />
                     </div>
                     <div>
                       <label className="erp-label">Stone Weight</label>
-                      <input 
-                        type="number" 
-                        step="0.001" 
-                        className="w-full text-right font-data text-lg font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20" 
-                        value={formData.stone_weight || ''} 
-                        onChange={(e) => setFormData({ ...formData, stone_weight: parseFloat(e.target.value) || 0 })} 
+                      <input
+                        type="number"
+                        step="0.001"
+                        className="w-full text-right font-data text-lg font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                        value={formData.stone_weight || ''}
+                        onChange={(e) => setFormData({ ...formData, stone_weight: parseFloat(e.target.value) || 0 })}
+                      />
+                    </div>
+                    <div>
+                      <label className="erp-label">Tounch (%)</label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        className="w-full text-right font-data text-lg font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                        value={formData.tounch || ''}
+                        onChange={(e) => setFormData({ ...formData, tounch: parseFloat(e.target.value) || 0 })}
+                      />
+                    </div>
+                    <div>
+                      <label className="erp-label">Fine Wt (Calc)</label>
+                      <input
+                        type="number"
+                        step="0.001"
+                        readOnly
+                        className="w-full text-right font-data text-lg font-bold text-primary px-3 py-1.5 border border-border rounded-md bg-secondary/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 cursor-not-allowed opacity-80"
+                        value={((formData.gross_weight - formData.stone_weight) * (formData.tounch / 100)).toFixed(3)}
                       />
                     </div>
                   </div>
@@ -173,40 +196,37 @@ export default function InventoryView() {
 
                 {/* PRICING & STOCK */}
                 <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-3">
+                  <div className="col-span-4">
                     <label className="erp-label">Purity (Karat)</label>
-                    <input 
-                      type="text" 
-                      className="w-full font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary" 
-                      value={formData.purity} 
-                      onChange={(e) => setFormData({ ...formData, purity: e.target.value })} 
-                    />
+                    <select
+                      className="w-full font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary cursor-pointer"
+                      value={formData.purity}
+                      onChange={(e) => setFormData({ ...formData, purity: e.target.value })}
+                    >
+                      {['9K', '10K', '12K', '14K', '16K', '18K', '20K', '21K', '22K', '23K', '24K'].map(k => (
+                        <option key={k} value={k}>{k}</option>
+                      ))}
+                    </select>
                   </div>
-                  <div className="col-span-3">
-                    <label className="erp-label">Selling Price /g</label>
-                    <input 
-                      type="number" 
-                      className="w-full text-right font-data font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary" 
-                      value={formData.selling_price || ''} 
-                      onChange={(e) => setFormData({ ...formData, selling_price: parseFloat(e.target.value) || 0 })} 
-                    />
+                  <div className="col-span-4">
+                    <label className="erp-label">Stone Charges</label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold font-data">₹</span>
+                      <input
+                        type="number"
+                        className="w-full text-right font-data font-bold pl-8 pr-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary"
+                        value={formData.making_charges || ''}
+                        onChange={(e) => setFormData({ ...formData, making_charges: parseFloat(e.target.value) || 0 })}
+                      />
+                    </div>
                   </div>
-                  <div className="col-span-3">
-                    <label className="erp-label">Making Charge</label>
-                    <input 
-                      type="number" 
-                      className="w-full text-right font-data font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary" 
-                      value={formData.making_charges || ''} 
-                      onChange={(e) => setFormData({ ...formData, making_charges: parseFloat(e.target.value) || 0 })} 
-                    />
-                  </div>
-                  <div className="col-span-3">
+                  <div className="col-span-4">
                     <label className="erp-label">Initial Stock</label>
-                    <input 
-                      type="number" 
-                      className="w-full text-right font-data font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary" 
-                      value={formData.current_stock} 
-                      onChange={(e) => setFormData({ ...formData, current_stock: parseInt(e.target.value) || 0 })} 
+                    <input
+                      type="number"
+                      className="w-full text-right font-data font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary"
+                      value={formData.current_stock}
+                      onChange={(e) => setFormData({ ...formData, current_stock: parseInt(e.target.value) || 0 })}
                     />
                   </div>
                 </div>
@@ -214,15 +234,15 @@ export default function InventoryView() {
 
               {/* STICKY ACTION FOOTER */}
               <div className="bg-secondary/15 px-6 py-4 border-t border-border flex justify-end gap-3 shrink-0 select-none">
-                <button 
-                  type="button" 
-                  onClick={() => setIsFormOpen(false)} 
+                <button
+                  type="button"
+                  onClick={() => setIsFormOpen(false)}
                   className="px-6 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 font-bold rounded-lg text-xs uppercase cursor-pointer transition-all"
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="px-8 py-2 bg-primary text-primary-foreground font-extrabold rounded-lg text-xs uppercase shadow-premium hover:shadow-elevated hover:bg-primary/90 cursor-pointer transition-all active:scale-[0.98]"
                 >
                   Save Inventory Item
@@ -263,9 +283,9 @@ export default function InventoryView() {
                   <tr className="bg-secondary/40 border-b border-border">
                     <th className="w-[15%] cursor-pointer text-foreground/80 font-bold" onClick={() => { setSortField('sku'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>SKU Code</th>
                     <th className="w-[30%] cursor-pointer text-foreground/80 font-bold" onClick={() => { setSortField('name'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Description</th>
-                    <th className="text-right text-foreground/80 font-bold">Weight (N/G)</th>
+                    <th className="text-right text-foreground/80 font-bold">Weight (F/G)</th>
                     <th className="text-center text-foreground/80 font-bold">Purity</th>
-                    <th className="text-right text-foreground/80 font-bold">Valuation</th>
+                    <th className="text-right text-foreground/80 font-bold">Stone Charges</th>
                     <th className="text-center text-foreground/80 font-bold">Stock</th>
                     <th className="w-16"></th>
                   </tr>
@@ -294,14 +314,14 @@ export default function InventoryView() {
                           </div>
                         </td>
                         <td className="text-right font-data">
-                          <span className="text-foreground">{p.net_weight.toFixed(3)}g</span>
+                          <span className="text-foreground">{p.fine.toFixed(3)}g</span>
                           <span className="text-muted-foreground/40 mx-1">/</span>
                           <span className="text-muted-foreground text-xs">{p.gross_weight.toFixed(3)}g</span>
                         </td>
                         <td className="text-center">
                           <span className="px-2 py-0.5 bg-primary/10 text-primary border border-primary/20 rounded-md text-[10px] font-bold">{p.purity}</span>
                         </td>
-                        <td className="text-right font-data font-bold">₹{p.selling_price.toLocaleString()}</td>
+                        <td className="text-right font-data font-bold">₹{p.making_charges.toLocaleString()}</td>
                         <td className="text-center">
                           <span className={`px-2 py-1 rounded-lg text-xs font-bold ${p.current_stock <= 2 ? 'bg-rose-500/10 text-rose-600' : 'bg-emerald-500/10 text-emerald-600'}`}>
                             {p.current_stock}

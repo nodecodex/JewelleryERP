@@ -190,7 +190,7 @@ export default function SalesView() {
         row.design = prod.name;
         row.gr_wt = prod.gross_weight;
         row.ls_wt = prod.stone_weight;
-        row.net_wt = prod.net_weight;
+        row.net_wt = prod.fine;
         row.pcs = 1;
 
         let defaultRate = prod.selling_price;
@@ -369,7 +369,7 @@ export default function SalesView() {
           freshRow.design = prod.name;
           freshRow.gr_wt = prod.gross_weight;
           freshRow.ls_wt = prod.stone_weight;
-          freshRow.net_wt = prod.net_weight;
+          freshRow.net_wt = prod.fine;
           freshRow.pcs = 1;
           
           let defaultRate = prod.selling_price;

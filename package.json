@@ -1,7 +1,7 @@
 {
   "name": "swarnpro-erp",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "SwarnPro ERP System",
   "author": "AsyncroZ Technologies",
   "type": "module",

@@ -89,9 +89,9 @@ export class PurchaseRepository extends BaseRepository {
 
     const insertProduct = this.db.prepare(`
       INSERT INTO products (
-        id, company_id, name, sku, barcode, qr_code, category, weight, net_weight, gross_weight,
-        purity, stone_weight, making_charges, making_charges_type, hsn_code, gst_rate, purchase_price, selling_price, current_stock
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        id, company_id, name, sku, barcode, qr_code, category, weight, tounch, gross_weight,
+        purity, stone_weight, making_charges, making_charges_type, hsn_code, gst_rate, purchase_price, selling_price, current_stock, fine
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const updateProduct = this.db.prepare(`
@@ -100,7 +100,7 @@ export class PurchaseRepository extends BaseRepository {
         sku = ?,
         category = ?,
         weight = ?,
-        net_weight = ?,
+        tounch = ?,
         gross_weight = ?,
         purity = ?,
         stone_weight = ?,
@@ -109,6 +109,7 @@ export class PurchaseRepository extends BaseRepository {
         purchase_price = ?,
         selling_price = ?,
         current_stock = ?,
+        fine = ?,
         updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
@@ -224,7 +225,7 @@ export class PurchaseRepository extends BaseRepository {
             tag.it_code,
             prodCat,
             tag.net_wt || tag.gr_wt || 0.0,
-            tag.net_wt || 0.0,
+            100.0,
             tag.gr_wt || 0.0,
             purityStr,
             tag.ls_wt || 0.0,
@@ -233,6 +234,7 @@ export class PurchaseRepository extends BaseRepository {
             tag.pr_cost || 0.0,
             tag.mrp || 0.0,
             tag.pcs,
+            tag.net_wt || 0.0,
             prod.id
           );
         } else {
@@ -246,7 +248,7 @@ export class PurchaseRepository extends BaseRepository {
             tag.tag_no, // qr_code defaults to barcode
             prodCat,
             tag.net_wt || tag.gr_wt || 0.0,
-            tag.net_wt || 0.0,
+            100.0,
             tag.gr_wt || 0.0,
             purityStr,
             tag.ls_wt || 0.0,
@@ -256,7 +258,8 @@ export class PurchaseRepository extends BaseRepository {
             3.0,    // default GST
             tag.pr_cost || 0.0,
             tag.mrp || 0.0,
-            tag.pcs
+            tag.pcs,
+            tag.net_wt || 0.0
           );
         }
       }
@@ -362,9 +365,9 @@ export class PurchaseRepository extends BaseRepository {
 
     const insertProduct = this.db.prepare(`
       INSERT INTO products (
-        id, company_id, name, sku, barcode, qr_code, category, weight, net_weight, gross_weight,
-        purity, stone_weight, making_charges, making_charges_type, hsn_code, gst_rate, purchase_price, selling_price, current_stock
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        id, company_id, name, sku, barcode, qr_code, category, weight, tounch, gross_weight,
+        purity, stone_weight, making_charges, making_charges_type, hsn_code, gst_rate, purchase_price, selling_price, current_stock, fine
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const updateProduct = this.db.prepare(`
@@ -373,7 +376,7 @@ export class PurchaseRepository extends BaseRepository {
         sku = ?,
         category = ?,
         weight = ?,
-        net_weight = ?,
+        tounch = ?,
         gross_weight = ?,
         purity = ?,
         stone_weight = ?,
@@ -382,6 +385,7 @@ export class PurchaseRepository extends BaseRepository {
         purchase_price = ?,
         selling_price = ?,
         current_stock = ?,
+        fine = ?,
         updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
@@ -506,7 +510,7 @@ export class PurchaseRepository extends BaseRepository {
             tag.it_code,
             prodCat,
             tag.net_wt || tag.gr_wt || 0.0,
-            tag.net_wt || 0.0,
+            100.0,
             tag.gr_wt || 0.0,
             purityStr,
             tag.ls_wt || 0.0,
@@ -515,6 +519,7 @@ export class PurchaseRepository extends BaseRepository {
             tag.pr_cost || 0.0,
             tag.mrp || 0.0,
             tag.pcs,
+            tag.net_wt || 0.0,
             prod.id
           );
         } else {
@@ -528,7 +533,7 @@ export class PurchaseRepository extends BaseRepository {
             tag.tag_no,
             prodCat,
             tag.net_wt || tag.gr_wt || 0.0,
-            tag.net_wt || 0.0,
+            100.0,
             tag.gr_wt || 0.0,
             purityStr,
             tag.ls_wt || 0.0,
@@ -538,7 +543,8 @@ export class PurchaseRepository extends BaseRepository {
             3.0,
             tag.pr_cost || 0.0,
             tag.mrp || 0.0,
-            tag.pcs
+            tag.pcs,
+            tag.net_wt || 0.0
           );
         }
       }
