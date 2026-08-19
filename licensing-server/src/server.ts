@@ -23,20 +23,81 @@ if (!ADMIN_USERNAME || !ADMIN_PASSWORD_HASH || !ADMIN_JWT_SECRET) {
   process.exit(1);
 }
 
-let keysDir = path.join(__dirname, 'keys');
-if (!fs.existsSync(keysDir) && fs.existsSync(path.join(__dirname, '../src/keys'))) {
-  keysDir = path.join(__dirname, '../src/keys');
-}
-const privateKeyPath = path.join(keysDir, 'private.pem');
-const publicKeyPath = path.join(keysDir, 'public.pem');
+const DEFAULT_PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8cVRdsdhs8iNByr2GhXV
+vKWSqyi83iFlNK289Me9IIJS3dRRGihlHii416qYPph5lJKrY3HkzHsn/prKuzJY
+Y8I0HfBBYEz9TO2M14bFZrwWUIeCNkAgyNH7i6NNQRsIYWeo18TrFLJMV6KX/bKM
+7vrzbT+Uh9cvncn9O0r29rN6KrXOMG2u6Kh+a/FMlLrZzyNrA0CAUsc1lXQBbLDX
+pmAsCjeu2bcNFQ311/3hzoWt71dgu0HY2hoa6RlJ4Sqt40GKanBh+eRHhwfg3yro
+udmyEt0CVUtqtvV1LG9y4f/u5FFxGEw3WMuZWQQOC47uU4CV8NQc7wI1OyyT0XQh
+1QIDAQAB
+-----END PUBLIC KEY-----`;
 
-if (!fs.existsSync(privateKeyPath) || !fs.existsSync(publicKeyPath)) {
-  console.log('Keys missing. Bootstrapping RSA keypair generation...');
-  generateKeyPair();
+const DEFAULT_PRIVATE_KEY = `-----BEGIN PRIVATE KEY-----
+MIIEugIBADANBgkqhkiG9w0BAQEFAASCBKQwggSgAgEAAoIBAQDxxVF2x2GzyI0H
+KvYaFdW8pZKrKLzeIWU0rbz0x70gglLd1FEaKGUeKLjXqpg+mHmUkqtjceTMeyf+
+msq7MlhjwjQd8EFgTP1M7YzXhsVmvBZQh4I2QCDI0fuLo01BGwhhZ6jXxOsUskxX
+opf9sozu+vNtP5SH1y+dyf07Svb2s3oqtc4wba7oqH5r8UyUutnPI2sDQIBSxzWV
+dAFssNemYCwKN67Ztw0VDfXX/eHOha3vV2C7QdjaGhrpGUnhKq3jQYpqcGH55EeH
+B+DfKui52bIS3QJVS2q29XUsb3Lh/+7kUXEYTDdYy5lZBA4Lju5TgJXw1BzvAjU7
+LJPRdCHVAgMBAAECgf8YjfG4HofNupCYKcTU4WLTxf0fZQPJi5q7vulx8tdCdfn0
+jZuvDGs4pOog/TJ5KQMwE7VUZDzYh6mIMjBk0rgnaZHheIUrQqZ3KakkOovR40hg
+5WJUIC80Nh9WDz/JXPV87wo238kAURtvyxOksH2fx9zxO4PaSACOBfWyD+sFIwK4
+SoNH9tCiFY6Ggd3SDRZqbVW3itCGGAyH08i7A5cjw7kTHf5zaSO7QexzxOvYEikY
+HR9MpfIr9nX+lE1y20TAB6Qs0ysvJfyN/Y6RZDJQeYw2ij3jnsZitsGBYdKtjcDT
+tbx4s++yv9o6jLpCKP2b3NdgkX1+PZvRGvXpDzkCgYEA/0UMUYCEIbrgITUhbOia
+O+7TUnB7eRmO0EuvatlpmqKu1wUEokQeQZT7ZSTquXwhIARg4087Gdx81FKqUuFp
+hQRqWjnkICa8+V3Gup0456YWKfgqSrKCjngxZh3Rb1+KeLhQ541D5l55XPluIa0C
+XyBjiJ39IrxSZA2fyquuXmcCgYEA8nZiRdKZ1hE8pfsayMChhZZSjU8OkGtaJA/o
+39owYuKo1pp3S+o6Xcruk4623VxQ0TcIDQvTGWD5ghYJlEMcjzSEkKIckIFDKbNT
+vkxM8Eg7Cy2G2suHPqZCqm+4Ua/7D/Y2EZpmwy6lbdHHlaST8++id0T10jVWMxLT
+5ogJYGMCgYAsjTJ/Lvzgnirr4Mf6qAXzG9WJ99O06P8B35O4BEXoFSiKoneSkmzt
+aUEPAAhvYvitC9aVFYjtFIw8ykirumeeLY0aPixQaDJnGzTJ8RKza0tG++b1rn4W
+u2dzuRSKaZRTSWflYcRN+oMX9PiBrB5T1+VHPLunSlLe33nZ92ixVQKBgAGRkoEx
+I52m7uWEAmBaHrFmj5IqeMWmbCbfk3ofR0Dchosc5LixAz+oGHML8VLtTfiMipjL
+AsqfPf4Bdn5nEMA8br8gzV6B95VFe703cSf8z6T63mx79JwLJ1NC9cZRhSZNSXxD
+q3aHzrovKUNmlS521m4/G/gIME6USJqtNqJRAoGAYOt9yp/TFBvndi/MwqC+7NAl
+FjfPKQhOsWEvpajlj4SjIgJGOA2iiVZ7CZ/lQOSG/ZJkwryFsYB+kz2cw9jOi8oE
+hPpMG9TDXQ+TxcnpDkJDjmlSVPzDLIxYNZ0FRFChQErMDBR6OpExkpy+zz1p8zIo
+987798jkTm++/dSwybE=
+-----END PRIVATE KEY-----`;
+
+function loadKeys(): { privateKey: string; publicKey: string } {
+  if (process.env.RSA_PRIVATE_KEY && process.env.RSA_PUBLIC_KEY) {
+    return {
+      privateKey: process.env.RSA_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      publicKey: process.env.RSA_PUBLIC_KEY.replace(/\\n/g, '\n')
+    };
+  }
+
+  const possiblePaths = [
+    path.join(__dirname, 'keys'),
+    path.join(__dirname, '../src/keys'),
+    path.join(process.cwd(), 'src/keys'),
+    path.join(process.cwd(), 'dist/keys'),
+    path.join(process.cwd(), 'keys')
+  ];
+
+  for (const dir of possiblePaths) {
+    const priv = path.join(dir, 'private.pem');
+    const pub = path.join(dir, 'public.pem');
+    if (fs.existsSync(priv) && fs.existsSync(pub)) {
+      try {
+        return {
+          privateKey: fs.readFileSync(priv, 'utf8'),
+          publicKey: fs.readFileSync(pub, 'utf8')
+        };
+      } catch (e) { }
+    }
+  }
+
+  return {
+    privateKey: DEFAULT_PRIVATE_KEY,
+    publicKey: DEFAULT_PUBLIC_KEY
+  };
 }
 
-const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
-const publicKey = fs.readFileSync(publicKeyPath, 'utf8');
+const { privateKey, publicKey } = loadKeys();
 
 const app = express();
 app.set('trust proxy', 1);
@@ -159,9 +220,10 @@ app.get('/api/v1/health', async (_req: Request, res: Response): Promise<any> => 
   }
 });
 
-// -------------------------------------------------------------
-// CLIENT LICENSING ENDPOINTS
-// -------------------------------------------------------------
+// 0. GET /license/public-key
+app.get('/api/v1/license/public-key', (req: Request, res: Response) => {
+  res.json({ success: true, publicKey });
+});
 
 // 1. POST /trial/start
 app.post('/api/v1/trial/start', async (req: Request, res: Response): Promise<any> => {
@@ -192,6 +254,7 @@ app.post('/api/v1/trial/start', async (req: Request, res: Response): Promise<any
         success: true,
         status: 'trial_active',
         trialToken: trial.trial_token,
+        publicKey,
         expiryDate: trial.expiry_date
       });
     }
@@ -227,6 +290,7 @@ app.post('/api/v1/trial/start', async (req: Request, res: Response): Promise<any
       success: true,
       status: 'trial_active',
       trialToken,
+      publicKey,
       expiryDate: expiryDate.toISOString()
     });
   } catch (err: any) {
@@ -315,6 +379,7 @@ app.post('/api/v1/license/activate', activationLimiter, async (req: Request, res
       success: true,
       status: 'activated',
       activationToken,
+      publicKey,
       licenseDetails: {
         customerName: customer.name,
         licenseType: license.license_type,
@@ -453,6 +518,7 @@ app.post('/api/v1/license/recover', recoveryLimiter, async (req: Request, res: R
       success: true,
       status: 'recovered',
       activationToken,
+      publicKey,
       message: 'Windows reinstall recovery approved! License restored.'
     });
   } catch (err: any) {

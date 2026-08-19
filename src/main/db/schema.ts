@@ -439,6 +439,7 @@ CREATE TABLE IF NOT EXISTS license_info (
     expiry_date TEXT,
     license_type TEXT DEFAULT 'trial',
     activation_token TEXT,
+    server_public_key TEXT,
     trial_started_at TEXT,
     trial_expiry_at TEXT,
     last_verified_at TEXT,
@@ -526,6 +527,7 @@ export function runMigrations(db: any) {
         expiry_date TEXT,
         license_type TEXT DEFAULT 'trial',
         activation_token TEXT,
+        server_public_key TEXT,
         trial_started_at TEXT,
         trial_expiry_at TEXT,
         last_verified_at TEXT,
@@ -541,6 +543,7 @@ export function runMigrations(db: any) {
     const newCols = [
       { name: 'license_type', type: "TEXT DEFAULT 'trial'" },
       { name: 'activation_token', type: 'TEXT' },
+      { name: 'server_public_key', type: 'TEXT' },
       { name: 'trial_started_at', type: 'TEXT' },
       { name: 'trial_expiry_at', type: 'TEXT' },
       { name: 'last_verified_at', type: 'TEXT' },
@@ -571,6 +574,7 @@ export function runMigrations(db: any) {
             expiry_date TEXT,
             license_type TEXT DEFAULT 'trial',
             activation_token TEXT,
+            server_public_key TEXT,
             trial_started_at TEXT,
             trial_expiry_at TEXT,
             last_verified_at TEXT,
@@ -582,7 +586,7 @@ export function runMigrations(db: any) {
         // Dynamically copy columns that exist in the old table to avoid errors like "no such column"
         const targetCols = [
           'id', 'license_key', 'device_id', 'activation_date', 'expiry_date',
-          'license_type', 'activation_token', 'trial_started_at', 'trial_expiry_at',
+          'license_type', 'activation_token', 'server_public_key', 'trial_started_at', 'trial_expiry_at',
           'last_verified_at', 'last_active_time', 'created_at'
         ];
         const commonCols = cols.filter(c => targetCols.includes(c));
