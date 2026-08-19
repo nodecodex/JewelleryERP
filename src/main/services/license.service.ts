@@ -118,6 +118,37 @@ export class LicenseService extends BaseRepository {
     };
   }
 
+  private cachedServerPublicKey: string | null = null;
+
+  /**
+   * Helper fetch with customizable timeout and human-readable network diagnostics
+   */
+  private async fetchWithTimeout(url: string, options: any = {}, timeoutMs: number = 45000): Promise<Response> {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal
+      });
+      clearTimeout(timer);
+      return response;
+    } catch (err: any) {
+      clearTimeout(timer);
+      if (err.name === 'AbortError' || err.code === 'UND_ERR_CONNECT_TIMEOUT' || err.message?.includes('aborted')) {
+        throw new Error('Connection timed out. Licensing server may be waking up from sleep mode, please retry in a few seconds.');
+      }
+      if (err.cause?.code === 'ENOTFOUND' || err.message?.includes('ENOTFOUND')) {
+        throw new Error('No internet connection detected or DNS failure. Please check your network.');
+      }
+      if (err.cause?.code === 'ECONNREFUSED' || err.message?.includes('ECONNREFUSED')) {
+        throw new Error('Server connection refused. Please ensure firewall allows outbound connections.');
+      }
+      throw new Error(err.message || 'Network request failed.');
+    }
+  }
+
   /**
    * Symmetrically encrypts active tokens locally using GCM with hardware fingerprint key
    */
@@ -162,24 +193,36 @@ export class LicenseService extends BaseRepository {
   }
 
   /**
-   * Validates JWT token signature (RS256) and parses claims
+   * Validates JWT token signature (RS256) and parses claims using available public keys
    */
-  private verifyJwt(token: string): { isValid: boolean; payload?: any } {
+  private verifyJwt(token: string, dynamicKey?: string): { isValid: boolean; payload?: any } {
     try {
       const parts = token.split('.');
       if (parts.length !== 3) return { isValid: false };
 
       const [headerB64, payloadB64, signatureB64] = parts;
-      const verify = crypto.createVerify('SHA256');
-      verify.update(`${headerB64}.${payloadB64}`);
-
+      const dataToVerify = `${headerB64}.${payloadB64}`;
       const signature = Buffer.from(signatureB64, 'base64url');
-      const isValid = verify.verify(BUNDLED_PUBLIC_KEY, signature);
 
-      if (!isValid) return { isValid: false };
+      const keysToTry: string[] = [];
+      if (dynamicKey && dynamicKey.trim()) keysToTry.push(dynamicKey.trim());
+      if (this.cachedServerPublicKey && this.cachedServerPublicKey.trim()) keysToTry.push(this.cachedServerPublicKey.trim());
+      keysToTry.push(BUNDLED_PUBLIC_KEY.trim());
 
-      const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
-      return { isValid: true, payload };
+      for (const pubKey of keysToTry) {
+        try {
+          const verify = crypto.createVerify('SHA256');
+          verify.update(dataToVerify);
+          if (verify.verify(pubKey, signature)) {
+            const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
+            return { isValid: true, payload };
+          }
+        } catch (e) {
+          // Continue to next key
+        }
+      }
+
+      return { isValid: false };
     } catch (e) {
       return { isValid: false };
     }
@@ -199,6 +242,7 @@ export class LicenseService extends BaseRepository {
         expiry_date: string | null;
         license_type: string;
         activation_token: string | null;
+        server_public_key: string | null;
         trial_started_at: string | null;
         trial_expiry_at: string | null;
         last_verified_at: string | null;
@@ -207,6 +251,10 @@ export class LicenseService extends BaseRepository {
 
       if (!row) {
         return { activated: false, deviceId, statusMessage: 'No license activated. Please activate or start a trial.' };
+      }
+
+      if (row.server_public_key) {
+        this.cachedServerPublicKey = row.server_public_key;
       }
 
       const now = new Date();
@@ -266,7 +314,7 @@ export class LicenseService extends BaseRepository {
       }
 
       // Verify JWT Claims & Signatures
-      const jwtResult = this.verifyJwt(token);
+      const jwtResult = this.verifyJwt(token, row.server_public_key || undefined);
       if (!jwtResult.isValid || !jwtResult.payload) {
         return { activated: false, deviceId, statusMessage: 'Invalid activation signature.' };
       }
@@ -319,7 +367,7 @@ export class LicenseService extends BaseRepository {
     const fp = this.getDeviceFingerprint();
 
     try {
-      const response = await fetch(`${SERVER_BASE_URL}/api/v1/trial/start`, {
+      const response = await this.fetchWithTimeout(`${SERVER_BASE_URL}/api/v1/trial/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ deviceFingerprint: fp })
@@ -331,18 +379,22 @@ export class LicenseService extends BaseRepository {
         return { activated: false, deviceId, statusMessage: data.message || 'Failed to start free trial.' };
       }
 
-      // Save trial locally
+      if (data.publicKey) {
+        this.cachedServerPublicKey = data.publicKey;
+      }
+
+      const encryptedToken = data.trialToken ? this.encryptToken(data.trialToken, deviceId) : null;
       const nowStr = new Date().toISOString();
 
       this.db.prepare('DELETE FROM license_info').run();
       this.db.prepare(`
-        INSERT INTO license_info (license_key, device_id, license_type, trial_started_at, trial_expiry_at, last_active_time)
-        VALUES ('TRIAL', ?, 'trial', ?, ?, ?)
-      `).run(deviceId, nowStr, data.expiryDate, nowStr);
+        INSERT INTO license_info (license_key, device_id, license_type, activation_token, server_public_key, trial_started_at, trial_expiry_at, last_active_time)
+        VALUES ('TRIAL', ?, 'trial', ?, ?, ?, ?, ?)
+      `).run(deviceId, encryptedToken, data.publicKey || null, nowStr, data.expiryDate, nowStr);
 
       return this.getLicenseStatus();
     } catch (err: any) {
-      return { activated: false, deviceId, statusMessage: `Network error connecting to licensing server: ${err.message}` };
+      return { activated: false, deviceId, statusMessage: `Trial network error: ${err.message}` };
     }
   }
 
@@ -354,7 +406,7 @@ export class LicenseService extends BaseRepository {
     const fp = this.getDeviceFingerprint();
 
     try {
-      const response = await fetch(`${SERVER_BASE_URL}/api/v1/license/activate`, {
+      const response = await this.fetchWithTimeout(`${SERVER_BASE_URL}/api/v1/license/activate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ licenseKey: key, deviceFingerprint: fp })
@@ -366,15 +418,25 @@ export class LicenseService extends BaseRepository {
         return { activated: false, deviceId, statusMessage: data.message || 'Activation rejected.' };
       }
 
+      if (data.publicKey) {
+        this.cachedServerPublicKey = data.publicKey;
+      }
+
+      // Verify JWT signature using received public key / bundled key
+      const jwtCheck = this.verifyJwt(data.activationToken, data.publicKey);
+      if (!jwtCheck.isValid) {
+        return { activated: false, deviceId, statusMessage: 'Server returned an invalid signature token.' };
+      }
+
       // Encrypt JWT token symmetrically bound to local HW GCM
       const encryptedToken = this.encryptToken(data.activationToken, deviceId);
       const nowStr = new Date().toISOString();
 
       this.db.prepare('DELETE FROM license_info').run();
       this.db.prepare(`
-        INSERT INTO license_info (license_key, device_id, activation_date, expiry_date, license_type, activation_token, last_verified_at, last_active_time)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-      `).run(key, deviceId, nowStr, data.licenseDetails.expiryDate || null, data.licenseDetails.licenseType, encryptedToken, nowStr, nowStr);
+        INSERT INTO license_info (license_key, device_id, activation_date, expiry_date, license_type, activation_token, server_public_key, last_verified_at, last_active_time)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(key, deviceId, nowStr, data.licenseDetails?.expiryDate || null, data.licenseDetails?.licenseType || 'lifetime', encryptedToken, data.publicKey || null, nowStr, nowStr);
 
       return this.getLicenseStatus();
     } catch (err: any) {
@@ -390,7 +452,7 @@ export class LicenseService extends BaseRepository {
     const fp = this.getDeviceFingerprint();
 
     try {
-      const response = await fetch(`${SERVER_BASE_URL}/api/v1/license/recover`, {
+      const response = await this.fetchWithTimeout(`${SERVER_BASE_URL}/api/v1/license/recover`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ licenseKey: key, mobileNumber: mobile, deviceFingerprint: fp })
@@ -402,14 +464,18 @@ export class LicenseService extends BaseRepository {
         return { activated: false, deviceId, statusMessage: data.message || 'License recovery failed.' };
       }
 
+      if (data.publicKey) {
+        this.cachedServerPublicKey = data.publicKey;
+      }
+
       const encryptedToken = this.encryptToken(data.activationToken, deviceId);
       const nowStr = new Date().toISOString();
 
       this.db.prepare('DELETE FROM license_info').run();
       this.db.prepare(`
-        INSERT INTO license_info (license_key, device_id, activation_date, license_type, activation_token, last_verified_at, last_active_time)
-        VALUES (?, ?, ?, 'lifetime', ?, ?, ?)
-      `).run(key || 'RECOVERED_KEY', deviceId, nowStr, encryptedToken, nowStr, nowStr);
+        INSERT INTO license_info (license_key, device_id, activation_date, license_type, activation_token, server_public_key, last_verified_at, last_active_time)
+        VALUES (?, ?, ?, 'lifetime', ?, ?, ?, ?)
+      `).run(key || 'RECOVERED_KEY', deviceId, nowStr, encryptedToken, data.publicKey || null, nowStr, nowStr);
 
       return this.getLicenseStatus();
     } catch (err: any) {
@@ -425,7 +491,7 @@ export class LicenseService extends BaseRepository {
     const fp = this.getDeviceFingerprint();
 
     try {
-      const response = await fetch(`${SERVER_BASE_URL}/api/v1/license/transfer`, {
+      const response = await this.fetchWithTimeout(`${SERVER_BASE_URL}/api/v1/license/transfer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ licenseKey: key, reason, newDeviceFingerprint: fp })
@@ -453,13 +519,13 @@ export class LicenseService extends BaseRepository {
     console.log('Actively verifying license status in background...');
     try {
       const decryptedToken = this.decryptToken(encryptedToken, this.getDeviceId());
-      const response = await fetch(`${SERVER_BASE_URL}/api/v1/license/verify`, {
+      const response = await this.fetchWithTimeout(`${SERVER_BASE_URL}/api/v1/license/verify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${decryptedToken}`
         }
-      });
+      }, 15000);
 
       const data = (await response.json()) as any;
 
