@@ -17,6 +17,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import type { DailyRate } from '../../../shared/ipc-api';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 interface RateGroupRow {
   sr: number;
@@ -45,6 +46,7 @@ export default function DailyRateView() {
   const selectedCompany = useCompanyStore((state) => state.selectedCompany);
   const { rates, loadRates, saveRates } = useRateStore();
   const { closeTab, activeTabId } = useTabStore();
+  const { showToast, showConfirm } = useDialog();
 
   const [vchDate, setVchDate] = useState(new Date().toISOString().split('T')[0]);
   const [goldRate, setGoldRate] = useState<number>(50000);
@@ -241,7 +243,7 @@ export default function DailyRateView() {
   // Actions
   const handleSave = async () => {
     if (!selectedCompany) {
-      alert('Please select a company workspace first.');
+      showToast('Please select a company workspace first.', 'warning');
       return;
     }
 
@@ -269,17 +271,23 @@ export default function DailyRateView() {
         vchDate
       );
       
-      alert(`Daily Rates for date ${vchDate} saved successfully.`);
+      showToast(`Daily Rates for date ${vchDate} saved successfully.`, 'success');
     } catch (err: any) {
       console.error(err);
-      alert(`Error saving daily rates: ${err.message || err}`);
+      showToast(`Error saving daily rates: ${err.message || err}`, 'error');
     } finally {
       setIsSaving(false);
     }
   };
 
-  const handleCancel = () => {
-    if (confirm('Revert all edits to last saved state?')) {
+  const handleCancel = async () => {
+    const confirmed = await showConfirm({
+      title: 'Revert Edits',
+      message: 'Revert all edits to last saved state?',
+      variant: 'warning',
+      confirmText: 'Revert',
+    });
+    if (confirmed) {
       // Reload rates lists from DB to trigger re-syncing
       if (selectedCompany) {
         loadRates(selectedCompany.id);
@@ -292,21 +300,23 @@ export default function DailyRateView() {
     
     const record = rates.find(r => r.rate_date === vchDate);
     if (!record) {
-      alert('No daily rate record exists to delete for this date.');
+      showToast('No daily rate record exists to delete for this date.', 'warning');
       return;
     }
 
-    if (confirm(`Are you sure you want to delete daily rates record for: ${vchDate}?`)) {
+    const confirmed = await showConfirm({
+      title: 'Delete Daily Rate',
+      message: `Are you sure you want to delete daily rates record for: ${vchDate}?`,
+      variant: 'danger',
+      confirmText: 'Delete',
+    });
+
+    if (confirmed) {
       try {
-        // Since getDailyRates/saveDailyRates is defined, let's execute deletion.
-        // If there's no custom deleteRate IPC handler, we can set rates to 0 or we can check if it exists.
-        // Let's call main channel if available or update rates to 0.
-        // Let's save 0 for all rates or write a direct database deletion.
-        // Wait, does the repository support deleting? The IPC doesn't declare deleteDailyRate, so we can just update all rates to 0 as clear!
         await saveRates(selectedCompany.id, 0, 0, 0, 0, '[]', '', vchDate);
-        alert('Daily rates cleared for this date.');
+        showToast('Daily rates cleared for this date.', 'success');
       } catch (err: any) {
-        alert(`Failed to delete daily rates: ${err.message}`);
+        showToast(`Failed to delete daily rates: ${err.message}`, 'error');
       }
     }
   };

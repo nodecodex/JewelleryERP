@@ -3,6 +3,7 @@ import { useCompanyStore } from '../../store/useCompanyStore';
 import { useTabStore } from '../../store/useTabStore';
 import { usePartyStore } from '../../store/usePartyStore';
 import type { Party } from '../../../shared/ipc-api';
+import { useDialog } from '../../components/ui/DialogProvider';
 import { 
   Plus, 
   Search, 
@@ -23,11 +24,13 @@ export default function PartyMasterView() {
   const closeTab = useTabStore((state) => state.closeTab);
   const activeTabId = useTabStore((state) => state.activeTabId);
   const { parties, loadParties, createParty, updateParty, deleteParty } = usePartyStore();
+  const { showToast, showConfirm } = useDialog();
 
   // Split-screen states
   const [selectedRecord, setSelectedRecord] = useState<Party | null>(null);
   const [globalFilter, setGlobalFilter] = useState('');
   const [activeFormTab, setActiveFormTab] = useState<'company' | 'other' | 'family'>('company');
+  const [hasAutoSelected, setHasAutoSelected] = useState(false);
 
   // Form Fields
   const [code, setCode] = useState('');
@@ -70,15 +73,17 @@ export default function PartyMasterView() {
   useEffect(() => {
     if (selectedCompany) {
       loadParties(selectedCompany.id);
+      setHasAutoSelected(false);
     }
   }, [selectedCompany]);
 
   useEffect(() => {
-    if (parties.length > 0 && !selectedRecord) {
+    if (parties.length > 0 && !hasAutoSelected) {
       setSelectedRecord(parties[0]);
       populateForm(parties[0]);
+      setHasAutoSelected(true);
     }
-  }, [parties, selectedRecord]);
+  }, [parties, hasAutoSelected]);
 
   const populateForm = (rec: Party | null) => {
     if (rec) {
@@ -162,11 +167,11 @@ export default function PartyMasterView() {
   const handleSave = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!name.trim()) {
-      alert('Please fill out the Account Name.');
+      showToast('Please fill out the Account Name.', 'warning');
       return;
     }
     if (!code.trim()) {
-      alert('Please specify an Account Code.');
+      showToast('Please specify an Account Code.', 'warning');
       return;
     }
     if (!selectedCompany) return;
@@ -210,14 +215,14 @@ export default function PartyMasterView() {
           ...selectedRecord,
           ...payload
         });
-        alert('Party registry details updated successfully.');
+        showToast('Party registry details updated successfully.', 'success');
       } else {
         const created = await createParty(payload);
         setSelectedRecord(created);
-        alert('New Party created successfully.');
+        showToast('New Party created successfully.', 'success');
       }
     } catch (err: any) {
-      alert(`Error saving party: ${err.message || err}`);
+      showToast(`Error saving party: ${err.message || err}`, 'error');
     }
   };
 
@@ -228,15 +233,22 @@ export default function PartyMasterView() {
   const handleDeleteRecord = async () => {
     if (!selectedRecord) return;
 
-    if (confirm(`CAUTION: Permanently delete Party "${selectedRecord.name}" and all transaction links?`)) {
-      try {
-        await deleteParty(selectedRecord.id);
-        alert('Party record removed successfully.');
-        setSelectedRecord(null);
-        populateForm(null);
-      } catch (err) {
-        alert('Error deleting party record.');
-      }
+    const confirmed = await showConfirm({
+      title: 'Delete Party',
+      message: `Are you sure you want to delete ${selectedRecord.name}?`,
+      variant: 'danger',
+      confirmText: 'Delete',
+    });
+
+    if (!confirmed) return;
+
+    try {
+      await deleteParty(selectedRecord.id);
+      showToast('Party record removed successfully.', 'success');
+      setSelectedRecord(null);
+      populateForm(null);
+    } catch (err) {
+      showToast('Error deleting party record.', 'error');
     }
   };
 
@@ -257,7 +269,7 @@ export default function PartyMasterView() {
   });
 
   return (
-    <div className="p-3 bg-background text-foreground h-full overflow-hidden flex flex-col font-sans select-none no-print transition-colors duration-200">
+    <div className="relative p-3 bg-background text-foreground h-full overflow-hidden flex flex-col font-sans select-none no-print transition-colors duration-200">
       
       {/* 1. Main Split-Panel Workspace */}
       <div className="flex-1 grid grid-cols-12 gap-3 overflow-hidden min-h-0 pb-2">
@@ -907,7 +919,7 @@ export default function PartyMasterView() {
         <button
           onClick={handleDeleteRecord}
           disabled={!selectedRecord}
-          className="flex items-center gap-1.5 px-4 py-1.5 bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/20 hover:border-destructive/30 rounded-md font-semibold uppercase shadow-xs transition-all text-xs active:scale-[0.98] cursor-pointer disabled:opacity-40 disabled:hover:bg-destructive/10 disabled:active:scale-100 animate-in duration-200"
+          className="flex items-center gap-1.5 px-4 py-1.5 border rounded-md font-semibold uppercase shadow-xs transition-all text-xs active:scale-[0.98] cursor-pointer disabled:opacity-40 disabled:active:scale-100 animate-in duration-200 bg-destructive/10 hover:bg-destructive/20 text-destructive border-destructive/20 hover:border-destructive/30 disabled:hover:bg-destructive/10"
         >
           <Trash2 className="h-4 w-4 text-rose-500" />
           <span>Delete</span>

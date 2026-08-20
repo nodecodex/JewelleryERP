@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Printer
 } from 'lucide-react';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 interface LocalItem {
   sr: number;
@@ -82,6 +83,7 @@ export default function SalesView() {
 
   const { parties, loadParties } = usePartyStore();
   const { invoices, loadInvoices, createInvoice, deleteInvoice } = useInvoiceStore();
+  const { showToast, showConfirm } = useDialog();
 
   // Color Theme Accent
   const [themeAccent, setThemeAccent] = useState<ThemeAccent>('orange');
@@ -213,12 +215,12 @@ export default function SalesView() {
               sr: idx + 1, it_code: '', it_name: '', dm_color: '', dm_origin: '', dm_remark: '', dm_sf_no: '', pcs: 0, weight: 0
             }));
           }
-          return updatedDiamonds;
-        });
-      } else {
-        alert(`Barcode/Tag code "${scannedValue}" not found in database.`);
-      }
-    } catch (e) {
+            return updatedDiamonds;
+          });
+        } else {
+          showToast(`Barcode/Tag code "${scannedValue}" not found in database.`, 'warning');
+        }
+      } catch (e) {
       console.error('Failed search in sales scan:', e);
     }
   };
@@ -575,7 +577,7 @@ export default function SalesView() {
   const handleSave = async () => {
     if (!selectedCompany) return;
     if (validItems.length === 0) {
-      alert('Voucher must contain at least one valid line item with ItCode & Pcs.');
+      showToast('Voucher must contain at least one valid line item with ItCode & Pcs.', 'warning');
       return;
     }
 
@@ -616,10 +618,10 @@ export default function SalesView() {
 
     try {
       await createInvoice(invoicePayload, itemsPayload);
-      alert(`Sales Gold Tax Invoice #${vchNo} saved and ledger entries posted successfully.`);
+      showToast(`Sales Gold Tax Invoice #${vchNo} saved and ledger entries posted successfully.`, 'success');
       handleNew();
     } catch (e: any) {
-      alert(`Error saving invoice: ${e.message || e}`);
+      showToast(`Error saving invoice: ${e.message || e}`, 'error');
     }
   };
 
@@ -651,16 +653,24 @@ export default function SalesView() {
 
   const handleDelete = async () => {
     if (!activeInvoiceId) {
-      alert('Cannot delete: No saved voucher is loaded.');
+      showToast('Cannot delete: No saved voucher is loaded.', 'warning');
       return;
     }
-    if (confirm('Are you sure you want to delete this invoice? This will permanently reverse all product stock and accounting entries.')) {
+
+    const confirmed = await showConfirm({
+      title: 'Delete Invoice',
+      message: 'Are you sure you want to delete this invoice? This will permanently reverse all product stock and accounting entries.',
+      variant: 'danger',
+      confirmText: 'Delete',
+    });
+
+    if (confirmed) {
       try {
         await deleteInvoice(activeInvoiceId);
-        alert(`Sales Gold Tax Invoice #${vchNo} has been deleted successfully.`);
+        showToast(`Sales Gold Tax Invoice #${vchNo} has been deleted successfully.`, 'success');
         handleNew();
       } catch (e: any) {
-        alert(`Error deleting invoice: ${e.message || e}`);
+        showToast(`Error deleting invoice: ${e.message || e}`, 'error');
       }
     }
   };
@@ -2029,7 +2039,7 @@ export default function SalesView() {
             type="button"
             onClick={async () => {
               const res = await (window as any).api.saveToPDF(`SalesInvoice_${vchNo || 'New'}.pdf`);
-              alert(res.message);
+              showToast(res.message, res.success ? 'success' : 'info');
             }}
             className="flex items-center gap-1.5 px-3 h-8 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-[2px] uppercase shadow-sm transition-all text-[11px] font-bold cursor-pointer"
           >

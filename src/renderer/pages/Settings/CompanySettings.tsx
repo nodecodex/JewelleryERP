@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useCompanyStore } from '../../store/useCompanyStore';
 import { useTabStore } from '../../store/useTabStore';
 import { Settings, Printer, Save, Undo2, LogOut, CheckSquare } from 'lucide-react';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 interface BookColumn {
   sr: number;
@@ -38,6 +39,7 @@ export default function CompanySettingsView() {
   const { selectedCompany, updateCompany } = useCompanyStore();
   const closeTab = useTabStore((state) => state.closeTab);
   const activeTabId = useTabStore((state) => state.activeTabId);
+  const { showToast } = useDialog();
 
   // Left Section Table Column configuration
   const [bookColumns, setBookColumns] = useState<BookColumn[]>(DEFAULT_COLUMNS);
@@ -65,6 +67,7 @@ export default function CompanySettingsView() {
   const [whTouchSave, setWhTouchSave] = useState('No');
   const [panCardValue, setPanCardValue] = useState('200000');
   const [duplicatePrint, setDuplicatePrint] = useState('No');
+  const [initialFine, setInitialFine] = useState('0');
 
   // Load active company's settings
   useEffect(() => {
@@ -101,6 +104,7 @@ export default function CompanySettingsView() {
         if (settings.whTouchSave) setWhTouchSave(settings.whTouchSave);
         if (settings.panCardValue) setPanCardValue(String(settings.panCardValue));
         if (settings.duplicatePrint) setDuplicatePrint(settings.duplicatePrint);
+        if (settings.initialFine) setInitialFine(String(settings.initialFine));
       } catch (err) {
         console.error('Failed to parse company settings payload:', err);
         resetToDefaults();
@@ -131,6 +135,7 @@ export default function CompanySettingsView() {
     setWhTouchSave('No');
     setPanCardValue('200000');
     setDuplicatePrint('No');
+    setInitialFine('0');
   };
 
   const handleColumnChange = (sr: number, field: keyof BookColumn, value: any) => {
@@ -141,7 +146,7 @@ export default function CompanySettingsView() {
 
   const handleSave = async () => {
     if (!selectedCompany) {
-      alert('Please select a company workspace first.');
+      showToast('Please select a company workspace first.', 'warning');
       return;
     }
 
@@ -172,7 +177,8 @@ export default function CompanySettingsView() {
         purcWithLbr,
         whTouchSave,
         panCardValue: parseInt(panCardValue) || 200000,
-        duplicatePrint
+        duplicatePrint,
+        initialFine: parseFloat(initialFine) || 0
       };
 
       const payload = {
@@ -181,10 +187,10 @@ export default function CompanySettingsView() {
       };
 
       await updateCompany(payload);
-      alert(`Company "${selectedCompany.name}" settings saved successfully.`);
+      showToast(`Company "${selectedCompany.name}" settings saved successfully.`, 'success');
     } catch (err) {
       console.error(err);
-      alert('Failed to update company setting options.');
+      showToast('Failed to update company setting options.', 'error');
     }
   };
 
@@ -548,6 +554,19 @@ export default function CompanySettingsView() {
                     <option value="Yes">Yes</option>
                   </select>
                   <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Duplicate Print</button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-1">
+                <span className="erp-label w-32 truncate">Initial Fine/PG (g)</span>
+                <div className="flex gap-1 flex-1">
+                  <input
+                    type="number"
+                    className="erp-input h-7 py-0.5 flex-1 font-data select-text"
+                    value={initialFine}
+                    onChange={(e) => setInitialFine(e.target.value)}
+                  />
+                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Fine Set</button>
                 </div>
               </div>
 

@@ -3,10 +3,12 @@ import { useCompanyStore } from '../../store/useCompanyStore';
 import { useRateStore } from '../../store/useRateStore';
 import { Settings, RefreshCw, Database, CloudLightning, ShieldAlert, CheckCircle } from 'lucide-react';
 import ScannerSettings from './ScannerSettings';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 export default function SettingsView() {
   const selectedCompany = useCompanyStore((state) => state.selectedCompany);
   const { currentRates, saveRates } = useRateStore();
+  const { showToast, showConfirm } = useDialog();
 
   // Daily Rates input states
   const [ratesForm, setRatesForm] = useState({
@@ -48,9 +50,9 @@ export default function SettingsView() {
         ratesForm.gold18k,
         ratesForm.silver
       );
-      alert('Metal rates updated successfully for item pricing calculations.');
+      showToast('Metal rates updated successfully for item pricing calculations.', 'success');
     } catch (err) {
-      alert('Error updating rates.');
+      showToast('Error updating rates.', 'error');
     }
   };
 
@@ -70,15 +72,22 @@ export default function SettingsView() {
     e.preventDefault();
     if (!restorePath.trim()) return;
 
-    if (confirm('CAUTION: Restoring database will overwrite all current sales cart items and ledger transactions. Do you wish to proceed?')) {
+    const confirmed = await showConfirm({
+      title: 'Restore Database',
+      message: 'CAUTION: Restoring database will overwrite all current sales cart items and ledger transactions. Do you wish to proceed?',
+      variant: 'danger',
+      confirmText: 'Restore',
+    });
+
+    if (confirmed) {
       try {
         const res = await (window as any).api.restoreBackup(restorePath.trim());
-        alert(res.message);
+        showToast(res.message, res.success ? 'success' : 'error');
         if (res.success) {
           window.location.reload();
         }
       } catch (err: any) {
-        alert(`Restore execution error: ${err.message || err}`);
+        showToast(`Restore execution error: ${err.message || err}`, 'error');
       }
     }
   };

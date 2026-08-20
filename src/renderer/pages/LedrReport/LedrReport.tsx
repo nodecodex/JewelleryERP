@@ -11,8 +11,10 @@ import {
   Trash2,
   LogOut,
   Search,
-  Plus
+  Plus,
+  ArrowRight
 } from 'lucide-react';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 type TagFilterType = 'IN' | 'OUT' | 'ALL';
 type ThemeAccent = 'orange' | 'gold' | 'slate' | 'classic';
@@ -23,6 +25,7 @@ interface TagDetail extends TagRecord {
 
 export default function LedrReportView() {
   const selectedCompany = useCompanyStore((state) => state.selectedCompany);
+  const { showToast, showConfirm } = useDialog();
   const closeTab = useTabStore((state) => state.closeTab);
   const activeTabId = useTabStore((state) => state.activeTabId);
   const currentRates = useRateStore((state) => state.currentRates);
@@ -529,7 +532,7 @@ export default function LedrReportView() {
                   <tr
                     key={row.tag_no}
                     onClick={() => selectActiveTag(row)}
-                    onDoubleClick={() => alert(`Tag details opened for: ${row.tag_no}`)}
+                    onDoubleClick={() => showToast(`Tag details opened for: ${row.tag_no}`, 'info')}
                     className={`border-b border-slate-200 transition-colors h-[25px] cursor-pointer ${
                       isSelected
                         ? 'bg-slate-100 border-l-[3px] border-l-orange-500 font-bold'
@@ -593,7 +596,7 @@ export default function LedrReportView() {
             {['MI', 'SD', 'IC'].map((act) => (
               <button
                 key={act}
-                onClick={() => alert(`Trigger action ${act}`)}
+                onClick={() => showToast(`Trigger action ${act}`, 'info')}
                 className="w-7 h-7 bg-white hover:bg-slate-200 text-[10px] font-bold text-slate-700 border border-slate-300 rounded-[2px] cursor-pointer flex items-center justify-center shadow-sm"
               >
                 {act}
@@ -603,7 +606,7 @@ export default function LedrReportView() {
             {['C', 'S', 'D'].map((act) => (
               <button
                 key={act}
-                onClick={() => alert(`Tag catalog trigger: ${act}`)}
+                onClick={() => showToast(`Tag catalog trigger: ${act}`, 'info')}
                 className="w-7 h-7 bg-white hover:bg-slate-200 text-[10px] font-bold text-slate-700 border border-slate-300 rounded-[2px] cursor-pointer flex items-center justify-center shadow-sm"
               >
                 {act}
@@ -898,7 +901,7 @@ export default function LedrReportView() {
           
           {/* Summary */}
           <button
-            onClick={() => alert(`Tag stock ledger entries: ${filteredTags.length} records. Pcs: ${totalPcs}, GrWt: ${totalGrWt.toFixed(2)}g, NetWt: ${totalNetWt.toFixed(2)}g.`)}
+            onClick={() => showToast(`Tag stock ledger entries: ${filteredTags.length} records. Pcs: ${totalPcs}, GrWt: ${totalGrWt.toFixed(2)}g, NetWt: ${totalNetWt.toFixed(2)}g.`, 'info')}
             className="flex items-center gap-1 px-3 h-8 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-[2px] uppercase shadow-sm transition-all text-[11px] cursor-pointer"
           >
             <FileText className="h-3.5 w-3.5 text-slate-400" />
@@ -935,7 +938,7 @@ export default function LedrReportView() {
 
           {/* Delete */}
           <button
-            onClick={() => alert('Only ledger administrators can delete registered tags.')}
+            onClick={() => showToast('Only ledger administrators can delete registered tags.', 'warning')}
             className="flex items-center gap-1 px-3.5 h-8 bg-red-600 hover:bg-red-700 text-white rounded-[2px] uppercase shadow-sm transition-all text-[11px] cursor-pointer"
           >
             <Trash2 className="h-3.5 w-3.5" />

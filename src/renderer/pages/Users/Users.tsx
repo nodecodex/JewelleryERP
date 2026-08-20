@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useCompanyStore } from '../../store/useCompanyStore';
 import { useTabStore } from '../../store/useTabStore';
 import type { User } from '../../../shared/ipc-api';
+import { useDialog } from '../../components/ui/DialogProvider';
 import { 
   Shield, 
   UserPlus, 
@@ -58,6 +59,7 @@ export default function UsersView() {
   const selectedCompany = useCompanyStore((state) => state.selectedCompany);
   const closeTab = useTabStore((state) => state.closeTab);
   const activeTabId = useTabStore((state) => state.activeTabId);
+  const { showToast, showConfirm } = useDialog();
 
   // Users Lists
   const [users, setUsers] = useState<User[]>([]);
@@ -138,15 +140,15 @@ export default function UsersView() {
 
   const handleUpdateRights = async () => {
     if (!selectedUserId) {
-      alert('Please select a user to update rights.');
+      showToast('Please select a user to update rights.', 'warning');
       return;
     }
     try {
       await (window as any).api.updateUserPermissions(selectedUserId, JSON.stringify(permissions));
-      alert('User permission rights updated successfully.');
+      showToast('User permission rights updated successfully.', 'success');
       loadUsers(); // Refresh permissions
     } catch (err) {
-      alert('Error updating user rights.');
+      showToast('Error updating user rights.', 'error');
     }
   };
 
@@ -156,11 +158,11 @@ export default function UsersView() {
     // 1. If "Create New User" is filled, attempt user creation
     if (newUsername.trim()) {
       if (!newPassword) {
-        alert('Please specify a password for the new user.');
+        showToast('Please specify a password for the new user.', 'warning');
         return;
       }
       if (newPassword !== confirmPassword) {
-        alert('Passwords do not match.');
+        showToast('Passwords do not match.', 'error');
         return;
       }
 
@@ -174,7 +176,7 @@ export default function UsersView() {
         };
 
         const created = await (window as any).api.createUser(payload);
-        alert(`User "${created.username}" created successfully.`);
+        showToast(`User "${created.username}" created successfully.`, 'success');
         setNewUsername('');
         setNewPassword('');
         setConfirmPassword('');
@@ -182,7 +184,7 @@ export default function UsersView() {
         setSelectedUserId(created.id);
         return;
       } catch (err: any) {
-        alert(`Failed to create user: ${err.message || err}`);
+        showToast(`Failed to create user: ${err.message || err}`, 'error');
         return;
       }
     }
@@ -190,24 +192,24 @@ export default function UsersView() {
     // 2. If existing user selected and password fields are filled, update password
     if (selectedUserId && (newPassword || oldPassword || confirmPassword)) {
       if (!oldPassword || !newPassword || !confirmPassword) {
-        alert('Please fill out Old Password, New Password, and Confirm Password fields.');
+        showToast('Please fill out Old Password, New Password, and Confirm Password fields.', 'warning');
         return;
       }
       if (newPassword !== confirmPassword) {
-        alert('New passwords do not match.');
+        showToast('New passwords do not match.', 'error');
         return;
       }
 
       try {
         const res = await (window as any).api.updateUserPassword(selectedUserId, oldPassword, newPassword);
-        alert(res.message);
+        showToast(res.message, res.success ? 'success' : 'error');
         if (res.success) {
           setOldPassword('');
           setNewPassword('');
           setConfirmPassword('');
         }
       } catch (err: any) {
-        alert(`Error resetting password: ${err.message || err}`);
+        showToast(`Error resetting password: ${err.message || err}`, 'error');
       }
       return;
     }
@@ -238,15 +240,22 @@ export default function UsersView() {
     const target = users.find(u => u.id === selectedUserId);
     if (!target) return;
 
-    if (confirm(`CAUTION: Permanently delete user "${target.username}" login credentials?`)) {
+    const confirmed = await showConfirm({
+      title: 'Delete User',
+      message: `CAUTION: Permanently delete user "${target.username}" login credentials?`,
+      variant: 'danger',
+      confirmText: 'Delete',
+    });
+
+    if (confirmed) {
       try {
         await (window as any).api.deleteUser(selectedUserId);
-        alert('User deleted successfully.');
+        showToast('User deleted successfully.', 'success');
         setSelectedUserId('');
         setUsers(users.filter(u => u.id !== selectedUserId));
         loadUsers();
       } catch (err) {
-        alert('Error removing user account.');
+        showToast('Error removing user account.', 'error');
       }
     }
   };
