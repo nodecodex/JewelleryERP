@@ -1,7 +1,7 @@
 {
   "name": "swarnpro-erp",
   "private": true,
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "SwarnPro ERP System",
   "author": "AsyncroZ Technologies",
   "type": "module",
@@ -17,7 +17,7 @@
     "appId": "com.SwarnProERP.app",
     "productName": "SwarnPro ERP",
     "directories": {
-      "output": "C:/Users/jagji/Desktop/SwarnProERP_Build"
+      "output": "D:/recording/SwarnProERP_Build"
     },
     "files": [
       "dist/**/*",
