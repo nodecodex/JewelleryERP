@@ -3,6 +3,8 @@ import { useCompanyStore } from '../../store/useCompanyStore';
 import { useRateStore } from '../../store/useRateStore';
 import { useCustomerStore } from '../../store/useCustomerStore';
 import { useInvoiceStore } from '../../store/useInvoiceStore';
+import { useProductStore } from '../../store/useProductStore';
+import { useDialog } from '../../components/ui/DialogProvider';
 import type { Product, Customer } from '../../../shared/ipc-api';
 import { ShoppingCart, User, Plus, Search, Barcode, Printer, Trash, FileText, Check, ChevronRight, CreditCard, Wallet, Banknote, Landmark } from 'lucide-react';
 
@@ -25,7 +27,9 @@ export default function BillingView() {
   const selectedCompany = useCompanyStore((state) => state.selectedCompany);
   const currentRates = useRateStore((state) => state.currentRates);
   const { customers, loadCustomers, createCustomer } = useCustomerStore();
+  const { products, loadProducts } = useProductStore();
   const { createInvoice } = useInvoiceStore();
+  const { showToast } = useDialog();
 
   // Bill Config
   const [invoiceType, setInvoiceType] = useState<'Retail' | 'Wholesale' | 'GST' | 'Estimate'>('GST');
@@ -113,7 +117,7 @@ export default function BillingView() {
         }]);
         setBarcodeQuery('');
       } else {
-        alert('Product tag not found.');
+        showToast('Product tag not found.', 'warning');
       }
     } catch (err) { console.error(err); }
   };
@@ -183,7 +187,7 @@ export default function BillingView() {
       setCart([]);
       setSelectedCustomer(null);
       loadNextInvoiceNumber();
-    } catch (err: any) { alert(`Billing error: ${err.message || err}`); }
+    } catch (err: any) { showToast(`Billing error: ${err.message || err}`, 'error'); }
   };
 
   return (

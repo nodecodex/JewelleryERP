@@ -14,6 +14,7 @@ import {
   Check,
   FolderOpen
 } from 'lucide-react';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 export default function CompanyView() {
   const { 
@@ -25,6 +26,7 @@ export default function CompanyView() {
     updateCompany, 
     deleteCompany 
   } = useCompanyStore();
+  const { showToast, showConfirm } = useDialog();
 
   const closeTab = useTabStore((state) => state.closeTab);
   const activeTabId = useTabStore((state) => state.activeTabId);
@@ -169,7 +171,7 @@ export default function CompanyView() {
   const handleSave = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!name.trim()) {
-      alert('Please fill out the Company Name.');
+      showToast('Please fill out the Company Name.', 'warning');
       return;
     }
 
@@ -215,15 +217,15 @@ export default function CompanyView() {
           ...selectedRecord,
           ...payload
         });
-        alert('Company details updated successfully.');
+        showToast('Company details updated successfully.', 'success');
       } else {
         const created = await createCompany(payload);
         setSelectedRecord(created);
-        alert('New company workspace created successfully.');
+        showToast('New company workspace created successfully.', 'success');
       }
       loadCompanies();
     } catch (err) {
-      alert('Error saving company master record.');
+      showToast('Error saving company master record.', 'error');
     }
   };
 
@@ -235,17 +237,24 @@ export default function CompanyView() {
     if (!selectedRecord) return;
     
     if (selectedCompany && selectedCompany.id === selectedRecord.id) {
-      alert('Cannot delete the active workspace company. Switch company context in top panel first.');
+      showToast('Cannot delete the active workspace company. Switch company context in top panel first.', 'warning');
       return;
     }
 
-    if (confirm(`CAUTION: Delete "${selectedRecord.name}" permanent database registers?`)) {
+    const confirmed = await showConfirm({
+      title: 'Delete Company',
+      message: `CAUTION: Delete "${selectedRecord.name}" permanent database registers?`,
+      variant: 'danger',
+      confirmText: 'Delete',
+    });
+
+    if (confirmed) {
       try {
         await deleteCompany(selectedRecord.id);
-        alert('Company removed successfully.');
+        showToast('Company removed successfully.', 'success');
         loadCompanies();
       } catch (err) {
-        alert('Error deleting company record.');
+        showToast('Error deleting company record.', 'error');
       }
     }
   };
@@ -383,13 +392,19 @@ export default function CompanyView() {
                                   type="button"
                                   onClick={async (e) => {
                                     e.stopPropagation();
-                                    if (confirm(`CAUTION: Delete "${comp.name}" permanent database registers?`)) {
+                                    const confirmed = await showConfirm({
+                                      title: 'Delete Company',
+                                      message: `CAUTION: Delete "${comp.name}" permanent database registers?`,
+                                      variant: 'danger',
+                                      confirmText: 'Delete',
+                                    });
+                                    if (confirmed) {
                                       try {
                                         await deleteCompany(comp.id);
-                                        alert('Company removed successfully.');
+                                        showToast('Company removed successfully.', 'success');
                                         loadCompanies();
                                       } catch (err) {
-                                        alert('Error deleting company record.');
+                                        showToast('Error deleting company record.', 'error');
                                       }
                                     }
                                   }}

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useCompanyStore } from '../../store/useCompanyStore';
 import { useVoucherStore } from '../../store/useVoucherStore';
 import type { Account, JournalEntry } from '../../../shared/ipc-api';
-import { FileSpreadsheet, Plus, AlertCircle, CheckCircle } from 'lucide-react';
+import { FileSpreadsheet, Plus, AlertCircle, CheckCircle, Trash2 } from 'lucide-react';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 interface VoucherItemInput {
   account_id: string;
@@ -13,6 +14,7 @@ interface VoucherItemInput {
 export default function AccountingView() {
   const selectedCompany = useCompanyStore((state) => state.selectedCompany);
   const { vouchers, accounts, loadVouchers, loadAccounts, createVoucher } = useVoucherStore();
+  const { showToast } = useDialog();
 
   // Form states
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -71,11 +73,11 @@ export default function AccountingView() {
     e.preventDefault();
     if (!selectedCompany) return;
     if (!isBalanced) {
-      alert('Voucher is not balanced. Total debits must equal total credits.');
+      showToast('Voucher is not balanced. Total debits must equal total credits.', 'warning');
       return;
     }
     if (items.some((i) => !i.account_id)) {
-      alert('Please select an account for all voucher rows.');
+      showToast('Please select an account for all voucher rows.', 'warning');
       return;
     }
 
@@ -95,7 +97,7 @@ export default function AccountingView() {
         { account_id: '', debit: 0, credit: 0 },
       ]);
     } catch (err: any) {
-      alert(`Error saving voucher: ${err.message || err}`);
+      showToast(`Error saving voucher: ${err.message || err}`, 'error');
     }
   };
 

@@ -12,6 +12,7 @@ import { useRateStore } from '../../store/useRateStore';
 import { useTagOpeningStore } from '../../store/useTagOpeningStore';
 import { useItStkLimitStore } from '../../store/useItStkLimitStore';
 import { debounce } from '../../utils/debounce';
+import { useDialog } from '../ui/DialogProvider';
 
 // Views
 import Dashboard from '../../pages/Dashboard/Dashboard';
@@ -86,8 +87,10 @@ export default function Layout() {
   const { theme, toggleTheme } = useThemeStore();
   const { tabs, activeTabId, setActiveTab, closeTab, addTab } = useTabStore();
   const { companies, selectedCompany, setSelectedCompany, loadCompanies } = useCompanyStore();
+  const { showConfirm } = useDialog();
 
   // Data Loaders (Optimized)
+  const products = useProductStore((state) => state.products);
   const loadProducts = useProductStore((state) => state.loadProducts);
   const loadParties = usePartyStore((state) => state.loadParties);
   const loadTaxes = useTaxStore((state) => state.loadTaxes);
@@ -140,8 +143,11 @@ export default function Layout() {
     if (!(window as any).api?.onDatabaseUpdated) return;
 
     const debouncedReload = debounce(() => {
-      loadCompanies();
-      reloadAllDataRef.current();
+      // CAUTION: Firing 11 simultaneous IPC reads immediately after a write 
+      // causes the SQLite driver to deadlock/freeze. Disabled shotgun reload.
+      console.log('Database updated signal received. Shotgun reload disabled to prevent freeze.');
+      // loadCompanies();
+      // reloadAllDataRef.current();
     }, 300);
 
     const unsubscribe = (window as any).api.onDatabaseUpdated(debouncedReload);
@@ -160,8 +166,29 @@ export default function Layout() {
     setSelectedCompany(comp || null);
   };
 
-  const handleExit = () => {
-    if (confirm('Are you sure you want to close the ERP client session?')) {
+  const [initialFine, setInitialFine] = useState<number>(0);
+  useEffect(() => {
+    if (selectedCompany) {
+      try {
+        const settings = JSON.parse(selectedCompany.settings_json || '{}');
+        setInitialFine(parseFloat(settings.initialFine) || 0);
+      } catch (e) {}
+    } else {
+      setInitialFine(0);
+    }
+  }, [selectedCompany]);
+
+  const totalFine = products.reduce((acc, p) => acc + ((p.fine || 0) * (p.current_stock > 0 ? p.current_stock : 0)), 0);
+  const profitFine = totalFine - initialFine;
+
+  const handleExit = async () => {
+    const confirmed = await showConfirm({
+      title: 'Exit Application',
+      message: 'Are you sure you want to close the ERP client session?',
+      variant: 'danger',
+      confirmText: 'Exit',
+    });
+    if (confirmed) {
       window.close();
     }
   };
@@ -270,6 +297,26 @@ export default function Layout() {
 
         {/* Global Utilities */}
         <div className="flex items-center gap-6">
+          {/* Profit Fine Tracker */}
+          <div className="hidden lg:flex items-center gap-3 bg-secondary/30 px-3 py-1.5 rounded-lg border border-border shadow-sm">
+            <div className="flex flex-col items-end">
+              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Initial Fine</span>
+              <span className="text-[11px] font-mono font-bold text-amber-600 dark:text-amber-500">{initialFine.toFixed(3)}g</span>
+            </div>
+            <div className="w-px h-6 bg-border"></div>
+            <div className="flex flex-col items-end">
+              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Total Fine</span>
+              <span className="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400">{totalFine.toFixed(3)}g</span>
+            </div>
+            <div className="w-px h-6 bg-border"></div>
+            <div className="flex flex-col items-end">
+              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Profit PG</span>
+              <span className={`text-xs font-mono font-extrabold ${profitFine >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-500'}`}>
+                {profitFine > 0 ? '+' : ''}{profitFine.toFixed(3)}g
+              </span>
+            </div>
+          </div>
+
           {/* Quick Search */}
           <div className="hidden md:flex items-center bg-secondary/50 border border-border px-3 py-1.5 rounded-lg gap-2 w-64 focus-within:ring-2 focus-within:ring-primary/20 transition-all">
             <Search className="h-4 w-4 text-muted-foreground" />

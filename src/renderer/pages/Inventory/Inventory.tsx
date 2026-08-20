@@ -3,6 +3,7 @@ import { useCompanyStore } from '../../store/useCompanyStore';
 import { useProductStore } from '../../store/useProductStore';
 import type { Product } from '../../../shared/ipc-api';
 import { Layers, Plus, Search, Barcode, Trash2, Edit2, ArrowUpDown, Tag, Box, Filter, Download, MoreVertical } from 'lucide-react';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 type SortField = 'name' | 'sku' | 'category' | 'selling_price' | 'current_stock';
 type SortOrder = 'asc' | 'desc';
@@ -10,6 +11,7 @@ type SortOrder = 'asc' | 'desc';
 export default function InventoryView() {
   const selectedCompany = useCompanyStore((state) => state.selectedCompany);
   const { products, loadProducts, createProduct, updateProduct, deleteProduct } = useProductStore();
+  const { showToast } = useDialog();
   const [searchQuery, setSearchQuery] = useState('');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -61,7 +63,7 @@ export default function InventoryView() {
       if (editingProduct) await updateProduct({ ...editingProduct, ...dataToSave });
       else await createProduct({ company_id: selectedCompany.id, ...dataToSave });
       setIsFormOpen(false);
-    } catch (e) { alert('Error saving product.'); }
+    } catch (e) { showToast('Error saving product.', 'error'); }
   };
 
   const processedProducts = products

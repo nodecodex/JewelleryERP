@@ -3,6 +3,7 @@ import { useCompanyStore } from '../../store/useCompanyStore';
 import { useTabStore } from '../../store/useTabStore';
 import { useTaxStore } from '../../store/useTaxStore';
 import type { Tax, TaxComponent } from '../../../shared/ipc-api';
+import { useDialog } from '../../components/ui/DialogProvider';
 import { 
   Plus, 
   Search, 
@@ -19,6 +20,7 @@ export default function TaxMasterView() {
   const closeTab = useTabStore((state) => state.closeTab);
   const activeTabId = useTabStore((state) => state.activeTabId);
   const { taxes, loadTaxes, createTax, updateTax, deleteTax } = useTaxStore();
+  const { showToast, showConfirm } = useDialog();
 
   // Records state
   const [selectedRecord, setSelectedRecord] = useState<Tax | null>(null);
@@ -163,11 +165,11 @@ export default function TaxMasterView() {
   const handleSave = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!name.trim()) {
-      alert('Please enter a Tax Description / Name.');
+      showToast('Please enter a Tax Description / Name.', 'warning');
       return;
     }
     if (!code.trim()) {
-      alert('Please specify a unique Tax Code.');
+      showToast('Please specify a unique Tax Code.', 'warning');
       return;
     }
     if (!selectedCompany) return;
@@ -194,14 +196,14 @@ export default function TaxMasterView() {
           ...selectedRecord,
           ...payload
         });
-        alert('Tax parameters updated successfully.');
+        showToast('Tax parameters updated successfully.', 'success');
       } else {
         const created = await createTax(payload);
         setSelectedRecord(created);
-        alert('New Tax registry entry created successfully.');
+        showToast('New Tax registry entry created successfully.', 'success');
       }
     } catch (err: any) {
-      alert(`Error saving tax config: ${err.message || err}`);
+      showToast(`Error saving tax config: ${err.message || err}`, 'error');
     }
   };
 
@@ -212,18 +214,25 @@ export default function TaxMasterView() {
   const handleDeleteRecord = async () => {
     if (!selectedRecord) return;
     if (selectedRecord.code === '00') {
-      alert('Default TAX FREE rule cannot be removed.');
+      showToast('Default TAX FREE rule cannot be removed.', 'warning');
       return;
     }
 
-    if (confirm(`CAUTION: Permanently delete Tax option "${selectedRecord.name}"? This will affect invoice references.`)) {
+    const confirmed = await showConfirm({
+      title: 'Delete Tax Record',
+      message: `CAUTION: Permanently delete Tax option "${selectedRecord.name}"? This will affect invoice references.`,
+      variant: 'danger',
+      confirmText: 'Delete',
+    });
+
+    if (confirmed) {
       try {
         await deleteTax(selectedRecord.id);
-        alert('Tax registry entry deleted successfully.');
+        showToast('Tax registry entry deleted successfully.', 'success');
         setSelectedRecord(null);
         populateForm(null);
       } catch (err) {
-        alert('Error removing tax configuration.');
+        showToast('Error removing tax configuration.', 'error');
       }
     }
   };

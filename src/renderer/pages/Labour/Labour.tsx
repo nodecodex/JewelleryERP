@@ -6,7 +6,8 @@ import { useLabourStore } from '../../store/useLabourStore';
 import { useRateStore } from '../../store/useRateStore';
 import { useTabStore } from '../../store/useTabStore';
 import type { Party, PartyWiseLabour } from '../../../shared/ipc-api';
-import { Printer, Save, Undo2, Trash2, LogOut, Coins } from 'lucide-react';
+import { Printer, Save, Undo2, Trash2, LogOut, ArrowUpDown } from 'lucide-react';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 interface GridRow {
   product_id: string;
@@ -26,6 +27,7 @@ export default function LabourView() {
   const { parties, loadParties } = usePartyStore();
   const { products, loadProducts } = useProductStore();
   const { getPartyWiseLabour, savePartyWiseLabour, deletePartyWiseLabour, isLoading } = useLabourStore();
+  const { showToast, showConfirm } = useDialog();
   const currentRates = useRateStore((state) => state.currentRates);
   const activeTabId = useTabStore((state) => state.activeTabId);
   const closeTab = useTabStore((state) => state.closeTab);
@@ -100,7 +102,7 @@ export default function LabourView() {
   const handleSave = async () => {
     if (!selectedCompany) return;
     if (!selectedPartyId) {
-      alert('Please select a party first.');
+      showToast('Please select a party first.', 'warning');
       return;
     }
 
@@ -130,10 +132,10 @@ export default function LabourView() {
 
     try {
       await savePartyWiseLabour(selectedCompany.id, selectedPartyId, entriesToSave);
-      alert('Party Wise Labour configurations saved successfully.');
+      showToast('Party Wise Labour configurations saved successfully.', 'success');
       fetchAndMapLabour(selectedPartyId);
     } catch (e: any) {
-      alert(`Error saving configuration: ${e.message || e}`);
+      showToast(`Error saving configuration: ${e.message || e}`, 'error');
     }
   };
 
@@ -145,13 +147,21 @@ export default function LabourView() {
 
   const handleDelete = async () => {
     if (!selectedCompany || !selectedPartyId) return;
-    if (confirm(`Are you sure you want to delete all custom configurations for ${selectedParty?.name}?`)) {
+
+    const confirmed = await showConfirm({
+      title: 'Delete Configurations',
+      message: `Are you sure you want to delete all custom configurations for ${selectedParty?.name}?`,
+      variant: 'danger',
+      confirmText: 'Delete',
+    });
+
+    if (confirmed) {
       try {
         await deletePartyWiseLabour(selectedCompany.id, selectedPartyId);
-        alert('Configurations deleted successfully.');
+        showToast('Configurations deleted successfully.', 'success');
         fetchAndMapLabour(selectedPartyId);
       } catch (e) {
-        alert('Error deleting configurations.');
+        showToast('Error deleting configurations.', 'error');
       }
     }
   };

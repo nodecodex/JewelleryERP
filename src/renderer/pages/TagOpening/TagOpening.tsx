@@ -4,6 +4,7 @@ import { useTagOpeningStore } from '../../store/useTagOpeningStore';
 import { useRateStore } from '../../store/useRateStore';
 import { useTabStore } from '../../store/useTabStore';
 import type { TagOpeningVoucher, TagOpeningAccessory } from '../../../shared/ipc-api';
+import { useDialog } from '../../components/ui/DialogProvider';
 import { 
   Plus, 
   Trash2, 
@@ -46,6 +47,7 @@ export default function TagOpeningView() {
   const currentRates = useRateStore((state) => state.currentRates);
 
   const { vouchers, loadVouchers, createVoucher, updateVoucher, deleteVoucher } = useTagOpeningStore();
+  const { showToast, showConfirm } = useDialog();
 
   // Mode & navigation
   const [activeVoucherId, setActiveVoucherId] = useState<string | null>(null);
@@ -280,7 +282,7 @@ export default function TagOpeningView() {
     if (!selectedCompany) return;
     const activeItems = items.filter((i) => i.it_code.trim() && i.tag_no.trim() && i.pcs > 0);
     if (activeItems.length === 0) {
-      alert('Voucher must contain at least one valid line item with Tag No & Pcs.');
+      showToast('Voucher must contain at least one valid line item with Tag No & Pcs.', 'warning');
       return;
     }
 
@@ -357,14 +359,14 @@ export default function TagOpeningView() {
           itemsPayload,
           accessoriesPayload
         );
-        alert('Opening Stock Voucher updated successfully.');
+        showToast('Opening Stock Voucher updated successfully.', 'success');
       } else {
         await createVoucher(voucherPayload, itemsPayload, accessoriesPayload);
-        alert('Opening Stock Voucher created successfully.');
+        showToast('Opening Stock Voucher created successfully.', 'success');
       }
       handleNew();
     } catch (e: any) {
-      alert(`Error saving stock: ${e.message || e}`);
+      showToast(`Error saving stock: ${e.message || e}`, 'error');
     }
   };
 
@@ -392,13 +394,21 @@ export default function TagOpeningView() {
 
   const handleDelete = async () => {
     if (!activeVoucherId) return;
-    if (confirm(`CAUTION: Permanently delete Tag Opening Voucher #${vchNo}? This will remove corresponding inventory tags.`)) {
+
+    const confirmed = await showConfirm({
+      title: 'Delete Voucher',
+      message: `CAUTION: Permanently delete Tag Opening Voucher #${vchNo}? This will remove corresponding inventory tags.`,
+      variant: 'danger',
+      confirmText: 'Delete',
+    });
+
+    if (confirmed) {
       try {
         await deleteVoucher(activeVoucherId);
-        alert('Voucher deleted successfully.');
+        showToast('Voucher deleted successfully.', 'success');
         handleNew();
       } catch (e) {
-        alert('Error deleting voucher.');
+        showToast('Error deleting voucher.', 'error');
       }
     }
   };

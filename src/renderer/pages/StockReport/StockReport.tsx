@@ -13,6 +13,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { useHardwareScanner } from '../../hooks/useHardwareScanner';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 type ItemTypeFilter = 'Gold' | 'Silver' | 'Diamond' | 'All';
 type StockTypeFilter = 'All' | 'Opening' | 'Inward' | 'Sales' | 'Purchase';
@@ -52,6 +53,7 @@ interface StockGridRow {
 export default function StockReportView() {
   const selectedCompany = useCompanyStore((state) => state.selectedCompany);
   const { closeTab, activeTabId } = useTabStore();
+  const { showToast } = useDialog();
 
   // Filters State
   const [grossWiseWeight, setGrossWiseWeight] = useState(false);
@@ -99,7 +101,7 @@ export default function StockReportView() {
           setHighlightedRowIndex(null);
         }
       } else {
-        alert(`Barcode/QR "${data.value}" did not match any tag or inventory item.`);
+        showToast(`Barcode/QR "${data.value}" did not match any tag or inventory item.`, 'warning');
         setScannedItemDetails(null);
         setHighlightedRowIndex(null);
       }
@@ -264,7 +266,7 @@ export default function StockReportView() {
 
   const handleExportPDF = async () => {
     const res = await (window as any).api.saveToPDF(`StockReport_${dateFrom}_to_${dateTo}.pdf`);
-    alert(res.message);
+    showToast(res.message, res.success ? 'success' : 'error');
   };
 
   const handleExcelExport = () => {

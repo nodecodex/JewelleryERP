@@ -20,6 +20,7 @@ import {
   Trash2,
   FileText
 } from 'lucide-react';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 // ─── LOCAL TYPES ────────────────────────────────────────────────────────────────
 
@@ -165,6 +166,7 @@ export default function PurchaseView() {
   const { taxes, loadTaxes } = useTaxStore();
   const { accounts, loadAccounts } = useVoucherStore();
   const { currentRates, loadRates } = useRateStore();
+  const { showToast, showConfirm } = useDialog();
 
   const [selectedVoucherId, setSelectedVoucherId] = useState<string | null>(null);
   const [vchNo, setVchNo] = useState('');
@@ -328,7 +330,7 @@ export default function PurchaseView() {
       // 2. Check barcode uniqueness for new tag registration
       const isUnique = await (window as any).api.isBarcodeUnique(selectedCompany.id, scannedValue);
       if (!isUnique) {
-        alert(`Warning: Barcode/Tag code "${scannedValue}" already exists in the system database. Duplicates are not allowed.`);
+        showToast(`Warning: Barcode/Tag code "${scannedValue}" already exists in the system database. Duplicates are not allowed.`, 'warning');
         return;
       }
 
@@ -513,7 +515,7 @@ export default function PurchaseView() {
 
   const handleAddTagRow = () => {
     const parentSummary = summaries[activeSummaryIndex];
-    if (!parentSummary || !parentSummary.it_code) { alert('Please enter Item Code on the summary row first.'); return; }
+    if (!parentSummary || !parentSummary.it_code) { showToast('Please enter Item Code on the summary row first.', 'warning'); return; }
     const matchingTags = tags.filter((t) => t.item_sr === parentSummary.sr);
     const autoTagNo = `${parentSummary.it_code}-${String(tags.length + 1).padStart(4, '0')}`;
     const newTag: LocalTag = {
@@ -545,7 +547,7 @@ export default function PurchaseView() {
     if (!parentSummary) return;
     const relatedTags = tags.filter((t) => t.item_sr === parentSummary.sr);
     const parentTag = relatedTags[activeTagIndex];
-    if (!parentTag) { alert('Please select or add a Tag row first.'); return; }
+    if (!parentTag) { showToast('Please select or add a Tag row first.', 'warning'); return; }
     const relatedDms = diamonds.filter((d) => d.tag_no === parentTag.tag_no);
     const newDm: LocalDiamond = {
       sr: relatedDms.length + 1, it_code: 'DM', it_name: 'DIAMOND',
@@ -643,10 +645,10 @@ export default function PurchaseView() {
 
   const handleSave = async () => {
     if (!selectedCompany) return;
-    if (!vchNo.trim()) { alert('Voucher Number is required.'); return; }
-    if (!partyId) { alert('Please select a Supplier/Party.'); return; }
+    if (!vchNo.trim()) { showToast('Voucher Number is required.', 'warning'); return; }
+    if (!partyId) { showToast('Please select a Supplier/Party.', 'warning'); return; }
     const finalSummaries = summaries.filter((s) => s.it_code.trim());
-    if (finalSummaries.length === 0) { alert('Please enter at least one Summary Item row.'); return; }
+    if (finalSummaries.length === 0) { showToast('Please enter at least one Summary Item row.', 'warning'); return; }
     const payloadVoucher: Omit<PurchaseVoucher, 'id'> = {
       company_id: selectedCompany.id, vch_no: vchNo.trim(), vch_date: vchDate,
       vch_time: vchTime || null, ref_no: refNo || null, party_id: partyId,
@@ -685,23 +687,31 @@ export default function PurchaseView() {
     try {
       if (selectedVoucherId) {
         await updateVoucher({ ...payloadVoucher, id: selectedVoucherId }, payloadItems, payloadTags as any, payloadDms);
-        alert('Purchase Voucher updated successfully!');
+        showToast('Purchase Voucher updated successfully!', 'success');
       } else {
         await createVoucher(payloadVoucher, payloadItems, payloadTags as any, payloadDms);
-        alert('Purchase Voucher saved successfully!');
+        showToast('Purchase Voucher saved successfully!', 'success');
       }
       handleNew();
-    } catch (e: any) { alert(`Error saving voucher: ${e.message || e}`); }
+    } catch (e: any) { showToast(`Error saving voucher: ${e.message || e}`, 'error'); }
   };
 
   const handleDelete = async () => {
     if (!selectedVoucherId) return;
-    if (confirm('Delete this purchase voucher? All barcodes will be removed from stock.')) {
+
+    const confirmed = await showConfirm({
+      title: 'Delete Voucher',
+      message: 'Delete this purchase voucher? All barcodes will be removed from stock.',
+      variant: 'danger',
+      confirmText: 'Delete',
+    });
+
+    if (confirmed) {
       try {
         await deleteVoucher(selectedVoucherId);
-        alert('Voucher deleted.');
+        showToast('Voucher deleted.', 'success');
         handleNew();
-      } catch (e: any) { alert(`Failed: ${e.message}`); }
+      } catch (e: any) { showToast(`Failed: ${e.message}`, 'error'); }
     }
   };
 

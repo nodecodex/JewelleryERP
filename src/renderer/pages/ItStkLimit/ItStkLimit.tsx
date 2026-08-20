@@ -4,7 +4,8 @@ import { useItStkLimitStore } from '../../store/useItStkLimitStore';
 import { useRateStore } from '../../store/useRateStore';
 import { useTabStore } from '../../store/useTabStore';
 
-import { Printer, Save, Undo2, Trash2, LogOut, Coins, Plus, Trash } from 'lucide-react';
+import { Printer, Save, Undo2, Trash2, LogOut, Coins, Plus, Trash, ArrowUpDown } from 'lucide-react';
+import { useDialog } from '../../components/ui/DialogProvider';
 
 interface LocalDetail {
   sr: number;
@@ -18,7 +19,8 @@ interface LocalDetail {
 
 export default function ItStkLimitView() {
   const selectedCompany = useCompanyStore((state) => state.selectedCompany);
-  const { limits, loadLimits, saveLimit, deleteLimit } = useItStkLimitStore();
+  const { limits, loadLimits, saveLimits, deleteLimits } = useItStkLimitStore();
+  const { showToast, showConfirm } = useDialog();
   const currentRates = useRateStore((state) => state.currentRates);
   const activeTabId = useTabStore((state) => state.activeTabId);
   const closeTab = useTabStore((state) => state.closeTab);
@@ -131,43 +133,33 @@ export default function ItStkLimitView() {
   const handleSave = async () => {
     if (!selectedCompany) return;
     if (!itemCode.trim() || !itemName.trim()) {
-      alert('Please enter both Item Code and Item Name.');
+      showToast('Please enter both Item Code and Item Name.', 'warning');
       return;
     }
 
-    // Filter valid detail entries
-    const validDetails = details
+    const payload = details
       .filter((d) => d.from_wt !== '' || d.to_wt !== '' || d.pcs !== '')
       .map((d) => ({
         sr: d.sr,
-        from_wt: d.from_wt === '' ? 0.0 : d.from_wt,
-        to_wt: d.to_wt === '' ? 0.0 : d.to_wt,
-        pcs: d.pcs === '' ? 0 : d.pcs,
-        labour_percent: d.labour_percent === '' ? 0.0 : d.labour_percent,
+        from_wt: d.from_wt === '' ? 0.0 : Number(d.from_wt),
+        to_wt: d.to_wt === '' ? 0.0 : Number(d.to_wt),
+        pcs: d.pcs === '' ? 0 : Number(d.pcs),
+        labour_percent: d.labour_percent === '' ? 0.0 : Number(d.labour_percent),
         labour_type: d.labour_type.trim() || 'N',
-        labour_rate: d.labour_rate === '' ? 0.0 : d.labour_rate
+        labour_rate: d.labour_rate === '' ? 0.0 : Number(d.labour_rate)
       }));
 
     try {
-      await saveLimit(
-        selectedCompany.id,
-        {
-          id: selectedLimitId || undefined,
-          item_code: itemCode.trim(),
-          item_name: itemName.trim()
-        },
-        validDetails
-      );
-      alert('Item Stock Limits saved successfully.');
-      handleNew();
+      await saveLimits(selectedCompany.id, itemCode.trim(), itemName.trim(), payload);
+      showToast('Item Stock Limits saved successfully.', 'success');
+      loadLimits(selectedCompany.id);
     } catch (e: any) {
-      alert(`Error saving configurations: ${e.message || e}`);
+      showToast(`Error saving configurations: ${e.message || e}`, 'error');
     }
   };
 
   const handleCancel = () => {
     if (selectedLimitId) {
-      // Re-trigger the selection loading effect
       setSelectedLimitId(selectedLimitId);
     } else {
       handleNew();
@@ -175,14 +167,23 @@ export default function ItStkLimitView() {
   };
 
   const handleDelete = async () => {
-    if (!selectedCompany || !selectedLimitId) return;
-    if (confirm(`CAUTION: Permanently delete stock limits configurations for "${itemCode} - ${itemName}"?`)) {
+    if (!selectedCompany || !itemCode.trim()) return;
+
+    const confirmed = await showConfirm({
+      title: 'Delete Stock Limits',
+      message: `CAUTION: Permanently delete stock limits configurations for "${itemCode} - ${itemName}"?`,
+      variant: 'danger',
+      confirmText: 'Delete',
+    });
+
+    if (confirmed) {
       try {
-        await deleteLimit(selectedLimitId, selectedCompany.id);
-        alert('Configurations deleted successfully.');
+        await deleteLimits(selectedCompany.id, itemCode.trim());
+        showToast('Configurations deleted successfully.', 'success');
         handleNew();
+        loadLimits(selectedCompany.id);
       } catch (e) {
-        alert('Error deleting configurations.');
+        showToast('Error deleting configurations.', 'error');
       }
     }
   };
