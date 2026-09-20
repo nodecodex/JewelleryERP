@@ -1,48 +1,27 @@
-import { Pool } from 'pg';
-import * as fs from 'fs';
-import * as path from 'path';
+import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const sslEnabled = process.env.DATABASE_URL?.includes('sslmode=require') || process.env.DB_SSL === 'true';
+const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/swarnpro_erp_licensing';
 
-let connectionString = process.env.DATABASE_URL;
-if (connectionString && connectionString.includes('?')) {
-  // Strip query parameters to prevent pg-connection-string from overriding SSL config
-  connectionString = connectionString.split('?')[0];
-}
-
-const pool = new Pool({
-  connectionString,
-  host: connectionString ? undefined : (process.env.DB_HOST || 'localhost'),
-  port: connectionString ? undefined : parseInt(process.env.DB_PORT || '5432'),
-  user: connectionString ? undefined : (process.env.DB_USER || 'postgres'),
-  password: connectionString ? undefined : (process.env.DB_PASSWORD || 'postgres'),
-  database: connectionString ? undefined : (process.env.DB_NAME || 'swarnpro_erp_licensing'),
-  ssl: sslEnabled ? { rejectUnauthorized: false } : undefined
-});
+let isConnected = false;
 
 export async function initDatabase() {
-  console.log('Connecting to PostgreSQL database...');
+  if (isConnected) {
+    return;
+  }
+  console.log('Connecting to MongoDB database...');
   try {
-    const client = await pool.connect();
-    console.log('PostgreSQL connection established.');
-
-    // Load and execute schema.sql for bootstrapping
-    const schemaPath = path.join(__dirname, '../schema.sql');
-    if (fs.existsSync(schemaPath)) {
-      const schemaSql = fs.readFileSync(schemaPath, 'utf8');
-      await client.query(schemaSql);
-      console.log('PostgreSQL tables initialized/verified successfully.');
-    } else {
-      console.warn('schema.sql not found at', schemaPath, '- skipping bootstrap schema.');
-    }
-    client.release();
+    const db = await mongoose.connect(connectionString);
+    isConnected = db.connections[0].readyState === 1;
+    console.log('MongoDB connection established successfully.');
   } catch (err) {
-    console.error('Failed to initialize PostgreSQL database:', err);
+    console.error('Failed to initialize MongoDB database:', err);
     throw err;
   }
 }
 
-export default pool;
+// Export mongoose to replace pool if needed, or simply let server.ts import models directly.
+// In our case server.ts will import models.
+export default mongoose;
