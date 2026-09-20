@@ -310,9 +310,11 @@ export default function Layout() {
             </div>
             <div className="w-px h-6 bg-border"></div>
             <div className="flex flex-col items-end">
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Profit PG</span>
+              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
+                {profitFine >= 0 ? 'Profit PG' : 'Loss PG'}
+              </span>
               <span className={`text-xs font-mono font-extrabold ${profitFine >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-500'}`}>
-                {profitFine > 0 ? '+' : ''}{profitFine.toFixed(3)}g
+                {profitFine > 0 ? '+' : (profitFine < 0 ? '-' : '')}{Math.abs(profitFine).toFixed(3)}g
               </span>
             </div>
           </div>
