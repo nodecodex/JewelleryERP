@@ -7,7 +7,7 @@ import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { initDatabase } from './db';
-import { Customer, License, DeviceRegistry, LicenseActivation, TrialUser, LicenseTransferRequest, LicenseRecoveryLog, AuditLog } from './models';
+import { Customer, License, DeviceRegistry, LicenseActivation, TrialUser, LicenseTransferRequest, LicenseRecoveryLog, AuditLog, AdminUser } from './models';
 import mongoose from 'mongoose';
 import { generateKeyPair } from './keys/generateKeys';
 import { DeviceFingerprintSchema, DeviceFingerprint } from './types';
@@ -15,13 +15,11 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import argon2 from 'argon2';
 
-// ── Admin Portal Credentials (from .env) ──────────────────────────
-const ADMIN_USERNAME   = process.env.ADMIN_USERNAME;
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH;
+// ── Admin Portal Configuration ──────────────────────────
 const ADMIN_JWT_SECRET = process.env.ADMIN_JWT_SECRET;
 
-if (!ADMIN_USERNAME || !ADMIN_PASSWORD_HASH || !ADMIN_JWT_SECRET) {
-  console.error('CRITICAL: Admin portal credentials (ADMIN_USERNAME, ADMIN_PASSWORD_HASH, ADMIN_JWT_SECRET) must be set in .env');
+if (!ADMIN_JWT_SECRET) {
+  console.error('CRITICAL: Admin portal secret (ADMIN_JWT_SECRET) must be set in .env');
   process.exit(1);
 }
 
@@ -680,19 +678,25 @@ app.post('/admin/login', loginLimiter, async (req: Request, res: Response): Prom
     res.status(400).json({ error: 'INVALID_INPUT', message: 'Username and password are required.' });
     return;
   }
-  if (username !== ADMIN_USERNAME) {
-    res.status(401).json({ error: 'INVALID_CREDENTIALS', message: 'Incorrect username or password.' });
-    return;
-  }
   
-  const validPassword = await argon2.verify(ADMIN_PASSWORD_HASH, password);
-  if (!validPassword) {
-    res.status(401).json({ error: 'INVALID_CREDENTIALS', message: 'Incorrect username or password.' });
-    return;
+  try {
+    const adminUser = await AdminUser.findOne({ username });
+    if (!adminUser) {
+      res.status(401).json({ error: 'INVALID_CREDENTIALS', message: 'Incorrect username or password.' });
+      return;
+    }
+
+    const validPassword = await argon2.verify(adminUser.passwordHash, password);
+    if (!validPassword) {
+      res.status(401).json({ error: 'INVALID_CREDENTIALS', message: 'Incorrect username or password.' });
+      return;
+    }
+    
+    const token = jwt.sign({ role: adminUser.role, sub: username }, ADMIN_JWT_SECRET!, { expiresIn: '8h' });
+    res.json({ success: true, token, expiresIn: '8h' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'SERVER_ERROR', message: err.message });
   }
-  
-  const token = jwt.sign({ role: 'admin', sub: username }, ADMIN_JWT_SECRET!, { expiresIn: '8h' });
-  res.json({ success: true, token, expiresIn: '8h' });
 });
 
 // ── GET /admin/logout (clears client token - informational) ──────
