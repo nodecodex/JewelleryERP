@@ -6,7 +6,9 @@ import jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import pool, { initDatabase } from './db';
+import { initDatabase } from './db';
+import { Customer, License, DeviceRegistry, LicenseActivation, TrialUser, LicenseTransferRequest, LicenseRecoveryLog, AuditLog } from './models';
+import mongoose from 'mongoose';
 import { generateKeyPair } from './keys/generateKeys';
 import { DeviceFingerprintSchema, DeviceFingerprint } from './types';
 import helmet from 'helmet';
@@ -101,6 +103,17 @@ const { privateKey, publicKey } = loadKeys();
 
 const app = express();
 app.set('trust proxy', 1);
+
+// Global middleware to ensure DB connection is active (useful for Vercel serverless)
+app.use(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await initDatabase();
+    next();
+  } catch (e) {
+    res.status(500).json({ success: false, error: 'Database connection failed' });
+  }
+});
+
 app.use((req, res, next) => {
   // Allow inline JS/CSS for the admin portal HTML page
   if (req.path === '/admin') {
@@ -153,37 +166,39 @@ async function matchOrCreateDevice(fp: DeviceFingerprint) {
   const currentHash = generateDeviceHash(fp);
 
   // 1. Check if device exists by CPU ID + Motherboard + Disk (Physical identity match)
-  const physicalMatch = await pool.query(
-    'SELECT * FROM device_registry WHERE cpu_id = $1 AND motherboard_serial = $2 AND disk_serial = $3',
-    [fp.cpuId, fp.motherboardSerial, fp.diskSerial]
-  );
+  const physicalMatch = await DeviceRegistry.findOne({
+    cpu_id: fp.cpuId,
+    motherboard_serial: fp.motherboardSerial,
+    disk_serial: fp.diskSerial
+  });
 
-  if (physicalMatch.rows.length > 0) {
-    const existing = physicalMatch.rows[0];
+  if (physicalMatch) {
     // If MachineGuid or hash changed (e.g. Windows format), update registry
-    if (existing.machine_guid !== fp.machineGuid || existing.device_hash !== currentHash) {
-      const updated = await pool.query(
-        'UPDATE device_registry SET machine_guid = $1, device_hash = $2, os_platform = $3, updated_at = NOW() WHERE id = $4 RETURNING *',
-        [fp.machineGuid, currentHash, fp.osPlatform, existing.id]
-      );
-      return updated.rows[0];
+    if (physicalMatch.machine_guid !== fp.machineGuid || physicalMatch.device_hash !== currentHash) {
+      physicalMatch.machine_guid = fp.machineGuid;
+      physicalMatch.device_hash = currentHash;
+      physicalMatch.os_platform = fp.osPlatform;
+      await physicalMatch.save();
     }
-    return existing;
+    return physicalMatch;
   }
 
   // 2. If no physical components match, check by device_hash directly as fallback
-  const hashMatch = await pool.query('SELECT * FROM device_registry WHERE device_hash = $1', [currentHash]);
-  if (hashMatch.rows.length > 0) {
-    return hashMatch.rows[0];
+  const hashMatch = await DeviceRegistry.findOne({ device_hash: currentHash });
+  if (hashMatch) {
+    return hashMatch;
   }
 
   // 3. Otherwise, create a new device registry entry
-  const result = await pool.query(
-    `INSERT INTO device_registry (device_hash, cpu_id, motherboard_serial, disk_serial, machine_guid, os_platform)
-     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-    [currentHash, fp.cpuId, fp.motherboardSerial, fp.diskSerial, fp.machineGuid, fp.osPlatform]
-  );
-  return result.rows[0];
+  const result = await DeviceRegistry.create({
+    device_hash: currentHash,
+    cpu_id: fp.cpuId,
+    motherboard_serial: fp.motherboardSerial,
+    disk_serial: fp.diskSerial,
+    machine_guid: fp.machineGuid,
+    os_platform: fp.osPlatform
+  });
+  return result;
 }
 
 // -------------------------------------------------------------
@@ -193,8 +208,8 @@ async function matchOrCreateDevice(fp: DeviceFingerprint) {
 app.get('/api/v1/health', async (_req: Request, res: Response): Promise<any> => {
   try {
     // Verify database connectivity
-    const dbCheck = await pool.query('SELECT NOW() AS server_time');
-    const dbTime = dbCheck.rows[0]?.server_time;
+    const state = mongoose.connection.readyState;
+    if (state !== 1) throw new Error('Database not connected');
 
     return res.status(200).json({
       success: true,
@@ -203,7 +218,7 @@ app.get('/api/v1/health', async (_req: Request, res: Response): Promise<any> => 
       timestamp: new Date().toISOString(),
       database: {
         connected: true,
-        serverTime: dbTime
+        serverTime: new Date()
       }
     });
   } catch (err: any) {
@@ -236,9 +251,9 @@ app.post('/api/v1/trial/start', async (req: Request, res: Response): Promise<any
     const device = await matchOrCreateDevice(parsed.data);
 
     // Check if a trial already exists on this physical hardware device
-    const existingTrial = await pool.query('SELECT * FROM trial_users WHERE device_id = $1', [device.id]);
-    if (existingTrial.rows.length > 0) {
-      const trial = existingTrial.rows[0];
+    const existingTrial = await TrialUser.findOne({ device_id: device._id });
+    if (existingTrial) {
+      const trial = existingTrial;
       const now = new Date();
       const expiry = new Date(trial.expiry_date);
 
@@ -276,15 +291,18 @@ app.post('/api/v1/trial/start', async (req: Request, res: Response): Promise<any
     const trialToken = jwt.sign(payload, privateKey, { algorithm: 'RS256', expiresIn: '3d' });
 
     // Store in DB
-    await pool.query(
-      'INSERT INTO trial_users (device_id, installation_date, expiry_date, trial_token) VALUES ($1, $2, $3, $4)',
-      [device.id, installationDate, expiryDate, trialToken]
-    );
+    await TrialUser.create({
+      device_id: device._id,
+      installation_date: installationDate,
+      expiry_date: expiryDate,
+      trial_token: trialToken
+    });
 
-    await pool.query(
-      "INSERT INTO audit_logs (action_type, details, performed_by) VALUES ('TRIAL_STARTED', $1, 'system')",
-      [`Trial started for device: ${device.device_hash}`]
-    );
+    await AuditLog.create({
+      action_type: 'TRIAL_STARTED',
+      details: `Trial started for device: ${device.device_hash}`,
+      performed_by: 'system'
+    });
 
     return res.json({
       success: true,
@@ -312,26 +330,21 @@ app.post('/api/v1/license/activate', activationLimiter, async (req: Request, res
     const device = await matchOrCreateDevice(parsedFp.data);
 
     // Verify License Key in Database
-    const licenseResult = await pool.query('SELECT * FROM licenses WHERE license_key = $1', [licenseKey]);
-    if (licenseResult.rows.length === 0) {
+    const license = await License.findOne({ license_key: licenseKey });
+    if (!license) {
       return res.status(404).json({ success: false, error: 'LICENSE_NOT_FOUND', message: 'The activation key entered is invalid.' });
     }
-
-    const license = licenseResult.rows[0];
 
     if (license.status === 'suspended') {
       return res.status(403).json({ success: false, error: 'LICENSE_SUSPENDED', message: 'This license key has been suspended.' });
     }
 
     // Check device limits
-    const activeActivations = await pool.query(
-      'SELECT * FROM license_activations WHERE license_id = $1 AND is_active = true',
-      [license.id]
-    );
+    const activeActivations = await LicenseActivation.find({ license_id: license._id, is_active: true });
 
-    const isAlreadyActivatedHere = activeActivations.rows.some((act: any) => act.device_id === device.id);
+    const isAlreadyActivatedHere = activeActivations.some((act) => act.device_id.toString() === device._id.toString());
 
-    if (!isAlreadyActivatedHere && activeActivations.rows.length >= license.max_devices) {
+    if (!isAlreadyActivatedHere && activeActivations.length >= license.max_devices) {
       return res.status(403).json({
         success: false,
         error: 'LICENSE_LIMIT_EXCEEDED',
@@ -340,8 +353,8 @@ app.post('/api/v1/license/activate', activationLimiter, async (req: Request, res
     }
 
     // Fetch Customer Details
-    const customerResult = await pool.query('SELECT * FROM customers WHERE id = $1', [license.customer_id]);
-    const customer = customerResult.rows[0] || { name: 'Valued Customer', mobile: 'Unknown' };
+    const customerResult = await Customer.findById(license.customer_id);
+    const customer = customerResult || { name: 'Valued Customer', mobile: 'Unknown' };
 
     // Generate RS256 JWT Activation Token
     const payload = {
@@ -360,20 +373,21 @@ app.post('/api/v1/license/activate', activationLimiter, async (req: Request, res
     const activationToken = jwt.sign(payload, privateKey, { algorithm: 'RS256' });
 
     // Save/Update Activation
-    await pool.query(
-      `INSERT INTO license_activations (license_id, device_id, activation_token, is_active, last_verified_at)
-       VALUES ($1, $2, $3, true, NOW())
-       ON CONFLICT (license_id, device_id) DO UPDATE SET activation_token = $3, is_active = true, last_verified_at = NOW()`,
-      [license.id, device.id, activationToken]
+    await LicenseActivation.findOneAndUpdate(
+      { license_id: license._id, device_id: device._id },
+      { activation_token: activationToken, is_active: true, last_verified_at: new Date() },
+      { upsert: true, new: true }
     );
 
     // Update license status to active
-    await pool.query("UPDATE licenses SET status = 'active', updated_at = NOW() WHERE id = $1", [license.id]);
+    license.status = 'active';
+    await license.save();
 
-    await pool.query(
-      "INSERT INTO audit_logs (action_type, details, performed_by) VALUES ('LICENSE_ACTIVATED', $1, 'system')",
-      [`Key: ${license.license_key} activated on device: ${device.device_hash}`]
-    );
+    await AuditLog.create({
+      action_type: 'LICENSE_ACTIVATED',
+      details: `Key: ${license.license_key} activated on device: ${device.device_hash}`,
+      performed_by: 'system'
+    });
 
     return res.json({
       success: true,
@@ -405,23 +419,22 @@ app.post('/api/v1/license/verify', async (req: Request, res: Response): Promise<
     // Verify JWT Signature
     const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] }) as any;
 
-    // Check key status in PostgreSQL DB
-    const licenseResult = await pool.query('SELECT * FROM licenses WHERE license_key = $1', [decoded.licenseKey]);
-    if (licenseResult.rows.length === 0) {
+    // Check key status in MongoDB
+    const license = await License.findOne({ license_key: decoded.licenseKey });
+    if (!license) {
       return res.status(401).json({ success: false, error: 'REVOKED', message: 'License key not found on server.' });
     }
 
-    const license = licenseResult.rows[0];
     if (license.status === 'suspended') {
       return res.status(401).json({ success: false, error: 'SUSPENDED', message: 'License has been suspended.' });
     }
 
     // Update last verified at
-    const deviceResult = await pool.query('SELECT id FROM device_registry WHERE device_hash = $1', [decoded.deviceId]);
-    if (deviceResult.rows.length > 0) {
-      await pool.query(
-        'UPDATE license_activations SET last_verified_at = NOW() WHERE license_id = $1 AND device_id = $2',
-        [license.id, deviceResult.rows[0].id]
+    const device = await DeviceRegistry.findOne({ device_hash: decoded.deviceId });
+    if (device) {
+      await LicenseActivation.updateOne(
+        { license_id: license._id, device_id: device._id },
+        { last_verified_at: new Date() }
       );
     }
 
@@ -445,37 +458,34 @@ app.post('/api/v1/license/recover', recoveryLimiter, async (req: Request, res: R
     const device = await matchOrCreateDevice(parsedFp.data);
 
     // Lookup license
-    let query = 'SELECT * FROM licenses WHERE ';
-    let params: any[] = [];
+    let license = null;
     if (licenseKey) {
-      query += 'license_key = $1';
-      params.push(licenseKey);
+      license = await License.findOne({ license_key: licenseKey });
     } else if (mobileNumber) {
-      query += 'customer_id IN (SELECT id FROM customers WHERE mobile = $1)';
-      params.push(mobileNumber);
+      const customer = await Customer.findOne({ mobile: mobileNumber });
+      if (customer) {
+        license = await License.findOne({ customer_id: customer._id });
+      }
     } else {
       return res.status(400).json({ success: false, error: 'INVALID_INPUT', message: 'Provide either License Key or Registered Mobile Number.' });
     }
 
-    const licenseRes = await pool.query(query, params);
-    if (licenseRes.rows.length === 0) {
+    if (!license) {
       return res.status(404).json({ success: false, error: 'LICENSE_NOT_FOUND', message: 'No registered purchase details matches.' });
     }
 
-    const license = licenseRes.rows[0];
-
     // Determine if physical hardware matches the registered activation
-    const activationRes = await pool.query(
-      'SELECT * FROM license_activations WHERE license_id = $1 AND device_id = $2',
-      [license.id, device.id]
-    );
+    const activation = await LicenseActivation.findOne({ license_id: license._id, device_id: device._id });
 
-    if (activationRes.rows.length === 0) {
+    if (!activation) {
       // Hardware does not match the active installation database record
-      await pool.query(
-        "INSERT INTO license_recovery_logs (license_id, device_id, recovery_type, status, ip_address) VALUES ($1, $2, 'windows_reinstall', 'failed', $3)",
-        [license.id, device.id, req.ip]
-      );
+      await LicenseRecoveryLog.create({
+        license_id: license._id,
+        device_id: device._id,
+        recovery_type: 'windows_reinstall',
+        status: 'failed',
+        ip_address: req.ip
+      });
       return res.status(400).json({
         success: false,
         error: 'HARDWARE_MISMATCH',
@@ -484,8 +494,7 @@ app.post('/api/v1/license/recover', recoveryLimiter, async (req: Request, res: R
     }
 
     // Reinstall recovery approved! Generate and return new JWT activation token
-    const customerResult = await pool.query('SELECT * FROM customers WHERE id = $1', [license.customer_id]);
-    const customer = customerResult.rows[0] || { name: 'Valued Customer', mobile: 'Unknown' };
+    const customer = await Customer.findById(license.customer_id) || { name: 'Valued Customer', mobile: 'Unknown' };
 
     const payload = {
       sub: 'license-activation',
@@ -503,16 +512,19 @@ app.post('/api/v1/license/recover', recoveryLimiter, async (req: Request, res: R
     const activationToken = jwt.sign(payload, privateKey, { algorithm: 'RS256' });
 
     // Update activation record
-    await pool.query(
-      'UPDATE license_activations SET activation_token = $1, last_verified_at = NOW(), is_active = true WHERE license_id = $2 AND device_id = $3',
-      [activationToken, license.id, device.id]
-    );
+    activation.activation_token = activationToken;
+    activation.last_verified_at = new Date();
+    activation.is_active = true;
+    await activation.save();
 
     // Save recovery log
-    await pool.query(
-      "INSERT INTO license_recovery_logs (license_id, device_id, recovery_type, status, ip_address) VALUES ($1, $2, 'windows_reinstall', 'success', $3)",
-      [license.id, device.id, req.ip]
-    );
+    await LicenseRecoveryLog.create({
+      license_id: license._id,
+      device_id: device._id,
+      recovery_type: 'windows_reinstall',
+      status: 'success',
+      ip_address: req.ip
+    });
 
     return res.json({
       success: true,
@@ -538,28 +550,24 @@ app.post('/api/v1/license/transfer', async (req: Request, res: Response): Promis
     }
 
     // Verify key
-    const licenseRes = await pool.query('SELECT * FROM licenses WHERE license_key = $1', [licenseKey]);
-    if (licenseRes.rows.length === 0) {
+    const license = await License.findOne({ license_key: licenseKey });
+    if (!license) {
       return res.status(404).json({ success: false, error: 'LICENSE_NOT_FOUND', message: 'License key is invalid.' });
     }
-    const license = licenseRes.rows[0];
 
     // Find current active device
-    const activeAct = await pool.query(
-      'SELECT device_id FROM license_activations WHERE license_id = $1 AND is_active = true LIMIT 1',
-      [license.id]
-    );
+    const activeAct = await LicenseActivation.findOne({ license_id: license._id, is_active: true });
 
-    if (activeAct.rows.length === 0) {
+    if (!activeAct) {
       return res.status(400).json({ success: false, error: 'NO_ACTIVE_ACTIVATION', message: 'No active device bound to this key to transfer from.' });
     }
 
-    const oldDeviceId = activeAct.rows[0].device_id;
+    const oldDeviceId = activeAct.device_id;
 
     // Register new device fingerprint
     const newDevice = await matchOrCreateDevice(parsedNewFp.data);
 
-    if (oldDeviceId === newDevice.id) {
+    if (oldDeviceId.toString() === newDevice._id.toString()) {
       return res.status(400).json({ success: false, error: 'SAME_DEVICE', message: 'This device is already active for this license.' });
     }
 
@@ -567,12 +575,12 @@ app.post('/api/v1/license/transfer', async (req: Request, res: Response): Promis
     const oneYearAgo = new Date();
     oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
     
-    const transfersCountRes = await pool.query(
-      "SELECT count(*) FROM license_transfer_requests WHERE license_id = $1 AND status = 'approved' AND processed_at >= $2",
-      [license.id, oneYearAgo]
-    );
+    const limit = await LicenseTransferRequest.countDocuments({
+      license_id: license._id,
+      status: 'approved',
+      processed_at: { $gte: oneYearAgo }
+    });
 
-    const limit = parseInt(transfersCountRes.rows[0].count);
     if (limit >= 2) {
       return res.status(403).json({
         success: false,
@@ -582,16 +590,19 @@ app.post('/api/v1/license/transfer', async (req: Request, res: Response): Promis
     }
 
     // Insert pending request
-    await pool.query(
-      `INSERT INTO license_transfer_requests (license_id, old_device_id, new_device_id, reason, status)
-       VALUES ($1, $2, $3, $4, 'pending')`,
-      [license.id, oldDeviceId, newDevice.id, reason]
-    );
+    await LicenseTransferRequest.create({
+      license_id: license._id,
+      old_device_id: oldDeviceId,
+      new_device_id: newDevice._id,
+      reason,
+      status: 'pending'
+    });
 
-    await pool.query(
-      "INSERT INTO audit_logs (action_type, details, performed_by) VALUES ('TRANSFER_REQUESTED', $1, 'system')",
-      [`Transfer request registered for key: ${license.license_key} to new device: ${newDevice.device_hash}`]
-    );
+    await AuditLog.create({
+      action_type: 'TRANSFER_REQUESTED',
+      details: `Transfer request registered for key: ${license.license_key} to new device: ${newDevice.device_hash}`,
+      performed_by: 'system'
+    });
 
     return res.json({
       success: true,
@@ -610,17 +621,10 @@ app.post('/api/v1/license/status', async (req: Request, res: Response): Promise<
     const { licenseKey } = req.body;
     if (!licenseKey) return res.status(400).json({ success: false, message: 'Key required.' });
 
-    const licRes = await pool.query('SELECT * FROM licenses WHERE license_key = $1', [licenseKey]);
-    if (licRes.rows.length === 0) return res.status(404).json({ success: false, message: 'Key not found.' });
+    const license = await License.findOne({ license_key: licenseKey });
+    if (!license) return res.status(404).json({ success: false, message: 'Key not found.' });
 
-    const license = licRes.rows[0];
-    const actRes = await pool.query(
-      `SELECT d.device_hash, a.activation_date, a.last_verified_at 
-       FROM license_activations a 
-       JOIN device_registry d ON a.device_id = d.id 
-       WHERE a.license_id = $1 AND a.is_active = true`,
-      [license.id]
-    );
+    const actRes = await LicenseActivation.find({ license_id: license._id, is_active: true }).populate('device_id');
 
     return res.json({
       success: true,
@@ -628,8 +632,8 @@ app.post('/api/v1/license/status', async (req: Request, res: Response): Promise<
       type: license.license_type,
       status: license.status,
       maxDevices: license.max_devices,
-      activations: actRes.rows.map((row: any) => ({
-        deviceHash: row.device_hash,
+      activations: actRes.map((row: any) => ({
+        deviceHash: row.device_id.device_hash,
         activationDate: row.activation_date,
         lastSeen: row.last_verified_at
       }))
@@ -699,18 +703,20 @@ app.get('/admin/logout', (_req: Request, res: Response): void => {
 // GET /admin/dashboard-stats
 app.get('/api/v1/admin/dashboard-stats', adminAuth, async (req: Request, res: Response) => {
   try {
-    const totalCommercial = await pool.query("SELECT count(*) FROM licenses WHERE license_type != 'trial'");
-    const activeCommercial = await pool.query("SELECT count(*) FROM licenses WHERE status = 'active'");
-    const trialUsers = await pool.query("SELECT count(*) FROM trial_users WHERE is_expired = false");
-    const expiredTrials = await pool.query("SELECT count(*) FROM trial_users WHERE is_expired = true OR expiry_date < NOW()");
-    const pendingTransfers = await pool.query("SELECT count(*) FROM license_transfer_requests WHERE status = 'pending'");
+    const totalCommercial = await License.countDocuments({ license_type: { $ne: 'trial' } });
+    const activeCommercial = await License.countDocuments({ status: 'active' });
+    const trialUsers = await TrialUser.countDocuments({ is_expired: false });
+    const expiredTrials = await TrialUser.countDocuments({
+      $or: [{ is_expired: true }, { expiry_date: { $lt: new Date() } }]
+    });
+    const pendingTransfers = await LicenseTransferRequest.countDocuments({ status: 'pending' });
 
     res.json({
-      totalCommercial: parseInt(totalCommercial.rows[0].count),
-      activeCommercial: parseInt(activeCommercial.rows[0].count),
-      trialUsers: parseInt(trialUsers.rows[0].count),
-      expiredTrials: parseInt(expiredTrials.rows[0].count),
-      pendingTransfers: parseInt(pendingTransfers.rows[0].count)
+      totalCommercial,
+      activeCommercial,
+      trialUsers,
+      expiredTrials,
+      pendingTransfers
     });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -720,8 +726,8 @@ app.get('/api/v1/admin/dashboard-stats', adminAuth, async (req: Request, res: Re
 // GET /admin/customers
 app.get('/api/v1/admin/customers', adminAuth, async (req: Request, res: Response) => {
   try {
-    const result = await pool.query('SELECT * FROM customers ORDER BY created_at DESC');
-    res.json(result.rows);
+    const result = await Customer.find().sort({ createdAt: -1 });
+    res.json(result);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -731,11 +737,8 @@ app.get('/api/v1/admin/customers', adminAuth, async (req: Request, res: Response
 app.post('/api/v1/admin/customers', adminAuth, async (req: Request, res: Response) => {
   const { name, mobile, email } = req.body;
   try {
-    const result = await pool.query(
-      'INSERT INTO customers (name, mobile, email) VALUES ($1, $2, $3) RETURNING *',
-      [name, mobile, email]
-    );
-    res.status(201).json(result.rows[0]);
+    const customer = await Customer.create({ name, mobile, email });
+    res.status(201).json(customer);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -744,13 +747,13 @@ app.post('/api/v1/admin/customers', adminAuth, async (req: Request, res: Respons
 // GET /admin/licenses
 app.get('/api/v1/admin/licenses', adminAuth, async (req: Request, res: Response) => {
   try {
-    const result = await pool.query(
-      `SELECT l.*, c.name as customer_name, c.mobile as customer_mobile 
-       FROM licenses l 
-       LEFT JOIN customers c ON l.customer_id = c.id 
-       ORDER BY l.created_at DESC`
-    );
-    res.json(result.rows);
+    const licenses = await License.find().populate('customer_id').sort({ createdAt: -1 }).lean();
+    const result = licenses.map((l: any) => ({
+      ...l,
+      customer_name: l.customer_id?.name || null,
+      customer_mobile: l.customer_id?.mobile || null
+    }));
+    res.json(result);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -765,24 +768,28 @@ app.post('/api/v1/admin/licenses/generate', adminAuth, async (req: Request, res:
     const blockGen = () => Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
     const licenseKey = `SPERP-${blockGen()}-${blockGen()}-${blockGen()}-${blockGen()}`;
 
-    let expiryDate = null;
+    let expiryDate: Date | undefined = undefined;
     if (expiryDays) {
       expiryDate = new Date();
       expiryDate.setDate(expiryDate.getDate() + parseInt(expiryDays));
     }
 
-    const result = await pool.query(
-      `INSERT INTO licenses (customer_id, license_key, license_type, max_devices, expiry_date, status)
-       VALUES ($1, $2, $3, $4, $5, 'issued') RETURNING *`,
-      [customerId, licenseKey, licenseType || 'lifetime', maxDevices || 1, expiryDate]
-    );
+    const license = await License.create({
+      customer_id: customerId,
+      license_key: licenseKey,
+      license_type: licenseType || 'lifetime',
+      max_devices: maxDevices || 1,
+      expiry_date: expiryDate,
+      status: 'issued'
+    });
 
-    await pool.query(
-      "INSERT INTO audit_logs (action_type, details, performed_by) VALUES ('LICENSE_GENERATED', $1, 'admin')",
-      [`Generated key: ${licenseKey} for Customer ID: ${customerId}`]
-    );
+    await AuditLog.create({
+      action_type: 'LICENSE_GENERATED',
+      details: `Generated key: ${licenseKey} for Customer ID: ${customerId}`,
+      performed_by: 'admin'
+    });
 
-    res.status(201).json(result.rows[0]);
+    res.status(201).json(license);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -791,17 +798,20 @@ app.post('/api/v1/admin/licenses/generate', adminAuth, async (req: Request, res:
 // GET /admin/transfers
 app.get('/api/v1/admin/transfers', adminAuth, async (req: Request, res: Response) => {
   try {
-    const result = await pool.query(
-      `SELECT r.*, l.license_key, 
-              d_old.device_hash as old_device_hash, 
-              d_new.device_hash as new_device_hash 
-       FROM license_transfer_requests r
-       JOIN licenses l ON r.license_id = l.id
-       JOIN device_registry d_old ON r.old_device_id = d_old.id
-       JOIN device_registry d_new ON r.new_device_id = d_new.id
-       ORDER BY r.requested_at DESC`
-    );
-    res.json(result.rows);
+    const transfers = await LicenseTransferRequest.find()
+      .populate('license_id')
+      .populate('old_device_id')
+      .populate('new_device_id')
+      .sort({ requested_at: -1 })
+      .lean();
+      
+    const result = transfers.map((r: any) => ({
+      ...r,
+      license_key: r.license_id?.license_key,
+      old_device_hash: r.old_device_id?.device_hash,
+      new_device_hash: r.new_device_id?.device_hash
+    }));
+    res.json(result);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -813,44 +823,36 @@ app.post('/api/v1/admin/transfers/approve', adminAuth, async (req: Request, res:
   if (!requestId) return res.status(400).json({ error: 'Request ID is required.' });
 
   try {
-    // Start transaction
-    await pool.query('BEGIN');
-
     // 1. Fetch details
-    const reqRes = await pool.query('SELECT * FROM license_transfer_requests WHERE id = $1', [requestId]);
-    if (reqRes.rows.length === 0) {
-      await pool.query('ROLLBACK');
-      return res.status(404).json({ error: 'Transfer request not found.' });
-    }
-    const transfer = reqRes.rows[0];
+    const transfer = await LicenseTransferRequest.findById(requestId);
+    if (!transfer) return res.status(404).json({ error: 'Transfer request not found.' });
 
     if (transfer.status !== 'pending') {
-      await pool.query('ROLLBACK');
       return res.status(400).json({ error: 'Transfer request is already processed.' });
     }
 
     // 2. Deactivate the old device activation
-    await pool.query(
-      'UPDATE license_activations SET is_active = false WHERE license_id = $1 AND device_id = $2',
-      [transfer.license_id, transfer.old_device_id]
+    await LicenseActivation.updateMany(
+      { license_id: transfer.license_id, device_id: transfer.old_device_id },
+      { is_active: false }
     );
 
     // 3. Mark request as approved
-    await pool.query(
-      "UPDATE license_transfer_requests SET status = 'approved', processed_at = NOW(), processed_by = 'admin', admin_note = $1 WHERE id = $2",
-      [adminNote || 'Approved via Admin Panel', requestId]
-    );
+    transfer.status = 'approved';
+    transfer.processed_at = new Date();
+    transfer.processed_by = 'admin';
+    transfer.admin_note = adminNote || 'Approved via Admin Panel';
+    await transfer.save();
 
     // 4. Record Audit Log
-    await pool.query(
-      "INSERT INTO audit_logs (action_type, details, performed_by) VALUES ('TRANSFER_APPROVED', $1, 'admin')",
-      [`Approved transfer from old device: ${transfer.old_device_id} to new device: ${transfer.new_device_id}`]
-    );
+    await AuditLog.create({
+      action_type: 'TRANSFER_APPROVED',
+      details: `Approved transfer from old device: ${transfer.old_device_id} to new device: ${transfer.new_device_id}`,
+      performed_by: 'admin'
+    });
 
-    await pool.query('COMMIT');
     res.json({ success: true, message: 'Transfer request approved successfully.' });
   } catch (err: any) {
-    await pool.query('ROLLBACK');
     res.status(500).json({ error: err.message });
   }
 });
@@ -861,10 +863,12 @@ app.post('/api/v1/admin/transfers/reject', adminAuth, async (req: Request, res: 
   if (!requestId) return res.status(400).json({ error: 'Request ID is required.' });
 
   try {
-    await pool.query(
-      "UPDATE license_transfer_requests SET status = 'rejected', processed_at = NOW(), processed_by = 'admin', admin_note = $1 WHERE id = $2",
-      [adminNote || 'Rejected via Admin Panel', requestId]
-    );
+    await LicenseTransferRequest.findByIdAndUpdate(requestId, {
+      status: 'rejected',
+      processed_at: new Date(),
+      processed_by: 'admin',
+      admin_note: adminNote || 'Rejected via Admin Panel'
+    });
     res.json({ success: true, message: 'Transfer request rejected successfully.' });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -875,17 +879,15 @@ app.post('/api/v1/admin/transfers/reject', adminAuth, async (req: Request, res: 
 app.post('/api/v1/admin/licenses/deactivate', adminAuth, async (req: Request, res: Response): Promise<any> => {
   const { licenseId, adminNote } = req.body;
   try {
-    await pool.query('BEGIN');
-    await pool.query("UPDATE licenses SET status = 'suspended', updated_at = NOW() WHERE id = $1", [licenseId]);
-    await pool.query("UPDATE license_activations SET is_active = false WHERE license_id = $1", [licenseId]);
-    await pool.query(
-      "INSERT INTO audit_logs (action_type, details, performed_by) VALUES ('LICENSE_SUSPENDED', $1, 'admin')",
-      [`Suspended license ID: ${licenseId}. Reason: ${adminNote || 'None'}`]
-    );
-    await pool.query('COMMIT');
+    await License.findByIdAndUpdate(licenseId, { status: 'suspended' });
+    await LicenseActivation.updateMany({ license_id: licenseId }, { is_active: false });
+    await AuditLog.create({
+      action_type: 'LICENSE_SUSPENDED',
+      details: `Suspended license ID: ${licenseId}. Reason: ${adminNote || 'None'}`,
+      performed_by: 'admin'
+    });
     res.json({ success: true, message: 'License key suspended and all active activations disabled.' });
   } catch (err: any) {
-    await pool.query('ROLLBACK');
     res.status(500).json({ error: err.message });
   }
 });
@@ -893,13 +895,13 @@ app.post('/api/v1/admin/licenses/deactivate', adminAuth, async (req: Request, re
 // GET /admin/trials
 app.get('/api/v1/admin/trials', adminAuth, async (req: Request, res: Response) => {
   try {
-    const result = await pool.query(
-      `SELECT t.*, d.device_hash, d.os_platform 
-       FROM trial_users t 
-       JOIN device_registry d ON t.device_id = d.id 
-       ORDER BY t.installation_date DESC`
-    );
-    res.json(result.rows);
+    const trials = await TrialUser.find().populate('device_id').sort({ installation_date: -1 }).lean();
+    const result = trials.map((t: any) => ({
+      ...t,
+      device_hash: t.device_id?.device_hash,
+      os_platform: t.device_id?.os_platform
+    }));
+    res.json(result);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -908,8 +910,8 @@ app.get('/api/v1/admin/trials', adminAuth, async (req: Request, res: Response) =
 // GET /admin/audit-logs
 app.get('/api/v1/admin/audit-logs', adminAuth, async (req: Request, res: Response) => {
   try {
-    const result = await pool.query('SELECT * FROM audit_logs ORDER BY created_at DESC LIMIT 100');
-    res.json(result.rows);
+    const result = await AuditLog.find().sort({ createdAt: -1 }).limit(100);
+    res.json(result);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -926,7 +928,7 @@ app.get('/admin', (req: Request, res: Response) => {
   }
 });
 
-// Boot Database & Web server
+// Boot Database & Web server locally
 async function startServer() {
   try {
     await initDatabase();
@@ -938,4 +940,9 @@ async function startServer() {
   }
 }
 
-startServer();
+// Only start the server if not running on Vercel
+if (!process.env.VERCEL) {
+  startServer();
+}
+
+export default app;
