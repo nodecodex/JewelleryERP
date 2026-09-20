@@ -615,7 +615,7 @@
     document.getElementById('cust-count').textContent = allCustomers.length;
     const sel = document.getElementById('gen-customer');
     sel.innerHTML = '<option value="">-- Choose Customer --</option>';
-    allCustomers.forEach(c => sel.innerHTML += `<option value="${c.id}">${c.name} (${c.mobile})</option>`);
+    allCustomers.forEach(c => sel.innerHTML += `<option value="${c._id}">${c.name} (${c.mobile})</option>`);
     if (!allCustomers.length) { el.innerHTML = '<tr><td colspan="4" class="empty">No customers yet.</td></tr>'; return; }
     el.innerHTML = allCustomers.map(c => `<tr>
       <td><strong>${esc(c.name)}</strong></td>
@@ -633,7 +633,7 @@
       <td class="mono" style="color:var(--amber);user-select:all;font-size:11px">${esc(l.license_key)}</td>
       <td style="text-transform:uppercase;font-size:10px;color:var(--muted)">${l.license_type}</td>
       <td>${statusTag(l.status)}</td>
-      <td>${l.status!=='suspended'?`<button class="btn btn-red" style="font-size:9px;padding:4px 10px" onclick="suspendLicense('${l.id}')">Suspend</button>`:'<span style="color:var(--muted);font-size:10px">Suspended</span>'}</td></tr>`).join('');
+      <td>${l.status!=='suspended'?`<button class="btn btn-red" style="font-size:9px;padding:4px 10px" onclick="suspendLicense('${l._id}')">Suspend</button>`:'<span style="color:var(--muted);font-size:10px">Suspended</span>'}</td></tr>`).join('');
   }
 
   function renderTransfers() {
@@ -653,9 +653,9 @@
           New HW: <span class="mono">${(t.new_device_hash||'').slice(0,20)}…</span>
         </div>
         ${t.status==='pending'?`<div class="transfer-actions">
-          <input class="transfer-note" type="text" placeholder="Admin review note..." oninput="adminNotes['${t.id}']=this.value">
-          <button class="btn btn-green" onclick="approveTransfer('${t.id}')">&check; Approve</button>
-          <button class="btn btn-red" onclick="rejectTransfer('${t.id}')">&times; Reject</button>
+          <input class="transfer-note" type="text" placeholder="Admin review note..." oninput="adminNotes['${t._id}']=this.value">
+          <button class="btn btn-green" onclick="approveTransfer('${t._id}')">&check; Approve</button>
+          <button class="btn btn-red" onclick="rejectTransfer('${t._id}')">&times; Reject</button>
         </div>`:`<div style="font-size:10px;color:var(--muted)">${t.admin_note?'Note: '+esc(t.admin_note):''}</div>`}
       </div>`).join('');
   }
@@ -677,9 +677,9 @@
           New: <span class="mono">${(t.new_device_hash||'').slice(0,20)}…</span>
         </div>
         <div class="transfer-actions">
-          <input class="transfer-note" type="text" placeholder="Admin note..." oninput="adminNotes['${t.id}']=this.value">
-          <button class="btn btn-green" onclick="approveTransfer('${t.id}')">&check; Approve</button>
-          <button class="btn btn-red" onclick="rejectTransfer('${t.id}')">&times; Reject</button>
+          <input class="transfer-note" type="text" placeholder="Admin note..." oninput="adminNotes['${t._id}']=this.value">
+          <button class="btn btn-green" onclick="approveTransfer('${t._id}')">&check; Approve</button>
+          <button class="btn btn-red" onclick="rejectTransfer('${t._id}')">&times; Reject</button>
         </div>
       </div>`).join('');
   }
@@ -718,7 +718,7 @@
     if(btn){btn.classList.add('btn-loading');btn.disabled=true;}
     try {
       const data=await api('/api/v1/admin/customers','POST',{name,mobile,email});
-      if (data.id){res.innerHTML='<div class="alert alert-success">Customer saved!</div>';document.getElementById('cust-name').value='';document.getElementById('cust-mobile').value='';document.getElementById('cust-email').value='';await fetchCustomers();renderCustomers();}
+      if (data._id){res.innerHTML='<div class="alert alert-success">Customer saved!</div>';document.getElementById('cust-name').value='';document.getElementById('cust-mobile').value='';document.getElementById('cust-email').value='';await fetchCustomers();renderCustomers();}
       else res.innerHTML=`<div class="alert alert-error">${data.error||'Failed.'}</div>`;
     } catch(e){res.innerHTML=`<div class="alert alert-error">${e.message}</div>`;}
     finally{if(btn){btn.classList.remove('btn-loading');btn.disabled=false;}}

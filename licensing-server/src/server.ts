@@ -767,6 +767,10 @@ app.get('/api/v1/admin/licenses', adminAuth, async (req: Request, res: Response)
 app.post('/api/v1/admin/licenses/generate', adminAuth, async (req: Request, res: Response) => {
   const { customerId, licenseType, maxDevices, expiryDays } = req.body;
   try {
+    if (!mongoose.Types.ObjectId.isValid(customerId)) {
+      return res.status(400).json({ error: 'Invalid customer selection. Please refresh the page and try again.' });
+    }
+
     // Generate unique license key SPERP-XXXX-XXXX-XXXX-XXXX
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Avoid ambiguous chars
     const blockGen = () => Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
