@@ -206,38 +206,38 @@ export default function CompanySettingsView() {
 
   if (!selectedCompany) {
     return (
-      <div className="p-3 bg-[#eef1f6] h-full overflow-hidden flex items-center justify-center font-sans">
-        <div className="bg-white border border-slate-350 rounded-[2px] p-6 max-w-sm text-center space-y-3 shadow-md">
+      <div className="p-3 bg-background h-full overflow-hidden flex items-center justify-center font-sans">
+        <div className="bg-card border border-border rounded-sm p-6 max-w-sm text-center space-y-3 shadow-md">
           <p className="text-rose-500 font-extrabold uppercase text-xs tracking-wider">WORKSPACE SELECTION REQUIRED</p>
-          <p className="text-slate-500 text-[11px] font-semibold">Please select an active company in the top selector to configure its individual business settings.</p>
+          <p className="text-muted-foreground text-[11px] font-semibold">Please select an active company in the top selector to configure its individual business settings.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-3 bg-[#eef1f6] h-full overflow-hidden flex flex-col font-sans select-none">
+    <div className="p-3 bg-background h-full overflow-hidden flex flex-col font-sans select-none">
       
       {/* 1. Main Workspace Panel */}
       <div className="flex-1 grid grid-cols-12 gap-3 overflow-hidden min-h-0 pb-2">
         
         {/* LEFT CARD: Custom Book Columns Registry (col-span-5) */}
-        <div className="col-span-5 bg-white border border-slate-350 rounded-[2px] shadow-sm flex flex-col overflow-hidden">
+        <div className="col-span-5 bg-card border border-border rounded-sm shadow-sm flex flex-col overflow-hidden">
           
           <div className="bg-[#070D18] text-[#d4af37] px-3 py-2 border-b border-slate-950 flex justify-between items-center shrink-0">
             <span className="text-[10px] font-bold uppercase tracking-wider font-luxury">Column Customizer</span>
             <div className="flex items-center gap-1">
               <CheckSquare className="h-3.5 w-3.5 text-amber-500" />
-              <span className="text-[9px] font-mono text-slate-400">BOOK FIELD NAMES</span>
+              <span className="text-[9px] font-mono text-muted-foreground">BOOK FIELD NAMES</span>
             </div>
           </div>
 
           {/* Book Col Set dropdown */}
-          <div className="p-2 border-b border-slate-200 bg-slate-50 flex items-center justify-between shrink-0">
+          <div className="p-2 border-b border-border bg-secondary/20 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
               <label className="erp-label">Book Col Set</label>
               <select
-                className="erp-input w-28 border-slate-300 font-bold"
+                className="erp-input w-28 border-border font-bold"
                 value={bookColSet}
                 onChange={(e) => setBookColSet(e.target.value)}
               >
@@ -246,7 +246,7 @@ export default function CompanySettingsView() {
                 <option value="GST_DETL">GST_DETL</option>
               </select>
             </div>
-            <button className="px-2 py-0.5 border border-amber-600 bg-amber-50 hover:bg-amber-100/50 text-amber-700 font-extrabold text-[9px] uppercase tracking-wider rounded-[2px] transition-colors">
+            <button className="px-2 py-0.5 border border-amber-600 bg-amber-50 hover:bg-amber-100/50 text-amber-700 font-extrabold text-[9px] uppercase tracking-wider rounded-sm transition-colors">
               Column Set
             </button>
           </div>
@@ -254,21 +254,21 @@ export default function CompanySettingsView() {
           {/* Columns Grid Table */}
           <div className="flex-1 overflow-y-auto">
             <table className="ag-grid-dense-table w-full border-collapse">
-              <thead className="sticky top-0 bg-slate-100 border-b border-slate-200 z-10 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+              <thead className="sticky top-0 bg-secondary/50 border-b border-border z-10 text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
                 <tr>
-                  <th className="p-2 border border-slate-200 text-center w-10">Sr</th>
-                  <th className="p-2 border border-slate-200 text-left">ColName</th>
-                  <th className="p-2 border border-slate-200 text-left">ColNewName</th>
-                  <th className="p-2 border border-slate-200 text-center w-14">RptCol</th>
-                  <th className="p-2 border border-slate-200 text-center w-14">ShowCol</th>
+                  <th className="p-2 border border-border text-center w-10">Sr</th>
+                  <th className="p-2 border border-border text-left">ColName</th>
+                  <th className="p-2 border border-border text-left">ColNewName</th>
+                  <th className="p-2 border border-border text-center w-14">RptCol</th>
+                  <th className="p-2 border border-border text-center w-14">ShowCol</th>
                 </tr>
               </thead>
-              <tbody className="font-semibold text-slate-700 font-data">
+              <tbody className="font-semibold text-foreground font-data">
                 {bookColumns.map((col) => (
-                  <tr key={col.sr} className="hover:bg-slate-50 border-b border-slate-150 text-[11px]">
-                    <td className="p-1 border border-slate-200 text-center text-slate-500 text-[10px]">{col.sr}</td>
-                    <td className="p-1 border border-slate-200 font-sans text-slate-500 font-medium">{col.colName}</td>
-                    <td className="p-1 border border-slate-200 font-sans">
+                  <tr key={col.sr} className="hover:bg-secondary/20 border-b border-border text-[11px]">
+                    <td className="p-1 border border-border text-center text-muted-foreground text-[10px]">{col.sr}</td>
+                    <td className="p-1 border border-border font-sans text-muted-foreground font-medium">{col.colName}</td>
+                    <td className="p-1 border border-border font-sans">
                       <input
                         type="text"
                         className="erp-input h-6 font-bold py-0.5 select-text"
@@ -276,7 +276,7 @@ export default function CompanySettingsView() {
                         onChange={(e) => handleColumnChange(col.sr, 'colNewName', e.target.value)}
                       />
                     </td>
-                    <td className="p-1 border border-slate-200 text-center">
+                    <td className="p-1 border border-border text-center">
                       <select
                         className="erp-input h-6 py-0 font-bold text-[10px] text-center"
                         value={col.rptCol}
@@ -286,7 +286,7 @@ export default function CompanySettingsView() {
                         <option value="N">N</option>
                       </select>
                     </td>
-                    <td className="p-1 border border-slate-200 text-center">
+                    <td className="p-1 border border-border text-center">
                       <select
                         className="erp-input h-6 py-0 font-bold text-[10px] text-center"
                         value={col.showCol}
@@ -304,7 +304,7 @@ export default function CompanySettingsView() {
         </div>
 
         {/* RIGHT CARD: Company settings controls list (col-span-7) */}
-        <div className="col-span-7 bg-white border border-slate-350 rounded-[2px] shadow-sm flex flex-col overflow-hidden">
+        <div className="col-span-7 bg-card border border-border rounded-sm shadow-sm flex flex-col overflow-hidden">
           
           <div className="bg-amber-500/15 border-b border-amber-500/30 py-2 text-center shrink-0">
             <h1 className="text-sm font-extrabold uppercase text-amber-700 tracking-widest font-luxury">
@@ -316,7 +316,7 @@ export default function CompanySettingsView() {
           <div className="flex-1 overflow-y-auto p-3 grid grid-cols-2 gap-x-4 gap-y-2.5">
             
             {/* COLUMN 1 */}
-            <div className="space-y-2.5 border-r border-slate-200 pr-4">
+            <div className="space-y-2.5 border-r border-border pr-4">
               
               <div className="flex items-center justify-between gap-1">
                 <span className="erp-label w-32 truncate">Labour Type Set</span>
@@ -327,7 +327,7 @@ export default function CompanySettingsView() {
                     <option value="Item Wise">Item Wise</option>
                     <option value="Purity Wise">Purity Wise</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Lbr Type Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Lbr Type Set</button>
                 </div>
               </div>
 
@@ -339,7 +339,7 @@ export default function CompanySettingsView() {
                     <option value="Net Weight Wise">Net Weight Wise</option>
                     <option value="Purity Wise">Purity Wise</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Rate Type Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Rate Type Set</button>
                 </div>
               </div>
 
@@ -351,7 +351,7 @@ export default function CompanySettingsView() {
                     <option value="0">0 Decimal</option>
                     <option value="1">1 Decimal</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Tax Rof Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Tax Rof Set</button>
                 </div>
               </div>
 
@@ -362,7 +362,7 @@ export default function CompanySettingsView() {
                     <option value="N">No (Locked)</option>
                     <option value="Y">Yes (Editable)</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Change Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Change Set</button>
                 </div>
               </div>
 
@@ -373,7 +373,7 @@ export default function CompanySettingsView() {
                     <option value="N">No (Manual)</option>
                     <option value="Y">Yes (Auto)</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Lbr Rate Gen</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Lbr Rate Gen</button>
                 </div>
               </div>
 
@@ -384,7 +384,7 @@ export default function CompanySettingsView() {
                     <option value="N">No (Manual)</option>
                     <option value="Y">Yes (Startup)</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Daily Rate Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Daily Rate Set</button>
                 </div>
               </div>
 
@@ -395,7 +395,7 @@ export default function CompanySettingsView() {
                     <option value="No">No</option>
                     <option value="Yes">Yes (Startup)</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Reminder Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Reminder Set</button>
                 </div>
               </div>
 
@@ -406,7 +406,7 @@ export default function CompanySettingsView() {
                     <option value="Net Wise">Net Wise</option>
                     <option value="Gross Wise">Gross Wise</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Stock Type Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Stock Type Set</button>
                 </div>
               </div>
 
@@ -417,7 +417,7 @@ export default function CompanySettingsView() {
                     <option value="Yes">Yes (Enabled)</option>
                     <option value="No">No (Disabled)</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Dhiran Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Dhiran Set</button>
                 </div>
               </div>
 
@@ -429,7 +429,7 @@ export default function CompanySettingsView() {
                     <option value="Year Wise">Year Wise</option>
                     <option value="Daily Wise">Daily Wise</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Dhrn Type Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Dhrn Type Set</button>
                 </div>
               </div>
 
@@ -443,7 +443,7 @@ export default function CompanySettingsView() {
                     <option value="2.50">2.50%</option>
                     <option value="3.00">3.00%</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Dhrn Int % Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Dhrn Int % Set</button>
                 </div>
               </div>
 
@@ -460,7 +460,7 @@ export default function CompanySettingsView() {
                     <option value="All Columns">All Columns</option>
                     <option value="Description Wise">Description Wise</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Help Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Help Set</button>
                 </div>
               </div>
 
@@ -471,7 +471,7 @@ export default function CompanySettingsView() {
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Ledger Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Ledger Set</button>
                 </div>
               </div>
 
@@ -483,7 +483,7 @@ export default function CompanySettingsView() {
                     <option value="Gross Wise">Gross Wise</option>
                     <option value="Both">Both</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Stk Rpt Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Stk Rpt Set</button>
                 </div>
               </div>
 
@@ -495,7 +495,7 @@ export default function CompanySettingsView() {
                     <option value="2">2 Decimal</option>
                     <option value="1">1 Decimal</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Rate Rof Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Rate Rof Set</button>
                 </div>
               </div>
 
@@ -507,7 +507,7 @@ export default function CompanySettingsView() {
                     <option value="2">2 Decimal</option>
                     <option value="1">1 Decimal</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Lbr Rof Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Lbr Rof Set</button>
                 </div>
               </div>
 
@@ -518,7 +518,7 @@ export default function CompanySettingsView() {
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Purc + Lbr Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Purc + Lbr Set</button>
                 </div>
               </div>
 
@@ -529,7 +529,7 @@ export default function CompanySettingsView() {
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Auto Tch Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Auto Tch Set</button>
                 </div>
               </div>
 
@@ -542,7 +542,7 @@ export default function CompanySettingsView() {
                     value={panCardValue}
                     onChange={(e) => setPanCardValue(e.target.value)}
                   />
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Sale Pan Value</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Sale Pan Value</button>
                 </div>
               </div>
 
@@ -553,7 +553,7 @@ export default function CompanySettingsView() {
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
                   </select>
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Duplicate Print</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Duplicate Print</button>
                 </div>
               </div>
 
@@ -566,7 +566,7 @@ export default function CompanySettingsView() {
                     value={initialFine}
                     onChange={(e) => setInitialFine(e.target.value)}
                   />
-                  <button className="px-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-[2px] text-[8px] font-bold uppercase shrink-0">Fine Set</button>
+                  <button className="px-1.5 bg-secondary/50 hover:bg-secondary border border-border rounded-sm text-[8px] font-bold uppercase shrink-0">Fine Set</button>
                 </div>
               </div>
 
@@ -574,7 +574,7 @@ export default function CompanySettingsView() {
 
           </div>
 
-          <div className="bg-slate-50 border-t border-slate-200 p-2.5 text-center text-[9.5px] text-slate-500 font-semibold uppercase tracking-wider shrink-0 select-none">
+          <div className="bg-secondary/20 border-t border-border p-2.5 text-center text-[9.5px] text-muted-foreground font-semibold uppercase tracking-wider shrink-0 select-none">
             Active Workspace context: <span className="text-amber-700 font-bold">{selectedCompany.name}</span>
           </div>
 
@@ -583,21 +583,21 @@ export default function CompanySettingsView() {
       </div>
 
       {/* 2. BOTTOM ACTIONS TOOLBAR */}
-      <footer className="bg-slate-100 border border-slate-350 rounded-[2px] p-1.5 flex justify-end gap-2.5 shrink-0 shadow-sm select-none">
+      <footer className="bg-secondary/50 border border-border rounded-sm p-1.5 flex justify-end gap-2.5 shrink-0 shadow-sm select-none">
         
         {/* Print Button */}
         <button
           onClick={handlePrint}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
-          <Printer className="h-4 w-4 text-slate-500" />
+          <Printer className="h-4 w-4 text-muted-foreground" />
           <span>Print</span>
         </button>
 
         {/* Save Button */}
         <button
           onClick={handleSave}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
           <Save className="h-4 w-4 text-emerald-600" />
           <span className="text-emerald-700">Save</span>
@@ -606,7 +606,7 @@ export default function CompanySettingsView() {
         {/* Cancel Button */}
         <button
           onClick={resetToDefaults}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
           <Undo2 className="h-4 w-4 text-amber-600" />
           <span className="text-amber-700">Cancel</span>
@@ -615,9 +615,9 @@ export default function CompanySettingsView() {
         {/* Exit Button */}
         <button
           onClick={handleExit}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
-          <LogOut className="h-4 w-4 text-slate-600" />
+          <LogOut className="h-4 w-4 text-muted-foreground" />
           <span>Exit</span>
         </button>
 

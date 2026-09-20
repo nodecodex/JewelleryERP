@@ -14,7 +14,7 @@ udmyEt0CVUtqtvV1LG9y4f/u5FFxGEw3WMuZWQQOC47uU4CV8NQc7wI1OyyT0XQh
 1QIDAQAB
 -----END PUBLIC KEY-----`;
 
-const SERVER_BASE_URL = app.isPackaged ? 'https://jewelleryerp-8l4k.onrender.com' : 'http://localhost:3003';
+const SERVER_BASE_URL = app.isPackaged ? 'https://jewellery-erp-pi.vercel.app' : 'http://localhost:3003';
 // const SERVER_BASE_URL = 'https://jewellery-erp-two.vercel.app';
 
 export class LicenseService extends BaseRepository {

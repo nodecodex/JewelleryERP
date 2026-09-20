@@ -80,7 +80,7 @@ const StatusBarClock = memo(function StatusBarClock() {
     return () => clearInterval(timer);
   }, []);
 
-  return <span className="font-data text-primary/80 font-bold">{systemTime}</span>;
+  return <span className="font-data text-primary font-semibold">{systemTime}</span>;
 });
 
 export default function Layout() {
@@ -256,17 +256,17 @@ export default function Layout() {
   return (
     <div className="flex flex-col h-screen bg-background text-foreground font-sans overflow-hidden select-none no-print">
 
-      {/* PREMIUM TOP BAR (Unified Win11 Header) */}
-      <header className="h-12 bg-card/85 backdrop-blur-md border-b border-border flex items-center justify-between px-6 z-50 shrink-0 text-card-foreground transition-colors duration-200">
+      {/* PREMIUM TOP BAR (Unified Desktop Header) */}
+      <header className="h-12 bg-card border-b border-border flex items-center justify-between px-6 z-50 shrink-0 text-foreground transition-colors duration-200">
         <div className="flex items-center gap-8">
           {/* Refined Branding */}
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-premium">
-              <Sparkles className="h-5 w-5 text-white" />
+            <div className="w-7 h-7 bg-primary rounded flex items-center justify-center">
+              <Sparkles className="h-4 w-4 text-primary-foreground" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="text-[14px] font-bold tracking-tight font-luxury text-primary">JEWEL ACC</span>
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">Enterprise Pro</span>
+              <span className="text-sm font-bold tracking-tight font-luxury text-primary">JEWEL ACC</span>
+              <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mt-0.5">Enterprise Pro</span>
             </div>
           </div>
 
@@ -274,11 +274,10 @@ export default function Layout() {
           <nav className="flex items-center gap-1">
             {['File', 'Masters', 'Transactions', 'Reports', 'System'].map((menu) => (
               <div key={menu} className="menu-dropdown">
-                <button className="px-3 py-1.5 text-sm font-medium hover:bg-secondary rounded-md transition-all text-muted-foreground hover:text-foreground">
+                <button className="px-3 py-1.5 text-[13px] font-semibold hover:bg-secondary rounded transition-all text-muted-foreground hover:text-foreground">
                   {menu}
                 </button>
                 <div className="menu-dropdown-content surface-elevated">
-                  {/* Menu items would go here, using menu-dropdown-item class */}
                   <button onClick={() => addTab({ title: 'Company Settings', type: 'company_settings' })} className="menu-dropdown-item">
                     <SettingsIcon className="h-4 w-4" /> Company Settings
                   </button>
@@ -298,51 +297,51 @@ export default function Layout() {
         {/* Global Utilities */}
         <div className="flex items-center gap-6">
           {/* Profit Fine Tracker */}
-          <div className="hidden lg:flex items-center gap-3 bg-secondary/30 px-3 py-1.5 rounded-lg border border-border shadow-sm">
+          <div className="hidden lg:flex items-center gap-3 bg-card px-4 py-1.5 rounded border border-border shadow-sm">
             <div className="flex flex-col items-end">
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Initial Fine</span>
-              <span className="text-[11px] font-mono font-bold text-amber-600 dark:text-amber-500">{initialFine.toFixed(3)}g</span>
+              <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Initial Fine</span>
+              <span className="text-xs font-data font-bold text-foreground">{initialFine.toFixed(3)}g</span>
             </div>
             <div className="w-px h-6 bg-border"></div>
             <div className="flex flex-col items-end">
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Total Fine</span>
-              <span className="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400">{totalFine.toFixed(3)}g</span>
+              <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Total Fine</span>
+              <span className="text-xs font-data font-bold text-foreground">{totalFine.toFixed(3)}g</span>
             </div>
             <div className="w-px h-6 bg-border"></div>
             <div className="flex flex-col items-end">
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
+              <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
                 {profitFine >= 0 ? 'Profit PG' : 'Loss PG'}
               </span>
-              <span className={`text-xs font-mono font-extrabold ${profitFine >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-500'}`}>
+              <span className={`text-xs font-data font-bold ${profitFine >= 0 ? 'text-success' : 'text-destructive'}`}>
                 {profitFine > 0 ? '+' : (profitFine < 0 ? '-' : '')}{Math.abs(profitFine).toFixed(3)}g
               </span>
             </div>
           </div>
 
           {/* Quick Search */}
-          <div className="hidden md:flex items-center bg-secondary/50 border border-border px-3 py-1.5 rounded-lg gap-2 w-64 focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+          <div className="hidden md:flex items-center bg-card border border-border px-3 py-1.5 rounded gap-2 w-64 focus-within:border-primary transition-all shadow-sm">
             <Search className="h-4 w-4 text-muted-foreground" />
-            <input type="text" placeholder="Search masters or bills..." className="bg-transparent border-none p-0 h-auto text-sm focus:ring-0 w-full" />
-            <span className="text-[10px] font-bold text-muted-foreground/60 border border-border px-1.5 py-0.5 rounded flex items-center gap-0.5">
+            <input type="text" placeholder="Search masters or bills..." className="bg-transparent border-none p-0 h-auto text-[13px] focus:ring-0 w-full" />
+            <span className="keyboard-key flex items-center gap-0.5">
               <Command className="h-2.5 w-2.5" /> K
             </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <button onClick={toggleTheme} className="p-2 hover:bg-secondary rounded-full transition-all text-muted-foreground hover:text-primary">
-              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            <button onClick={toggleTheme} className="btn-icon">
+              {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             </button>
-            <button className="p-2 hover:bg-secondary rounded-full transition-all text-muted-foreground relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white dark:border-slate-950"></span>
+            <button className="btn-icon relative">
+              <Bell className="h-4 w-4" />
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-destructive rounded-full"></span>
             </button>
-            <div className="h-8 w-px bg-border mx-1"></div>
-            <div className="flex items-center gap-3 pl-1">
+            <div className="h-6 w-px bg-border mx-1"></div>
+            <div className="flex items-center gap-2 pl-1">
               <div className="flex flex-col items-end">
-                <span className="text-sm font-bold text-foreground leading-none">{selectedCompany?.name || 'Select Company'}</span>
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mt-1">Administrator</span>
+                <span className="text-[13px] font-bold text-foreground leading-none">{selectedCompany?.name || 'Select Company'}</span>
+                <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mt-1">Administrator</span>
               </div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/40 border border-primary/20 flex items-center justify-center text-primary font-bold text-sm">
+              <div className="w-8 h-8 rounded bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-sm">
                 A
               </div>
             </div>
@@ -351,8 +350,8 @@ export default function Layout() {
       </header>
 
       {/* QUICK ACTIONS RIBBON */}
-      <section className="h-16 bg-card text-card-foreground border-b border-border flex items-center justify-between px-6 shrink-0 shadow-premium transition-colors duration-200">
-        <div className="flex items-center gap-2">
+      <section className="h-14 bg-secondary/30 text-foreground border-b border-border flex items-center justify-between px-6 shrink-0 transition-colors duration-200">
+        <div className="flex items-center gap-1">
           {[
             { label: 'Sales Bill', icon: ShoppingCart, type: 'billing', key: 'F3' },
             { label: 'Voucher', icon: FileSpreadsheet, type: 'accounting', key: 'F4' },
@@ -362,34 +361,34 @@ export default function Layout() {
             <button
               key={item.label}
               onClick={() => addTab({ title: item.label, type: item.type })}
-              className="flex flex-col items-center justify-center h-12 w-20 hover:bg-secondary rounded-lg transition-all group relative active:scale-95"
+              className="flex items-center gap-2 h-9 px-3 hover:bg-secondary rounded transition-all group relative"
             >
-              <item.icon className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
-              <span className="text-[10px] font-bold text-muted-foreground group-hover:text-foreground mt-1 uppercase tracking-tight">{item.label}</span>
-              <span className="absolute top-0 right-1 text-[8px] font-bold text-primary/40 group-hover:text-primary transition-colors">{item.key}</span>
+              <item.icon className="h-4 w-4 text-primary" />
+              <span className="text-[12px] font-bold text-foreground group-hover:text-primary transition-colors">{item.label}</span>
+              <span className="text-[10px] font-data text-muted-foreground ml-2">[{item.key}]</span>
             </button>
           ))}
-          <div className="h-10 w-px bg-border mx-4"></div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg shadow-premium hover:shadow-elevated hover:bg-primary/90 transition-all active:scale-95 font-semibold text-sm">
-            <Plus className="h-4 w-4" /> New Transaction
+          <div className="h-6 w-px bg-border mx-3"></div>
+          <button className="btn btn-primary h-8 text-[12px]">
+            <Plus className="h-3.5 w-3.5" /> New Transaction
           </button>
         </div>
 
         <div className="flex items-center gap-4">
           <div className="flex flex-col items-end mr-2">
-            <span className="erp-label !mb-0 text-primary">Active Workspace</span>
+            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">Active Workspace</span>
             <div className="relative workspace-dropdown-container">
               <button
                 type="button"
                 onClick={() => setWorkspaceDropdownOpen(!workspaceDropdownOpen)}
-                className="flex items-center gap-1 bg-transparent border-none text-sm font-bold focus:outline-none cursor-pointer h-auto p-0 text-right text-foreground hover:text-primary transition-all duration-200"
+                className="flex items-center gap-1 bg-transparent border-none text-[13px] font-bold focus:outline-none cursor-pointer h-auto p-0 text-right text-foreground hover:text-primary transition-all duration-200"
               >
                 <span>{selectedCompany?.name || 'Select Company'}</span>
-                <ChevronDown className={`h-4 w-4 text-muted-foreground/60 transition-transform duration-200 ${workspaceDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${workspaceDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {workspaceDropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-56 bg-card border border-border rounded-lg shadow-elevated z-50 py-1.5 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute right-0 top-full mt-2 w-56 bg-card border border-border rounded shadow-elevated z-50 py-1">
                   {companies.map((c) => {
                     const isActive = selectedCompany?.id === c.id;
                     return (
@@ -400,8 +399,8 @@ export default function Layout() {
                           setSelectedCompany(c);
                           setWorkspaceDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2 text-xs font-semibold flex items-center justify-between hover:bg-secondary/60 transition-colors ${
-                          isActive ? 'text-primary bg-primary/5 font-bold' : 'text-foreground/80'
+                        className={`w-full text-left px-4 py-2 text-[12px] font-semibold flex items-center justify-between hover:bg-secondary transition-colors ${
+                          isActive ? 'text-primary bg-primary/5' : 'text-foreground'
                         }`}
                       >
                         <span>{c.name}</span>
@@ -413,38 +412,35 @@ export default function Layout() {
               )}
             </div>
           </div>
-          <div className="p-2 bg-secondary rounded-lg">
-            <FolderOpen className="h-5 w-5 text-primary" />
-          </div>
         </div>
       </section>
 
       {/* MAIN LAYOUT CANVAS */}
-      <div className="flex-1 flex overflow-hidden bg-[#F3F4F6] dark:bg-slate-950">
+      <div className="flex-1 flex overflow-hidden bg-background">
 
-        {/* MICA SIDEBAR */}
+        {/* SIDEBAR */}
         <aside
-          className={`bg-sidebar-bg border-r border-sidebar-border text-sidebar-text flex flex-col transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'}`}
+          className={`bg-sidebar-bg border-r border-sidebar-border text-sidebar-text flex flex-col transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-60'}`}
         >
-          <div className="flex-1 overflow-y-auto py-6 space-y-6">
+          <div className="flex-1 overflow-y-auto py-4 space-y-5 custom-scrollbar">
             {menuGroups.map((g, idx) => (
-              <div key={idx} className="px-4">
+              <div key={idx} className="px-3">
                 {!sidebarCollapsed && (
-                  <span className="px-3 text-[10px] font-bold text-sidebar-text/30 uppercase tracking-[0.2em] block mb-3">
+                  <span className="px-2 text-[10px] font-bold text-sidebar-text/50 uppercase tracking-widest block mb-2">
                     {g.group}
                   </span>
                 )}
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   {g.items.map((item) => (
                     <button
                       key={item.type}
                       onClick={() => addTab({ title: item.label, type: item.type })}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-sidebar-hover rounded-xl text-sidebar-text/70 hover:text-white transition-all group cursor-pointer"
+                      className="w-full flex items-center gap-3 px-2 py-2 hover:bg-sidebar-hover rounded text-sidebar-text hover:text-white transition-all group cursor-pointer"
                       title={item.label}
                     >
-                      <item.icon className="h-5 w-5 shrink-0 group-hover:text-primary transition-colors" />
+                      <item.icon className="h-4 w-4 shrink-0 group-hover:text-primary transition-colors" />
                       {!sidebarCollapsed && (
-                        <span className="text-sm font-medium tracking-tight">{item.label}</span>
+                        <span className="text-[13px] font-medium tracking-tight">{item.label}</span>
                       )}
                     </button>
                   ))}
@@ -455,35 +451,36 @@ export default function Layout() {
 
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="p-4 bg-black/20 hover:bg-black/40 text-sidebar-text/40 hover:text-white flex items-center justify-center transition-all shrink-0"
+            className="p-3 bg-sidebar-border/50 hover:bg-sidebar-hover text-sidebar-text hover:text-white flex items-center justify-center transition-all shrink-0 border-t border-sidebar-border"
           >
-            {sidebarCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+            {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
           </button>
         </aside>
 
         {/* WORKSPACE AREA */}
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {/* MODERN TAB BAR */}
-          <div className="bg-card/45 backdrop-blur-sm border-b border-border h-12 flex items-end px-6 shrink-0 transition-colors duration-200">
-            <div className="flex gap-2 overflow-x-auto h-full items-end scrollbar-none">
+        <main className="flex-1 flex flex-col overflow-hidden bg-background">
+          {/* TAB BAR */}
+          <div className="bg-card border-b border-border h-10 flex items-end px-4 shrink-0">
+            <div className="flex gap-1 overflow-x-auto h-full items-end scrollbar-none w-full">
               {tabs.map((t) => {
                 const isActive = t.id === activeTabId;
                 return (
                   <div
                     key={t.id}
                     onClick={() => setActiveTab(t.id)}
-                    className={`flex items-center gap-3 px-5 h-10 rounded-t-xl transition-all cursor-pointer text-sm font-medium relative ${isActive
-                      ? 'bg-background text-primary shadow-[0_-4px_10px_-5px_rgba(0,0,0,0.1)] z-10 before:content-[""] before:absolute before:bottom-[-1px] before:left-0 before:right-0 before:h-[2px] before:bg-primary'
-                      : 'text-foreground/75 hover:text-foreground hover:bg-secondary/40'
+                    className={`flex items-center gap-2 px-4 h-8 rounded-t border-t border-l border-r transition-all cursor-pointer text-[12px] font-bold relative ${isActive
+                      ? 'bg-background text-primary border-border border-b-0 z-10 before:absolute before:-top-px before:left-0 before:right-0 before:h-[2px] before:bg-primary'
+                      : 'bg-secondary/50 text-muted-foreground border-transparent border-b-border hover:bg-secondary'
                       }`}
+                    style={{ marginBottom: isActive ? '-1px' : '0' }}
                   >
                     <span>{t.title}</span>
                     {t.id !== 'dashboard' && (
                       <button
                         onClick={(e) => { e.stopPropagation(); closeTab(t.id); }}
-                        className="p-1 rounded-md hover:bg-muted text-foreground/40 hover:text-destructive transition-colors"
+                        className="p-0.5 rounded hover:bg-muted text-muted-foreground hover:text-destructive transition-colors ml-1"
                       >
-                        <X className="h-3.5 w-3.5" />
+                        <X className="h-3 w-3" />
                       </button>
                     )}
                   </div>
@@ -493,13 +490,13 @@ export default function Layout() {
           </div>
 
           {/* VIEWPORT CANVAS */}
-          <div className="flex-1 overflow-hidden relative p-6">
+          <div className="flex-1 overflow-hidden relative p-4">
             {tabs.map((t) => (
               <div
                 key={t.id}
-                className={`h-full ${t.id === activeTabId ? 'block animate-in fade-in zoom-in-95 duration-300' : 'hidden'}`}
+                className={`h-full ${t.id === activeTabId ? 'block' : 'hidden'}`}
               >
-                <div className="h-full surface-premium overflow-hidden">
+                <div className="h-full bg-card border border-border shadow-sm rounded overflow-hidden">
                   {renderActiveView(t.type)}
                 </div>
               </div>
@@ -508,29 +505,31 @@ export default function Layout() {
         </main>
       </div>
 
-      {/* STATUS BAR (Dense & Informative) */}
-      <footer className="h-8 bg-card text-card-foreground border-t border-border flex items-center justify-between px-6 shrink-0 transition-colors duration-200">
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
-            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">System Online</span>
+      {/* STATUS BAR */}
+      <footer className="h-7 bg-card text-foreground border-t border-border flex items-center justify-between px-4 shrink-0 transition-colors duration-200 select-none">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.5">
+            <div className="w-2 h-2 rounded-full bg-success"></div>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">System Ready</span>
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-            <Database className="h-3.5 w-3.5" />
+          <div className="h-3 w-px bg-border"></div>
+          <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-bold tracking-wide">
+            <Database className="h-3 w-3 text-primary" />
             <span className="font-data">Local Storage (SQLITE)</span>
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-muted-foreground border-l border-border pl-4">
-            <Clock className="h-3.5 w-3.5" />
+          <div className="h-3 w-px bg-border"></div>
+          <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+            <Clock className="h-3 w-3" />
             <StatusBarClock />
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <span className="text-[10px] font-bold text-muted-foreground/40">SHORTCUTS:</span>
+          <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Shortcuts</span>
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1.5"><span className="keyboard-key">F2</span> <span className="text-[11px] font-medium text-muted-foreground">Save</span></span>
-            <span className="flex items-center gap-1.5"><span className="keyboard-key">F12</span> <span className="text-[11px] font-medium text-muted-foreground">Print</span></span>
-            <span className="flex items-center gap-1.5"><span className="keyboard-key">Alt+X</span> <span className="text-[11px] font-medium text-muted-foreground">Exit</span></span>
+            <span className="flex items-center gap-1"><span className="keyboard-key">F2</span> <span className="text-[10px] font-semibold text-muted-foreground">Save</span></span>
+            <span className="flex items-center gap-1"><span className="keyboard-key">F12</span> <span className="text-[10px] font-semibold text-muted-foreground">Print</span></span>
+            <span className="flex items-center gap-1"><span className="keyboard-key">Alt+X</span> <span className="text-[10px] font-semibold text-muted-foreground">Exit</span></span>
           </div>
         </div>
       </footer>

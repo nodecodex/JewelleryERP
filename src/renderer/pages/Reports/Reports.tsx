@@ -96,25 +96,25 @@ export default function ReportsView() {
   };
 
   return (
-    <div className="p-3 bg-[#eef1f6] h-full overflow-y-auto max-h-[calc(100vh-105px)] font-sans">
-      <div className="flex justify-between items-center border-b border-slate-300 pb-2 mb-3">
+    <div className="p-3 bg-background h-full overflow-y-auto  font-sans">
+      <div className="flex justify-between items-center border-b border-border pb-2 mb-3">
         <div>
-          <h2 className="text-sm font-bold flex items-center gap-1.5 text-slate-800 uppercase tracking-wider font-luxury">
+          <h2 className="text-sm font-bold flex items-center gap-1.5 text-foreground uppercase tracking-wider font-luxury">
             <FileText className="h-4.5 w-4.5 text-amber-500" />
             <span>Financial Statements & Books</span>
           </h2>
-          <p className="text-[10px] text-slate-500 font-semibold uppercase">Generate statutory balance sheets, P&L accounts, and tax books.</p>
+          <p className="text-[10px] text-muted-foreground font-semibold uppercase">Generate statutory balance sheets, P&L accounts, and tax books.</p>
         </div>
       </div>
 
       {/* Tabs bar */}
-      <div className="flex border-b border-slate-300 gap-0.5 select-none mb-3">
+      <div className="flex border-b border-border gap-0.5 select-none mb-3">
         <button
           onClick={() => setActiveReportTab('pl')}
           className={`px-3 py-1 text-xs font-bold transition-all border-x border-t rounded-t-[2px] cursor-pointer relative top-[1px] ${
             activeReportTab === 'pl' 
-              ? 'bg-white border-slate-350 border-t-amber-500 border-t-2 border-b-white text-slate-800 font-extrabold z-10' 
-              : 'bg-slate-200 border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+              ? 'bg-card border-border border-t-amber-500 border-t-2 border-b-white text-foreground font-extrabold z-10' 
+              : 'bg-secondary border-transparent text-muted-foreground hover:text-foreground hover:bg-secondary/50'
           }`}
         >
           Profit & Loss Statement
@@ -123,8 +123,8 @@ export default function ReportsView() {
           onClick={() => setActiveReportTab('bs')}
           className={`px-3 py-1 text-xs font-bold transition-all border-x border-t rounded-t-[2px] cursor-pointer relative top-[1px] ${
             activeReportTab === 'bs' 
-              ? 'bg-white border-slate-350 border-t-amber-500 border-t-2 border-b-white text-slate-800 font-extrabold z-10' 
-              : 'bg-slate-200 border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+              ? 'bg-card border-border border-t-amber-500 border-t-2 border-b-white text-foreground font-extrabold z-10' 
+              : 'bg-secondary border-transparent text-muted-foreground hover:text-foreground hover:bg-secondary/50'
           }`}
         >
           Balance Sheet
@@ -133,8 +133,8 @@ export default function ReportsView() {
           onClick={() => setActiveReportTab('tax')}
           className={`px-3 py-1 text-xs font-bold transition-all border-x border-t rounded-t-[2px] cursor-pointer relative top-[1px] ${
             activeReportTab === 'tax' 
-              ? 'bg-white border-slate-350 border-t-amber-500 border-t-2 border-b-white text-slate-800 font-extrabold z-10' 
-              : 'bg-slate-200 border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+              ? 'bg-card border-border border-t-amber-500 border-t-2 border-b-white text-foreground font-extrabold z-10' 
+              : 'bg-secondary border-transparent text-muted-foreground hover:text-foreground hover:bg-secondary/50'
           }`}
         >
           GST Sales Tax Log
@@ -142,45 +142,45 @@ export default function ReportsView() {
       </div>
 
       {activeReportTab === 'pl' && (
-        <div className="bg-white border border-slate-350 rounded-[2px] max-w-3xl mx-auto shadow-sm overflow-hidden">
-          <div className="bg-slate-800 text-slate-100 px-3 py-1.5 border-b border-slate-900 flex justify-between items-center">
+        <div className="bg-card border border-border rounded-sm max-w-3xl mx-auto shadow-sm overflow-hidden">
+          <div className="bg-card text-foreground px-3 py-1.5 border-b border-border flex justify-between items-center">
             <h3 className="font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 font-luxury">
               <TrendingUp className="h-4 w-4 text-emerald-500" />
               <span>Profit & Loss Statement Account</span>
             </h3>
             <button
               onClick={handleExportPL}
-              className="flex items-center gap-1 px-2 py-0.5 bg-slate-700 hover:bg-slate-600 text-[10px] text-white font-bold uppercase tracking-wider rounded-[2px] transition-all"
+              className="flex items-center gap-1 px-2 py-0.5 bg-primary hover:bg-slate-600 text-[10px] text-white font-bold uppercase tracking-wider rounded-sm transition-all"
             >
               <Download className="h-3 w-3 text-amber-400" />
               <span>Export CSV</span>
             </button>
           </div>
 
-          <div className="p-4 divide-y divide-slate-150 text-xs font-bold text-slate-650 font-data space-y-2.5">
-            <div className="flex justify-between py-1.5 text-slate-800 text-xs font-bold font-sans uppercase">
+          <div className="p-4 divide-y divide-border text-xs font-bold text-muted-foreground font-data space-y-2.5">
+            <div className="flex justify-between py-1.5 text-foreground text-xs font-bold font-sans uppercase">
               <span>Sales Revenue (Turnover):</span>
               <span className="font-data font-extrabold">₹{salesRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
-            <div className="flex justify-between py-1.5 text-slate-550">
+            <div className="flex justify-between py-1.5 text-muted-foreground">
               <span>Less: Purchases (Cost of Stock Goods):</span>
               <span className="text-rose-500 font-extrabold">-₹{costOfGoodsSold.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
-            <div className="flex justify-between py-1.5 text-slate-550">
+            <div className="flex justify-between py-1.5 text-muted-foreground">
               <span>Less: Direct Wages & Manufacturing:</span>
               <span className="text-rose-500 font-extrabold">-₹{directExpenses.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
-            <div className="flex justify-between py-2 border-t border-slate-300 text-sm font-extrabold text-slate-850 uppercase font-sans">
+            <div className="flex justify-between py-2 border-t border-border text-sm font-extrabold text-foreground uppercase font-sans">
               <span>Gross Profit Margin (GP):</span>
               <span className={grossProfit >= 0 ? 'text-emerald-600 font-data' : 'text-rose-600 font-data'}>
                 ₹{grossProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </span>
             </div>
-            <div className="flex justify-between py-1.5 text-slate-550">
+            <div className="flex justify-between py-1.5 text-muted-foreground">
               <span>Less: Indirect Operating & Admin Expenses:</span>
               <span className="text-rose-500 font-extrabold">-₹{indirectExpenses.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
-            <div className="flex justify-between py-2.5 border-t-2 border-double border-slate-400 text-base font-extrabold text-amber-600 uppercase font-sans">
+            <div className="flex justify-between py-2.5 border-t-2 border-double border-primary/30 text-base font-extrabold text-amber-600 uppercase font-sans">
               <span>Net Profit / (Loss) for Period:</span>
               <span className={netProfit >= 0 ? 'text-emerald-600 font-data text-lg' : 'text-rose-600 font-data text-lg'}>
                 ₹{netProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -191,39 +191,39 @@ export default function ReportsView() {
       )}
 
       {activeReportTab === 'bs' && (
-        <div className="bg-white border border-slate-350 rounded-[2px] max-w-4xl mx-auto shadow-sm overflow-hidden">
-          <div className="bg-slate-800 text-slate-100 px-3 py-1.5 border-b border-slate-900 flex justify-between items-center">
+        <div className="bg-card border border-border rounded-sm max-w-4xl mx-auto shadow-sm overflow-hidden">
+          <div className="bg-card text-foreground px-3 py-1.5 border-b border-border flex justify-between items-center">
             <h3 className="font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 font-luxury">
               <DollarSign className="h-4 w-4 text-amber-500" />
               <span>Balance Sheet Statement</span>
             </h3>
             <button
               onClick={handleExportBS}
-              className="flex items-center gap-1 px-2 py-0.5 bg-slate-700 hover:bg-slate-600 text-[10px] text-white font-bold uppercase tracking-wider rounded-[2px] transition-all"
+              className="flex items-center gap-1 px-2 py-0.5 bg-primary hover:bg-slate-600 text-[10px] text-white font-bold uppercase tracking-wider rounded-sm transition-all"
             >
               <Download className="h-3 w-3 text-amber-400" />
               <span>Export CSV</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-300 font-sans">
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border font-sans">
             {/* ASSETS */}
             <div className="p-4 space-y-3">
-              <h4 className="font-extrabold text-[10px] text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-1">Assets & Properties</h4>
-              <div className="space-y-2 text-xs font-bold font-data text-slate-650">
-                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+              <h4 className="font-extrabold text-[10px] text-muted-foreground uppercase tracking-wider border-b border-border pb-1">Assets & Properties</h4>
+              <div className="space-y-2 text-xs font-bold font-data text-muted-foreground">
+                <div className="flex justify-between border-b border-border pb-1.5">
                   <span>Cash-in-Hand Balance:</span>
-                  <span className="text-slate-800">₹{cashAsset.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                  <span className="text-foreground">₹{cashAsset.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
-                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                <div className="flex justify-between border-b border-border pb-1.5">
                   <span>Bank Account Balance:</span>
-                  <span className="text-slate-800">₹{bankAsset.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                  <span className="text-foreground">₹{bankAsset.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
-                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                <div className="flex justify-between border-b border-border pb-1.5">
                   <span>Customer Receivables:</span>
-                  <span className="text-slate-800">₹{customerReceivables.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                  <span className="text-foreground">₹{customerReceivables.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
-                <div className="flex justify-between border-t border-slate-350 pt-2 text-xs font-extrabold text-slate-850 uppercase font-sans">
+                <div className="flex justify-between border-t border-border pt-2 text-xs font-extrabold text-foreground uppercase font-sans">
                   <span>Total Assets Ledger:</span>
                   <span>₹{totalAssets.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
@@ -232,21 +232,21 @@ export default function ReportsView() {
 
             {/* LIABILITIES & EQUITIES */}
             <div className="p-4 space-y-3">
-              <h4 className="font-extrabold text-[10px] text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-1">Liabilities & Equities</h4>
-              <div className="space-y-2 text-xs font-bold font-data text-slate-650">
-                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+              <h4 className="font-extrabold text-[10px] text-muted-foreground uppercase tracking-wider border-b border-border pb-1">Liabilities & Equities</h4>
+              <div className="space-y-2 text-xs font-bold font-data text-muted-foreground">
+                <div className="flex justify-between border-b border-border pb-1.5">
                   <span>Capital Account Ledger:</span>
-                  <span className="text-slate-800">₹{capitalEquity.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                  <span className="text-foreground">₹{capitalEquity.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
-                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                <div className="flex justify-between border-b border-border pb-1.5">
                   <span>Supplier Payables:</span>
-                  <span className="text-slate-800">₹{(-supplierPayables).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                  <span className="text-foreground">₹{(-supplierPayables).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
-                <div className="flex justify-between border-b border-slate-100 pb-1.5 text-emerald-600">
+                <div className="flex justify-between border-b border-border pb-1.5 text-emerald-600">
                   <span>Current Period Net Profit:</span>
                   <span className="font-extrabold">₹{netProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
-                <div className="flex justify-between border-t border-slate-350 pt-2 text-xs font-extrabold text-slate-850 uppercase font-sans">
+                <div className="flex justify-between border-t border-border pt-2 text-xs font-extrabold text-foreground uppercase font-sans">
                   <span>Total Liab & Capital:</span>
                   <span>₹{totalLiabilitiesEquity.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
@@ -257,8 +257,8 @@ export default function ReportsView() {
       )}
 
       {activeReportTab === 'tax' && (
-        <div className="bg-white border border-slate-350 rounded-[2px] overflow-hidden shadow-sm">
-          <div className="bg-slate-800 text-slate-100 px-3 py-2 border-b border-slate-900">
+        <div className="bg-card border border-border rounded-sm overflow-hidden shadow-sm">
+          <div className="bg-card text-foreground px-3 py-2 border-b border-border">
             <h3 className="font-bold text-xs uppercase tracking-wider font-luxury text-amber-500">GST Sales Tax Log Registry</h3>
           </div>
           <div className="overflow-x-auto">
@@ -273,10 +273,10 @@ export default function ReportsView() {
                   <th className="p-2 text-right">Grand Total amount (₹)</th>
                 </tr>
               </thead>
-              <tbody className="font-semibold text-slate-700 bg-white">
+              <tbody className="font-semibold text-foreground bg-card">
                 {invoices.filter(i => i.invoice_type !== 'Estimate').length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="p-8 text-center text-slate-400 italic font-medium">
+                    <td colSpan={6} className="p-8 text-center text-muted-foreground italic font-medium">
                       No GST sales tax invoices generated to date.
                     </td>
                   </tr>
@@ -284,9 +284,9 @@ export default function ReportsView() {
                   invoices
                     .filter(i => i.invoice_type !== 'Estimate')
                     .map((inv) => (
-                      <tr key={inv.id} className="border-b border-slate-150">
+                      <tr key={inv.id} className="border-b border-border">
                         <td className="p-1.5 font-data text-xs">{inv.invoice_date}</td>
-                        <td className="p-1.5 font-data text-xs text-slate-850 font-bold">{inv.invoice_number}</td>
+                        <td className="p-1.5 font-data text-xs text-foreground font-bold">{inv.invoice_number}</td>
                         <td className="p-1.5 font-sans text-xs">{inv.customer_id ? 'Registered Ledger' : 'Cash Counter'}</td>
                         <td className="p-1.5 text-right font-data">₹{inv.gross_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                         <td className="p-1.5 text-right font-data text-amber-600">₹{inv.tax_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>

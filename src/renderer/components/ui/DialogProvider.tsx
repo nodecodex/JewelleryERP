@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useRef, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from 'react';
 import { AlertCircle, CheckCircle, Info, AlertTriangle, X } from 'lucide-react';
 
 // --- Types ---
@@ -57,10 +57,10 @@ const getIcon = (type: ToastType | AlertType, className: string = 'w-5 h-5') => 
 // --- Provider Component ---
 export function DialogProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  
+
   // Alert state
   const [alertState, setAlertState] = useState<{ options: AlertOptions; resolve: () => void } | null>(null);
-  
+
   // Confirm state
   const [confirmState, setConfirmState] = useState<{ options: ConfirmOptions; resolve: (value: boolean) => void } | null>(null);
 
@@ -127,7 +127,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
         if (confirmState) handleConfirmClose(false);
       }
     };
-    
+
     if (alertState || confirmState) {
       window.addEventListener('keydown', handleKeyDown);
       // Try to focus inside modal
@@ -162,10 +162,10 @@ export function DialogProvider({ children }: { children: ReactNode }) {
 
       {/* Alert Modal */}
       {alertState && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-background/80 backdrop-blur-sm animate-in fade-in">
-          <div 
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-foreground/10 backdrop-blur-[2px] animate-in fade-in">
+          <div
             ref={modalRef}
-            className="bg-card border border-border shadow-xl rounded-lg w-full max-w-sm overflow-hidden animate-in zoom-in-95"
+            className="surface-premium w-full max-w-sm overflow-hidden animate-in zoom-in-95"
             role="dialog"
             aria-modal="true"
           >
@@ -185,7 +185,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             <div className="p-3 bg-secondary/50 border-t border-border flex justify-end">
               <button
                 onClick={handleAlertClose}
-                className="px-4 py-1.5 bg-primary text-primary-foreground text-xs font-bold rounded-md hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="btn btn-primary"
               >
                 OK
               </button>
@@ -196,10 +196,10 @@ export function DialogProvider({ children }: { children: ReactNode }) {
 
       {/* Confirm Modal */}
       {confirmState && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-background/80 backdrop-blur-sm animate-in fade-in">
-          <div 
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-foreground/10 backdrop-blur-[2px] animate-in fade-in">
+          <div
             ref={modalRef}
-            className="bg-card border border-border shadow-xl rounded-lg w-full max-w-sm overflow-hidden animate-in zoom-in-95"
+            className="surface-premium w-full max-w-sm overflow-hidden animate-in zoom-in-95"
             role="dialog"
             aria-modal="true"
           >
@@ -223,17 +223,13 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             <div className="p-3 bg-secondary/50 border-t border-border flex justify-end gap-2">
               <button
                 onClick={() => handleConfirmClose(false)}
-                className="px-4 py-1.5 bg-secondary text-secondary-foreground border border-border text-xs font-bold rounded-md hover:bg-secondary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-border"
+                className="btn btn-secondary"
               >
                 {confirmState.options.cancelText || 'Cancel'}
               </button>
               <button
                 onClick={() => handleConfirmClose(true)}
-                className={`px-4 py-1.5 text-xs font-bold rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 ${
-                  confirmState.options.variant === 'danger' 
-                    ? 'bg-rose-500 text-white hover:bg-rose-600 focus:ring-rose-500' 
-                    : 'bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50'
-                }`}
+                className={`btn ${confirmState.options.variant === 'danger' ? 'btn-destructive' : 'btn-primary'}`}
               >
                 {confirmState.options.confirmText || 'Confirm'}
               </button>

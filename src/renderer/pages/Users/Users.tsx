@@ -271,29 +271,29 @@ export default function UsersView() {
   };
 
   return (
-    <div className="p-3 bg-[#eef1f6] h-full overflow-hidden flex flex-col font-sans select-none">
+    <div className="p-3 bg-background h-full overflow-hidden flex flex-col font-sans select-none">
       
       {/* 1. Split Panel Workspace */}
       <div className="flex-1 grid grid-cols-12 gap-3 overflow-hidden min-h-0 pb-2">
         
         {/* LEFT PANEL: User Selection & Tabular Rights Matrix (col-span-8) */}
-        <div className="col-span-8 bg-white border border-slate-350 rounded-[2px] shadow-sm flex flex-col overflow-hidden">
+        <div className="col-span-8 bg-card border border-border rounded-sm shadow-sm flex flex-col overflow-hidden">
           
           {/* Top orange header */}
           <div className="bg-[#070D18] text-[#d4af37] px-3 py-2 border-b border-slate-950 flex justify-between items-center shrink-0">
             <span className="text-[10px] font-bold uppercase tracking-wider font-luxury">User Rights Matrix</span>
             <div className="flex items-center gap-1">
               <UserCheck className="h-3.5 w-3.5 text-amber-500" />
-              <span className="text-[9px] font-mono text-slate-400">ACCESS PERMISSIONS CONTROL</span>
+              <span className="text-[9px] font-mono text-muted-foreground">ACCESS PERMISSIONS CONTROL</span>
             </div>
           </div>
 
           {/* User selection dropdown row */}
-          <div className="p-2 border-b border-slate-200 bg-slate-50 flex items-center gap-4 shrink-0">
+          <div className="p-2 border-b border-border bg-secondary/20 flex items-center gap-4 shrink-0">
             <div className="flex items-center gap-2">
               <label className="erp-label">User Name</label>
               <select
-                className="erp-input w-48 font-bold border-slate-300"
+                className="erp-input w-48 font-bold border-border"
                 value={selectedUserId}
                 onChange={(e) => setSelectedUserId(e.target.value)}
               >
@@ -310,64 +310,64 @@ export default function UsersView() {
           {/* Grid table */}
           <div className="flex-1 overflow-y-auto min-h-0">
             <table className="ag-grid-dense-table w-full border-collapse">
-              <thead className="sticky top-0 bg-slate-100 border-b border-slate-200 z-10 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+              <thead className="sticky top-0 bg-secondary/50 border-b border-border z-10 text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
                 <tr>
-                  <th className="p-2 border border-slate-200 text-center w-12">SrNo</th>
-                  <th className="p-2 border border-slate-200">Main Menu</th>
-                  <th className="p-2 border border-slate-200">Sub Menu</th>
-                  <th className="p-2 border border-slate-200 text-center w-16">View</th>
-                  <th className="p-2 border border-slate-200 text-center w-16">Edit</th>
-                  <th className="p-2 border border-slate-200 text-center w-16">Delete</th>
-                  <th className="p-2 border border-slate-200 text-center w-16">Print</th>
+                  <th className="p-2 border border-border text-center w-12">SrNo</th>
+                  <th className="p-2 border border-border">Main Menu</th>
+                  <th className="p-2 border border-border">Sub Menu</th>
+                  <th className="p-2 border border-border text-center w-16">View</th>
+                  <th className="p-2 border border-border text-center w-16">Edit</th>
+                  <th className="p-2 border border-border text-center w-16">Delete</th>
+                  <th className="p-2 border border-border text-center w-16">Print</th>
                 </tr>
               </thead>
-              <tbody className="font-semibold text-slate-700">
+              <tbody className="font-semibold text-foreground">
                 {PERMISSION_ITEMS.map((item) => {
                   const key = `${item.menu}_${item.submenu}`;
                   const rights = permissions[key] || { view: false, edit: false, delete: false, print: false };
                   const isMaster = item.menu === 'Master';
                   
                   return (
-                    <tr key={key} className="hover:bg-slate-50 border-b border-slate-150">
-                      <td className="p-1.5 border border-slate-200 text-center font-data text-slate-500 text-[10px]">
+                    <tr key={key} className="hover:bg-secondary/20 border-b border-border">
+                      <td className="p-1.5 border border-border text-center font-data text-muted-foreground text-[10px]">
                         {String(item.sr).padStart(2, '0')}
                       </td>
-                      <td className={`p-1.5 border border-slate-200 text-[11px] uppercase ${isMaster ? 'text-amber-700 font-bold' : 'text-indigo-700 font-bold'}`}>
+                      <td className={`p-1.5 border border-border text-[11px] uppercase ${isMaster ? 'text-amber-700 font-bold' : 'text-indigo-700 font-bold'}`}>
                         {item.menu}
                       </td>
-                      <td className="p-1.5 border border-slate-200 text-[11px] text-slate-800 font-medium">
+                      <td className="p-1.5 border border-border text-[11px] text-foreground font-medium">
                         {item.submenu}
                       </td>
                       
                       {/* Checkbox columns */}
-                      <td className="p-1 border border-slate-200 text-center">
+                      <td className="p-1 border border-border text-center">
                         <input
                           type="checkbox"
-                          className="h-3.5 w-3.5 text-amber-500 focus:ring-amber-500/20 border-slate-300 rounded-[2px] cursor-pointer"
+                          className="h-3.5 w-3.5 text-amber-500 focus:ring-amber-500/20 border-border rounded-sm cursor-pointer"
                           checked={rights.view}
                           onChange={() => handleCheckboxChange(item.menu, item.submenu, 'view')}
                         />
                       </td>
-                      <td className="p-1 border border-slate-200 text-center">
+                      <td className="p-1 border border-border text-center">
                         <input
                           type="checkbox"
-                          className="h-3.5 w-3.5 text-amber-500 focus:ring-amber-500/20 border-slate-300 rounded-[2px] cursor-pointer"
+                          className="h-3.5 w-3.5 text-amber-500 focus:ring-amber-500/20 border-border rounded-sm cursor-pointer"
                           checked={rights.edit}
                           onChange={() => handleCheckboxChange(item.menu, item.submenu, 'edit')}
                         />
                       </td>
-                      <td className="p-1 border border-slate-200 text-center">
+                      <td className="p-1 border border-border text-center">
                         <input
                           type="checkbox"
-                          className="h-3.5 w-3.5 text-amber-500 focus:ring-amber-500/20 border-slate-300 rounded-[2px] cursor-pointer"
+                          className="h-3.5 w-3.5 text-amber-500 focus:ring-amber-500/20 border-border rounded-sm cursor-pointer"
                           checked={rights.delete}
                           onChange={() => handleCheckboxChange(item.menu, item.submenu, 'delete')}
                         />
                       </td>
-                      <td className="p-1 border border-slate-200 text-center">
+                      <td className="p-1 border border-border text-center">
                         <input
                           type="checkbox"
-                          className="h-3.5 w-3.5 text-amber-500 focus:ring-amber-500/20 border-slate-300 rounded-[2px] cursor-pointer"
+                          className="h-3.5 w-3.5 text-amber-500 focus:ring-amber-500/20 border-border rounded-sm cursor-pointer"
                           checked={rights.print}
                           onChange={() => handleCheckboxChange(item.menu, item.submenu, 'print')}
                         />
@@ -380,11 +380,11 @@ export default function UsersView() {
           </div>
 
           {/* Under grid action button */}
-          <div className="p-2 bg-slate-50 border-t border-slate-200 flex justify-center shrink-0">
+          <div className="p-2 bg-secondary/20 border-t border-border flex justify-center shrink-0">
             <button
               type="button"
               onClick={handleUpdateRights}
-              className="border border-amber-600 bg-white hover:bg-amber-50 text-amber-700 px-6 py-1.5 rounded-[2px] font-bold text-xs uppercase tracking-wide transition-colors shadow-xs"
+              className="border border-amber-600 bg-card hover:bg-amber-50 text-amber-700 px-6 py-1.5 rounded-sm font-bold text-xs uppercase tracking-wide transition-colors shadow-xs"
             >
               Update User Right
             </button>
@@ -392,7 +392,7 @@ export default function UsersView() {
         </div>
 
         {/* RIGHT PANEL: Create / Edit password controls (col-span-4) */}
-        <div className="col-span-4 bg-white border border-slate-350 rounded-[2px] shadow-sm flex flex-col overflow-hidden">
+        <div className="col-span-4 bg-card border border-border rounded-sm shadow-sm flex flex-col overflow-hidden">
           
           <div className="bg-amber-500/15 border-b border-amber-500/30 py-2 text-center shrink-0">
             <h1 className="text-sm font-extrabold uppercase text-amber-700 tracking-widest font-luxury flex items-center justify-center gap-1.5">
@@ -404,8 +404,8 @@ export default function UsersView() {
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             
             {/* Create New User Panel */}
-            <div className="bg-slate-50 border border-slate-200 p-3 rounded-[2px] space-y-3">
-              <h2 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 border-b border-slate-200 pb-1">
+            <div className="bg-secondary/20 border border-border p-3 rounded-sm space-y-3">
+              <h2 className="text-[10px] font-extrabold uppercase tracking-wider text-foreground border-b border-border pb-1">
                 Create New User Profile
               </h2>
               
@@ -436,8 +436,8 @@ export default function UsersView() {
             </div>
 
             {/* Password Modification Panel */}
-            <div className="bg-slate-50 border border-slate-200 p-3 rounded-[2px] space-y-3">
-              <h2 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 border-b border-slate-200 pb-1">
+            <div className="bg-secondary/20 border border-border p-3 rounded-sm space-y-3">
+              <h2 className="text-[10px] font-extrabold uppercase tracking-wider text-foreground border-b border-border pb-1">
                 Password Setup / Reset
               </h2>
               
@@ -478,8 +478,8 @@ export default function UsersView() {
             </div>
 
             {selectedUserId && !newUsername && (
-              <div className="p-2 border border-slate-250 bg-slate-50 rounded-[2px] text-[10px] text-slate-500 font-semibold uppercase text-center">
-                Editing: <span className="text-slate-800 font-bold">{users.find(u => u.id === selectedUserId)?.username}</span>
+              <div className="p-2 border border-slate-250 bg-secondary/20 rounded-sm text-[10px] text-muted-foreground font-semibold uppercase text-center">
+                Editing: <span className="text-foreground font-bold">{users.find(u => u.id === selectedUserId)?.username}</span>
               </div>
             )}
           </div>
@@ -487,21 +487,21 @@ export default function UsersView() {
       </div>
 
       {/* 2. BOTTOM ACTION BUTTONS TOOLBAR */}
-      <footer className="bg-slate-100 border border-slate-350 rounded-[2px] p-1.5 flex justify-end gap-2.5 shrink-0 shadow-sm">
+      <footer className="bg-secondary/50 border border-border rounded-sm p-1.5 flex justify-end gap-2.5 shrink-0 shadow-sm">
         
         {/* Print Button */}
         <button
           onClick={handlePrint}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
-          <Printer className="h-4 w-4 text-slate-500" />
+          <Printer className="h-4 w-4 text-muted-foreground" />
           <span>Print</span>
         </button>
 
         {/* Save Button */}
         <button
           onClick={handleSave}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
           <Save className="h-4 w-4 text-emerald-600" />
           <span className="text-emerald-700">Save</span>
@@ -510,7 +510,7 @@ export default function UsersView() {
         {/* Cancel Button */}
         <button
           onClick={handleCancel}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
           <Undo2 className="h-4 w-4 text-amber-600" />
           <span className="text-amber-700">Cancel</span>
@@ -520,7 +520,7 @@ export default function UsersView() {
         <button
           onClick={handleDeleteUser}
           disabled={!selectedUserId}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-rose-50 border border-slate-300 disabled:opacity-40 disabled:hover:bg-white rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-rose-50 border border-border disabled:opacity-40 disabled:hover:bg-card rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
           <Trash2 className="h-4 w-4 text-rose-500" />
           <span className="text-rose-600">Delete</span>
@@ -529,9 +529,9 @@ export default function UsersView() {
         {/* Exit Button */}
         <button
           onClick={handleExit}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
-          <LogOut className="h-4 w-4 text-slate-600" />
+          <LogOut className="h-4 w-4 text-muted-foreground" />
           <span>Exit</span>
         </button>
 

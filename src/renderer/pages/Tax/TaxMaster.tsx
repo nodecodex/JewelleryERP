@@ -253,27 +253,27 @@ export default function TaxMasterView() {
   });
 
   return (
-    <div className="p-3 bg-[#eef1f6] h-full overflow-hidden flex flex-col font-sans select-none">
+    <div className="p-3 bg-background h-full overflow-hidden flex flex-col font-sans select-none">
       
       {/* Split Workspace */}
       <div className="flex-1 grid grid-cols-12 gap-3 overflow-hidden min-h-0 pb-2">
         
         {/* Left Side search index list */}
-        <div className="col-span-5 bg-white border border-slate-350 rounded-[2px] shadow-sm flex flex-col overflow-hidden">
-          <div className="bg-slate-800 text-slate-100 px-3 py-1.5 border-b border-slate-900 flex justify-between items-center shrink-0">
+        <div className="col-span-5 bg-card border border-border rounded-sm shadow-sm flex flex-col overflow-hidden">
+          <div className="bg-card text-foreground px-3 py-1.5 border-b border-border flex justify-between items-center shrink-0">
             <span className="text-[10px] font-bold uppercase tracking-wider font-luxury">SEARCH RECORD</span>
             <button
               onClick={handleNewRecord}
-              className="flex items-center gap-1 px-2 py-0.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[9px] uppercase tracking-wider rounded-[2px] border border-amber-600 transition-colors"
+              className="flex items-center gap-1 px-2 py-0.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[9px] uppercase tracking-wider rounded-sm border border-amber-600 transition-colors"
             >
               <Plus className="h-3 w-3" />
               <span>New Tax</span>
             </button>
           </div>
 
-          <div className="p-2 border-b border-slate-200 bg-slate-50 shrink-0">
-            <div className="flex items-center gap-1.5 bg-white border border-slate-300 rounded-[2px] px-2 py-1 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/20">
-              <Search className="h-3.5 w-3.5 text-slate-400" />
+          <div className="p-2 border-b border-border bg-secondary/20 shrink-0">
+            <div className="flex items-center gap-1.5 surface-premium bg-card px-2 py-1 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/20">
+              <Search className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search by code or description..."
@@ -286,16 +286,16 @@ export default function TaxMasterView() {
 
           <div className="flex-1 overflow-y-auto">
             <table className="w-full border-collapse text-left text-xs">
-              <thead className="bg-slate-100 border-b border-slate-200 sticky top-0 z-10 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+              <thead className="bg-secondary/50 border-b border-border sticky top-0 z-10 text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
                 <tr>
-                  <th className="p-2 border border-slate-200 text-center w-20">Code</th>
-                  <th className="p-2 border border-slate-200">Name / Description</th>
+                  <th className="p-2 border border-border text-center w-20">Code</th>
+                  <th className="p-2 border border-border">Name / Description</th>
                 </tr>
               </thead>
-              <tbody className="font-semibold text-slate-700 font-data">
+              <tbody className="font-semibold text-foreground font-data">
                 {filteredTaxes.length === 0 ? (
                   <tr>
-                    <td colSpan={2} className="p-6 text-center text-slate-400 italic font-sans">
+                    <td colSpan={2} className="p-6 text-center text-muted-foreground italic font-sans">
                       No tax records found.
                     </td>
                   </tr>
@@ -306,14 +306,14 @@ export default function TaxMasterView() {
                       <tr 
                         key={t.id}
                         onClick={() => handleSelectRecord(t)}
-                        className={`cursor-pointer border-b border-slate-150 transition-colors ${
+                        className={`cursor-pointer border-b border-border transition-colors ${
                           isSelected 
                             ? 'bg-rose-100/75 text-rose-900 border-l-[3px] border-l-amber-500' 
-                            : 'hover:bg-slate-50'
+                            : 'hover:bg-secondary/20'
                         }`}
                       >
-                        <td className="p-1.5 border border-slate-200 text-center font-data text-amber-700">{t.code}</td>
-                        <td className="p-1.5 border border-slate-200 font-sans font-bold text-slate-800">{t.name}</td>
+                        <td className="p-1.5 border border-border text-center font-data text-amber-700">{t.code}</td>
+                        <td className="p-1.5 border border-border font-sans font-bold text-foreground">{t.name}</td>
                       </tr>
                     );
                   })
@@ -324,7 +324,7 @@ export default function TaxMasterView() {
         </div>
 
         {/* Right Side config form panel */}
-        <div className="col-span-7 bg-white border border-slate-350 rounded-[2px] shadow-sm flex flex-col overflow-hidden">
+        <div className="col-span-7 bg-card border border-border rounded-sm shadow-sm flex flex-col overflow-hidden">
           
           {/* Mockup custom orange/peach banner */}
           <div className="bg-amber-50 border-b border-amber-100 px-4 py-2 flex items-center justify-center shrink-0">
@@ -339,7 +339,7 @@ export default function TaxMasterView() {
                 
                 {/* Tax Type / Code */}
                 <div className="col-span-12 grid grid-cols-12 gap-1 items-center">
-                  <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-3 uppercase">Tax Type</label>
+                  <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-3 uppercase">Tax Type</label>
                   <div className="col-span-3">
                     <input 
                       type="text" 
@@ -357,7 +357,7 @@ export default function TaxMasterView() {
 
                 {/* Tax Desc */}
                 <div className="col-span-12 grid grid-cols-12 gap-1 items-center">
-                  <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-3 uppercase">Tax Desc</label>
+                  <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-3 uppercase">Tax Desc</label>
                   <div className="col-span-8">
                     <input 
                       type="text" 
@@ -375,7 +375,7 @@ export default function TaxMasterView() {
 
                 {/* Tax % and Add Tax % */}
                 <div className="col-span-12 grid grid-cols-12 gap-1 items-center">
-                  <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-3 uppercase">Tax %</label>
+                  <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-3 uppercase">Tax %</label>
                   <div className="col-span-3">
                     <input 
                       type="number" 
@@ -385,7 +385,7 @@ export default function TaxMasterView() {
                       onChange={(e) => handlePrimaryPercentChange(e.target.value)}
                     />
                   </div>
-                  <label className="col-span-2 text-[10px] font-bold text-slate-500 text-right pr-3 uppercase">Add Tax %</label>
+                  <label className="col-span-2 text-[10px] font-bold text-muted-foreground text-right pr-3 uppercase">Add Tax %</label>
                   <div className="col-span-3">
                     <input 
                       type="number" 
@@ -399,7 +399,7 @@ export default function TaxMasterView() {
 
                 {/* Ac Code and name info */}
                 <div className="col-span-12 grid grid-cols-12 gap-1 items-center">
-                  <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-3 uppercase">Ac Code</label>
+                  <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-3 uppercase">Ac Code</label>
                   <div className="col-span-3">
                     <input 
                       type="text" 
@@ -413,7 +413,7 @@ export default function TaxMasterView() {
                     <input 
                       type="text" 
                       placeholder="Ledger Posting Account"
-                      className="erp-input font-sans text-slate-500 bg-slate-50 border-slate-200 select-text" 
+                      className="erp-input font-sans text-muted-foreground bg-secondary/20 border-border select-text" 
                       value={acName}
                       onChange={(e) => setAcName(e.target.value)}
                     />
@@ -424,10 +424,10 @@ export default function TaxMasterView() {
 
               {/* Sub components breakdown table */}
               <div className="pt-2">
-                <span className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+                <span className="text-[9.5px] font-bold text-muted-foreground uppercase tracking-wider block mb-1">
                   Tax Breakdown Components Table
                 </span>
-                <div className="border border-slate-300 rounded-[2px] overflow-hidden shadow-xs max-w-2xl bg-white">
+                <div className="border border-border rounded-sm overflow-hidden shadow-xs max-w-2xl bg-card">
                   <table className="w-full border-collapse text-left text-xs ag-grid-dense-table">
                     <thead>
                       <tr>
@@ -438,11 +438,11 @@ export default function TaxMasterView() {
                         <th className="w-24 text-right">Tax %</th>
                       </tr>
                     </thead>
-                    <tbody className="font-semibold text-slate-700 font-data">
+                    <tbody className="font-semibold text-foreground font-data">
                       {components.map((c, idx) => (
-                        <tr key={idx} className="hover:bg-slate-50/50">
-                          <td className="text-center font-data text-slate-400 bg-slate-50 border-r border-slate-200 p-1">{c.sr}</td>
-                          <td className="p-0.5 border-r border-slate-200">
+                        <tr key={idx} className="hover:bg-secondary/20/50">
+                          <td className="text-center font-data text-muted-foreground bg-secondary/20 border-r border-border p-1">{c.sr}</td>
+                          <td className="p-0.5 border-r border-border">
                             <input
                               type="text"
                               placeholder="e.g. CGST"
@@ -451,7 +451,7 @@ export default function TaxMasterView() {
                               onChange={(e) => handleComponentCellChange(idx, 'tax_type', e.target.value)}
                             />
                           </td>
-                          <td className="p-0.5 border-r border-slate-200">
+                          <td className="p-0.5 border-r border-border">
                             <input
                               type="text"
                               placeholder="e.g. CGST 1.5%"
@@ -460,7 +460,7 @@ export default function TaxMasterView() {
                               onChange={(e) => handleComponentCellChange(idx, 'tax_name', e.target.value)}
                             />
                           </td>
-                          <td className="p-0.5 border-r border-slate-200">
+                          <td className="p-0.5 border-r border-border">
                             <input
                               type="text"
                               placeholder="00085"
@@ -490,19 +490,19 @@ export default function TaxMasterView() {
           </div>
 
           {/* Bottom Button Action bar */}
-          <div className="bg-slate-100 border-t border-slate-300 p-2 flex justify-between items-center shrink-0 select-none">
+          <div className="bg-secondary/50 border-t border-border p-2 flex justify-between items-center shrink-0 select-none">
             <button
               onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-350 text-slate-700 font-bold text-xs uppercase tracking-wider rounded-[2px] shadow-xs transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border text-foreground font-bold text-xs uppercase tracking-wider rounded-sm shadow-xs transition-colors"
             >
-              <Printer className="h-4 w-4 text-slate-500" />
+              <Printer className="h-4 w-4 text-muted-foreground" />
               <span>Print</span>
             </button>
 
             <div className="flex gap-2">
               <button
                 onClick={() => handleSave()}
-                className="flex items-center gap-1.5 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 border border-emerald-700 text-white font-bold text-xs uppercase tracking-wider rounded-[2px] shadow-xs transition-colors"
+                className="flex items-center gap-1.5 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 border border-emerald-700 text-white font-bold text-xs uppercase tracking-wider rounded-sm shadow-xs transition-colors"
               >
                 <Save className="h-4 w-4" />
                 <span>Save</span>
@@ -510,15 +510,15 @@ export default function TaxMasterView() {
 
               <button
                 onClick={handleCancel}
-                className="flex items-center gap-1.5 px-4 py-1.5 bg-white hover:bg-slate-50 border border-slate-350 text-slate-700 font-bold text-xs uppercase tracking-wider rounded-[2px] shadow-xs transition-colors"
+                className="flex items-center gap-1.5 px-4 py-1.5 bg-card hover:bg-secondary/20 border border-border text-foreground font-bold text-xs uppercase tracking-wider rounded-sm shadow-xs transition-colors"
               >
-                <Undo2 className="h-4 w-4 text-slate-500" />
+                <Undo2 className="h-4 w-4 text-muted-foreground" />
                 <span>Cancel</span>
               </button>
 
               <button
                 onClick={handleDeleteRecord}
-                className="flex items-center gap-1.5 px-4 py-1.5 bg-rose-600 hover:bg-rose-700 border border-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded-[2px] shadow-xs transition-colors"
+                className="flex items-center gap-1.5 px-4 py-1.5 bg-rose-600 hover:bg-rose-700 border border-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded-sm shadow-xs transition-colors"
               >
                 <Trash2 className="h-4 w-4" />
                 <span>Delete</span>
@@ -526,7 +526,7 @@ export default function TaxMasterView() {
 
               <button
                 onClick={handleExit}
-                className="flex items-center gap-1.5 px-4 py-1.5 bg-slate-700 hover:bg-slate-800 border border-slate-850 text-white font-bold text-xs uppercase tracking-wider rounded-[2px] shadow-xs transition-colors"
+                className="flex items-center gap-1.5 px-4 py-1.5 bg-primary hover:bg-primary/90 border border-slate-850 text-white font-bold text-xs uppercase tracking-wider rounded-sm shadow-xs transition-colors"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Exit</span>

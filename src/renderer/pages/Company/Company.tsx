@@ -304,18 +304,18 @@ export default function CompanyView() {
   });
 
   return (
-    <div className="p-3 bg-[#eef1f6] h-full overflow-hidden flex flex-col font-sans select-none">
+    <div className="p-3 bg-background h-full overflow-hidden flex flex-col font-sans select-none">
       
       {/* 1. Split Panel Workspace */}
       <div className="flex-1 grid grid-cols-12 gap-3 overflow-hidden min-h-0 pb-2">
         
         {/* LEFT PANEL: Search and Table Records (40% width) */}
-        <div className="col-span-5 bg-white border border-slate-350 rounded-[2px] shadow-sm flex flex-col overflow-hidden">
-          <div className="bg-slate-800 text-slate-100 px-3 py-1.5 border-b border-slate-900 flex justify-between items-center shrink-0">
+        <div className="col-span-5 bg-card border border-border rounded-sm shadow-sm flex flex-col overflow-hidden">
+          <div className="bg-card text-foreground px-3 py-1.5 border-b border-border flex justify-between items-center shrink-0">
             <span className="text-[10px] font-bold uppercase tracking-wider font-luxury">SEARCH RECORD</span>
             <button
               onClick={handleNewRecord}
-              className="flex items-center gap-1 px-2 py-0.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[9px] uppercase tracking-wider rounded-[2px] border border-amber-600 transition-colors"
+              className="flex items-center gap-1 px-2 py-0.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[9px] uppercase tracking-wider rounded-sm border border-amber-600 transition-colors"
             >
               <Plus className="h-3 w-3" />
               <span>New Company</span>
@@ -323,9 +323,9 @@ export default function CompanyView() {
           </div>
 
           {/* Search box input */}
-          <div className="p-2 border-b border-slate-200 bg-slate-50 shrink-0">
-            <div className="flex items-center gap-1.5 bg-white border border-slate-300 rounded-[2px] px-2 py-1 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/20">
-              <Search className="h-3.5 w-3.5 text-slate-400" />
+          <div className="p-2 border-b border-border bg-secondary/20 shrink-0">
+            <div className="flex items-center gap-1.5 surface-premium bg-card px-2 py-1 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/20">
+              <Search className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search by code, name, GSTIN, or phone..."
@@ -339,17 +339,17 @@ export default function CompanyView() {
           {/* Table list of companies */}
           <div className="flex-1 overflow-y-auto">
             <table className="w-full border-collapse text-left text-xs">
-              <thead className="bg-slate-100 border-b border-slate-200 sticky top-0 z-10 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+              <thead className="bg-secondary/50 border-b border-border sticky top-0 z-10 text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
                 <tr>
-                  <th className="p-2 border border-slate-200 text-center w-12">Code</th>
-                  <th className="p-2 border border-slate-200">Name</th>
-                  <th className="p-2 border border-slate-200 text-center w-24">Workspace</th>
+                  <th className="p-2 border border-border text-center w-12">Code</th>
+                  <th className="p-2 border border-border">Name</th>
+                  <th className="p-2 border border-border text-center w-24">Workspace</th>
                 </tr>
               </thead>
-              <tbody className="font-semibold text-slate-700 font-data">
+              <tbody className="font-semibold text-foreground font-data">
                 {filteredCompanies.length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="p-6 text-center text-slate-400 italic font-sans">
+                    <td colSpan={3} className="p-6 text-center text-muted-foreground italic font-sans">
                       No matching company listings.
                     </td>
                   </tr>
@@ -362,15 +362,15 @@ export default function CompanyView() {
                       <tr 
                         key={comp.id}
                         onClick={() => handleSelectRecord(comp)}
-                        className={`cursor-pointer border-b border-slate-150 transition-colors ${
+                        className={`cursor-pointer border-b border-border transition-colors ${
                           isSelected 
                             ? 'bg-rose-100/75 text-rose-900 border-l-[3px] border-l-amber-500' 
-                            : 'hover:bg-slate-50'
+                            : 'hover:bg-secondary/20'
                         }`}
                       >
-                        <td className="p-1.5 border border-slate-200 text-center font-data">{codeLabel}</td>
-                        <td className="p-1.5 border border-slate-200 font-sans font-bold text-slate-800">{comp.name}</td>
-                        <td className="p-1 border border-slate-200 text-center font-sans">
+                        <td className="p-1.5 border border-border text-center font-data">{codeLabel}</td>
+                        <td className="p-1.5 border border-border font-sans font-bold text-foreground">{comp.name}</td>
+                        <td className="p-1 border border-border text-center font-sans">
                           <div className="flex items-center justify-center gap-1.5">
                             {isActiveWorkspace ? (
                               <span className="inline-flex items-center justify-center p-0.5 bg-emerald-500/10 text-emerald-600 rounded-full" title="Active workspace context">
@@ -384,7 +384,7 @@ export default function CompanyView() {
                                     e.stopPropagation();
                                     setSelectedCompany(comp);
                                   }}
-                                  className="px-1.5 py-0.5 bg-slate-100 hover:bg-amber-500 hover:text-white border border-slate-300 rounded-[2px] text-[8.5px] font-bold uppercase transition-colors"
+                                  className="px-1.5 py-0.5 bg-secondary/50 hover:bg-amber-500 hover:text-white border border-border rounded-sm text-[8.5px] font-bold uppercase transition-colors"
                                 >
                                   Open
                                 </button>
@@ -408,7 +408,7 @@ export default function CompanyView() {
                                       }
                                     }
                                   }}
-                                  className="p-0.5 bg-white hover:bg-rose-50 text-rose-500 hover:text-rose-600 border border-slate-300 hover:border-rose-300 rounded-[2px] transition-colors"
+                                  className="p-0.5 bg-card hover:bg-rose-50 text-rose-500 hover:text-rose-600 border border-border hover:border-rose-300 rounded-sm transition-colors"
                                   title="Delete Company"
                                 >
                                   <Trash2 className="h-3 w-3" />
@@ -427,7 +427,7 @@ export default function CompanyView() {
         </div>
 
         {/* RIGHT PANEL: Form Details (60% width) */}
-        <div className="col-span-7 bg-white border border-slate-350 rounded-[2px] shadow-sm flex flex-col overflow-hidden">
+        <div className="col-span-7 bg-card border border-border rounded-sm shadow-sm flex flex-col overflow-hidden">
           
           {/* Header styled orange */}
           <div className="bg-amber-500/15 border-b border-amber-500/30 py-2 text-center shrink-0">
@@ -444,20 +444,20 @@ export default function CompanyView() {
                 <div className="space-y-2.5">
                   {/* Co Code */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Co Code</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Co Code</label>
                     <div className="col-span-3">
                       <input 
                         type="text" 
                         disabled 
                         placeholder={selectedRecord ? 'Loaded' : 'New'} 
-                        className="erp-input bg-slate-50 font-data border-slate-300 text-slate-500" 
+                        className="erp-input bg-secondary/20 font-data border-border text-muted-foreground" 
                       />
                     </div>
                   </div>
 
                   {/* Co Name */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Co Name *</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Co Name *</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -471,7 +471,7 @@ export default function CompanyView() {
 
                   {/* Address 1 */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Address 1</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Address 1</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -484,7 +484,7 @@ export default function CompanyView() {
 
                   {/* Address 2 */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Address 2</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Address 2</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -497,7 +497,7 @@ export default function CompanyView() {
 
                   {/* Address 3 */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Address 3</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Address 3</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -510,7 +510,7 @@ export default function CompanyView() {
 
                   {/* Country */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Country</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Country</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -523,7 +523,7 @@ export default function CompanyView() {
 
                   {/* State */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">State</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">State</label>
                     <div className="col-span-2">
                       <input 
                         type="text" 
@@ -546,7 +546,7 @@ export default function CompanyView() {
 
                   {/* City & Pin Code */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">City</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">City</label>
                     <div className="col-span-3">
                       <input 
                         type="text" 
@@ -555,7 +555,7 @@ export default function CompanyView() {
                         onChange={(e) => setCity(e.target.value)}
                       />
                     </div>
-                    <label className="col-span-2 text-[10px] font-bold text-slate-500 text-right pr-1 uppercase">Pin Code</label>
+                    <label className="col-span-2 text-[10px] font-bold text-muted-foreground text-right pr-1 uppercase">Pin Code</label>
                     <div className="col-span-4">
                       <input 
                         type="text" 
@@ -568,7 +568,7 @@ export default function CompanyView() {
 
                   {/* Phone No & Phone No2 */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Phone No</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Phone No</label>
                     <div className="col-span-3">
                       <input 
                         type="text" 
@@ -577,7 +577,7 @@ export default function CompanyView() {
                         onChange={(e) => setPhone(e.target.value)}
                       />
                     </div>
-                    <label className="col-span-2 text-[10px] font-bold text-slate-500 text-right pr-1 uppercase">Phone No2</label>
+                    <label className="col-span-2 text-[10px] font-bold text-muted-foreground text-right pr-1 uppercase">Phone No2</label>
                     <div className="col-span-4">
                       <input 
                         type="text" 
@@ -590,7 +590,7 @@ export default function CompanyView() {
 
                   {/* Mobile No & Mobile No2 */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Mobile No</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Mobile No</label>
                     <div className="col-span-3">
                       <input 
                         type="text" 
@@ -599,7 +599,7 @@ export default function CompanyView() {
                         onChange={(e) => setMobile(e.target.value)}
                       />
                     </div>
-                    <label className="col-span-2 text-[10px] font-bold text-slate-500 text-right pr-1 uppercase">Mobile No2</label>
+                    <label className="col-span-2 text-[10px] font-bold text-muted-foreground text-right pr-1 uppercase">Mobile No2</label>
                     <div className="col-span-4">
                       <input 
                         type="text" 
@@ -612,7 +612,7 @@ export default function CompanyView() {
 
                   {/* Email */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Email</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Email</label>
                     <div className="col-span-9">
                       <input 
                         type="email" 
@@ -625,7 +625,7 @@ export default function CompanyView() {
 
                   {/* Work Type & Metal Type */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Work Type</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Work Type</label>
                     <div className="col-span-3">
                       <select 
                         className="erp-input font-bold" 
@@ -638,7 +638,7 @@ export default function CompanyView() {
                         <option>Export</option>
                       </select>
                     </div>
-                    <label className="col-span-2 text-[10px] font-bold text-slate-500 text-right pr-1 uppercase">Metal Type</label>
+                    <label className="col-span-2 text-[10px] font-bold text-muted-foreground text-right pr-1 uppercase">Metal Type</label>
                     <div className="col-span-4">
                       <select 
                         className="erp-input font-bold" 
@@ -655,7 +655,7 @@ export default function CompanyView() {
 
                   {/* Report Header & Co Type */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Report Header</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Report Header</label>
                     <div className="col-span-3">
                       <select 
                         className="erp-input font-bold" 
@@ -667,7 +667,7 @@ export default function CompanyView() {
                         <option>Billing Unit</option>
                       </select>
                     </div>
-                    <label className="col-span-2 text-[10px] font-bold text-slate-500 text-right pr-1 uppercase">Co Type</label>
+                    <label className="col-span-2 text-[10px] font-bold text-muted-foreground text-right pr-1 uppercase">Co Type</label>
                     <div className="col-span-4">
                       <input 
                         type="text" 
@@ -683,7 +683,7 @@ export default function CompanyView() {
               {activeFormTab === 'tax' && (
                 <div className="space-y-3">
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">GSTIN Code</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">GSTIN Code</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -696,7 +696,7 @@ export default function CompanyView() {
                   </div>
 
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">PAN Number</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">PAN Number</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -709,7 +709,7 @@ export default function CompanyView() {
                   </div>
 
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">F.Y. Start</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">F.Y. Start</label>
                     <div className="col-span-9">
                       <input 
                         type="date" 
@@ -721,7 +721,7 @@ export default function CompanyView() {
                   </div>
 
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">F.Y. End</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">F.Y. End</label>
                     <div className="col-span-9">
                       <input 
                         type="date" 
@@ -737,7 +737,7 @@ export default function CompanyView() {
               {activeFormTab === 'bank' && (
                 <div className="space-y-3">
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Bank Name</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Bank Name</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -750,7 +750,7 @@ export default function CompanyView() {
                   </div>
 
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Account No</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Account No</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -763,7 +763,7 @@ export default function CompanyView() {
                   </div>
 
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">IFSC Code</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">IFSC Code</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -781,15 +781,15 @@ export default function CompanyView() {
           </div>
 
           {/* Sub Tab Switcher Line */}
-          <div className="bg-slate-100 border-t border-slate-300 h-9 flex items-end px-3 select-none shrink-0">
+          <div className="bg-secondary/50 border-t border-border h-9 flex items-end px-3 select-none shrink-0">
             <div className="flex gap-0.5 h-full items-end">
               <button
                 type="button"
                 onClick={() => setActiveFormTab('company')}
                 className={`px-4 h-7 rounded-t border-t border-x cursor-pointer text-[10px] uppercase font-bold tracking-wider relative top-[1px] ${
                   activeFormTab === 'company'
-                    ? 'bg-white border-slate-350 border-t-amber-500 border-t-2 border-b-white text-slate-800 font-extrabold z-10'
-                    : 'bg-slate-200 border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                    ? 'bg-card border-border border-t-amber-500 border-t-2 border-b-white text-foreground font-extrabold z-10'
+                    : 'bg-secondary border-transparent text-muted-foreground hover:text-foreground hover:bg-secondary/50'
                 }`}
               >
                 Company Detail
@@ -799,8 +799,8 @@ export default function CompanyView() {
                 onClick={() => setActiveFormTab('tax')}
                 className={`px-4 h-7 rounded-t border-t border-x cursor-pointer text-[10px] uppercase font-bold tracking-wider relative top-[1px] ${
                   activeFormTab === 'tax'
-                    ? 'bg-white border-slate-350 border-t-amber-500 border-t-2 border-b-white text-slate-800 font-extrabold z-10'
-                    : 'bg-slate-200 border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                    ? 'bg-card border-border border-t-amber-500 border-t-2 border-b-white text-foreground font-extrabold z-10'
+                    : 'bg-secondary border-transparent text-muted-foreground hover:text-foreground hover:bg-secondary/50'
                 }`}
               >
                 Tax Detail
@@ -810,8 +810,8 @@ export default function CompanyView() {
                 onClick={() => setActiveFormTab('bank')}
                 className={`px-4 h-7 rounded-t border-t border-x cursor-pointer text-[10px] uppercase font-bold tracking-wider relative top-[1px] ${
                   activeFormTab === 'bank'
-                    ? 'bg-white border-slate-350 border-t-amber-500 border-t-2 border-b-white text-slate-800 font-extrabold z-10'
-                    : 'bg-slate-200 border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                    ? 'bg-card border-border border-t-amber-500 border-t-2 border-b-white text-foreground font-extrabold z-10'
+                    : 'bg-secondary border-transparent text-muted-foreground hover:text-foreground hover:bg-secondary/50'
                 }`}
               >
                 Bank Detail
@@ -823,21 +823,21 @@ export default function CompanyView() {
       </div>
 
       {/* 2. BOTTOM ACTION BUTTONS TOOLBAR */}
-      <footer className="bg-slate-100 border border-slate-350 rounded-[2px] p-1.5 flex justify-end gap-2.5 shrink-0 shadow-sm">
+      <footer className="bg-secondary/50 border border-border rounded-sm p-1.5 flex justify-end gap-2.5 shrink-0 shadow-sm">
         
         {/* Print Button */}
         <button
           onClick={handlePrint}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
-          <Printer className="h-4 w-4 text-slate-500" />
+          <Printer className="h-4 w-4 text-muted-foreground" />
           <span>Print</span>
         </button>
 
         {/* Save Button */}
         <button
           onClick={() => handleSave()}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
           <Save className="h-4 w-4 text-emerald-600" />
           <span className="text-emerald-700">Save</span>
@@ -846,7 +846,7 @@ export default function CompanyView() {
         {/* Cancel Button */}
         <button
           onClick={handleCancel}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
           <Undo2 className="h-4 w-4 text-amber-600" />
           <span className="text-amber-700">Cancel</span>
@@ -856,7 +856,7 @@ export default function CompanyView() {
         <button
           onClick={handleDeleteRecord}
           disabled={!selectedRecord}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-rose-50 border border-slate-300 disabled:opacity-40 disabled:hover:bg-white rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-rose-50 border border-border disabled:opacity-40 disabled:hover:bg-card rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
           <Trash2 className="h-4 w-4 text-rose-500" />
           <span className="text-rose-600">Delete</span>
@@ -865,9 +865,9 @@ export default function CompanyView() {
         {/* Exit Button */}
         <button
           onClick={handleExit}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/20 border border-border rounded-sm text-xs font-bold text-foreground uppercase tracking-wide transition-all shadow-xs"
         >
-          <LogOut className="h-4 w-4 text-slate-600" />
+          <LogOut className="h-4 w-4 text-muted-foreground" />
           <span>Exit</span>
         </button>
 

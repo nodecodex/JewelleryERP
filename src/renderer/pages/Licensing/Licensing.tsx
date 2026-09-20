@@ -154,7 +154,7 @@ export default function LicensingView() {
 
   if (!licenseStatus) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 space-y-2 animate-pulse text-slate-500">
+      <div className="flex flex-col items-center justify-center p-8 space-y-2 animate-pulse text-muted-foreground">
         <div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
         <p className="text-xs font-mono font-bold uppercase tracking-wider text-amber-600">Retrieving Hardware Signature...</p>
       </div>
@@ -164,7 +164,7 @@ export default function LicensingView() {
   const showActiveState = licenseStatus.activated || licenseStatus.isTrialActive;
 
   return (
-    <div className="space-y-6 font-sans select-text text-slate-300">
+    <div className="space-y-6 font-sans select-text text-muted-foreground">
 
       {/* Alert banner */}
       <div className={`p-4 rounded-xl border flex items-start gap-3.5 backdrop-blur-md transition-all duration-300 ${licenseStatus.activated
@@ -181,12 +181,12 @@ export default function LicensingView() {
           <ShieldAlert className="h-5 w-5 shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)] animate-pulse" />
         )}
         <div className="text-xs space-y-1 w-full">
-          <p className="font-extrabold uppercase tracking-widest font-luxury text-[11px] text-slate-100">
+          <p className="font-extrabold uppercase tracking-widest font-luxury text-[11px] text-primary-foreground">
             {licenseStatus.activated ? 'Premium Lifetime Active' : licenseStatus.isTrialActive ? 'Active Trial Period' : 'System Secure Lock'}
           </p>
-          <p className="font-medium text-slate-300">{licenseStatus.statusMessage}</p>
+          <p className="font-medium text-muted-foreground">{licenseStatus.statusMessage}</p>
           {licenseStatus.expiryDate && (
-            <p className="font-medium font-data text-[10px] text-slate-400">
+            <p className="font-medium font-data text-[10px] text-muted-foreground">
               Expiration: {new Date(licenseStatus.expiryDate).toLocaleString()}
             </p>
           )}
@@ -197,18 +197,18 @@ export default function LicensingView() {
       <div className="space-y-5">
 
         {/* Device ID Display */}
-        <div className="space-y-1.5 bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 shadow-inner">
-          <label className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Computer Hardware Fingerprint</label>
+        <div className="space-y-1.5 bg-primary/40 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+          <label className="text-[10px] uppercase font-bold text-muted-foreground block tracking-wider">Computer Hardware Fingerprint</label>
           <div className="flex gap-2">
             <input
               type="text"
               readOnly
-              className="w-full bg-slate-900/80 border border-slate-700/80 text-xs font-mono font-medium text-slate-300 px-3 py-2 rounded-lg select-all outline-none focus:ring-1 focus:ring-amber-500/50 transition-all"
+              className="w-full bg-slate-900/80 border border-slate-700/80 text-xs font-mono font-medium text-muted-foreground px-3 py-2 rounded-lg select-all outline-none focus:ring-1 focus:ring-amber-500/50 transition-all"
               value={licenseStatus.deviceId}
             />
             <button
               onClick={handleCopyDeviceId}
-              className="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white text-[10px] font-bold rounded-lg flex items-center gap-1.5 uppercase shrink-0 transition-all shadow-md"
+              className="px-3 py-2 bg-primary hover:bg-slate-600 text-white text-[10px] font-bold rounded-lg flex items-center gap-1.5 uppercase shrink-0 transition-all shadow-md"
               title="Copy Fingerprint ID"
             >
               {copied ? (
@@ -227,7 +227,7 @@ export default function LicensingView() {
         </div>
 
         {/* Tab Controls */}
-        <div className="flex p-1 bg-slate-800/60 rounded-lg border border-slate-700/50 overflow-x-auto shadow-inner">
+        <div className="flex p-1 bg-primary/60 rounded-lg border border-slate-700/50 overflow-x-auto shadow-inner">
           {[
             { id: 'activate', label: 'Activate' },
             { id: 'trial', label: 'Trial Mode' },
@@ -239,7 +239,7 @@ export default function LicensingView() {
               onClick={() => { setActiveTab(tab.id as any); clearMessages(); }}
               className={`flex-1 px-3 py-2 text-[10px] font-bold uppercase tracking-wider rounded-md transition-all duration-300 whitespace-nowrap ${activeTab === tab.id
                 ? 'bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
+                : 'text-muted-foreground hover:text-slate-200 hover:bg-primary/50'
                 }`}
             >
               {tab.label}
@@ -249,7 +249,7 @@ export default function LicensingView() {
 
         {/* Loading Spinner overlay */}
         {isLoading && (
-          <div className="flex items-center justify-center py-6 text-slate-400 space-x-2">
+          <div className="flex items-center justify-center py-6 text-muted-foreground space-x-2">
             <RefreshCw className="h-4 w-4 animate-spin text-amber-505" />
             <span className="text-xs font-mono font-bold uppercase">Processing...</span>
           </div>
@@ -262,13 +262,13 @@ export default function LicensingView() {
             {/* 1. ACTIVATE TAB */}
             {activeTab === 'activate' && (
               <form onSubmit={handleActivate} className="space-y-4">
-                <p className="text-slate-400 leading-relaxed text-[11px]">
+                <p className="text-muted-foreground leading-relaxed text-[11px]">
                   If you have purchased a premium license, enter the license key signature to register your workstation.
                 </p>
                 <div className="space-y-1.5">
-                  <label className="font-bold text-slate-300 text-xs tracking-wide">License Key Signature</label>
+                  <label className="font-bold text-muted-foreground text-xs tracking-wide">License Key Signature</label>
                   <div className="flex items-center bg-slate-900/80 border border-slate-700/80 rounded-lg px-3 py-2.5 focus-within:border-amber-500/50 focus-within:ring-1 focus-within:ring-amber-500/50 transition-all shadow-inner">
-                    <Key className="h-4 w-4 text-slate-500 shrink-0 mr-2" />
+                    <Key className="h-4 w-4 text-muted-foreground shrink-0 mr-2" />
                     <input
                       type="text"
                       required
@@ -282,7 +282,7 @@ export default function LicensingView() {
                 <button
                   type="submit"
                   disabled={licenseStatus.activated}
-                  className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:from-slate-700 disabled:to-slate-800 disabled:text-slate-500 text-slate-950 font-extrabold uppercase tracking-wider rounded-lg shadow-[0_4px_14px_0_rgba(245,158,11,0.39)] disabled:shadow-none transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+                  className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:from-slate-700 disabled:to-slate-800 disabled:text-muted-foreground text-slate-950 font-extrabold uppercase tracking-wider rounded-lg shadow-[0_4px_14px_0_rgba(245,158,11,0.39)] disabled:shadow-none transition-all transform hover:-translate-y-0.5 active:translate-y-0"
                 >
                   {licenseStatus.activated ? 'License Already Verified' : 'Activate Commercial License'}
                 </button>
@@ -292,7 +292,7 @@ export default function LicensingView() {
             {/* 2. TRIAL TAB */}
             {activeTab === 'trial' && (
               <div className="space-y-4">
-                <p className="text-slate-400 leading-relaxed text-[11px]">
+                <p className="text-muted-foreground leading-relaxed text-[11px]">
                   Start a free trial to evaluate features offline for 3 days. After expiration, licensing is mandatory.
                 </p>
 
@@ -300,13 +300,13 @@ export default function LicensingView() {
                   <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl text-center space-y-2 shadow-inner">
                     <Clock className="h-8 w-8 text-amber-500 mx-auto animate-pulse drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
                     <p className="font-bold text-amber-400 text-sm tracking-wide">Your trial is active!</p>
-                    <p className="text-slate-400 font-medium text-[10px] tracking-wider uppercase">Expires on: {new Date(licenseStatus.expiryDate).toLocaleDateString()}</p>
+                    <p className="text-muted-foreground font-medium text-[10px] tracking-wider uppercase">Expires on: {new Date(licenseStatus.expiryDate).toLocaleDateString()}</p>
                   </div>
                 ) : (
                   <button
                     onClick={handleStartTrial}
                     disabled={licenseStatus.activated}
-                    className="w-full py-2.5 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white font-extrabold uppercase tracking-wider rounded-lg shadow-md border border-slate-600 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+                    className="w-full py-2.5 bg-primary hover:bg-slate-600 disabled:bg-primary disabled:text-muted-foreground text-white font-extrabold uppercase tracking-wider rounded-lg shadow-md border border-slate-600 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
                   >
                     Start 3-Day Free Trial
                   </button>
@@ -317,12 +317,12 @@ export default function LicensingView() {
             {/* 3. RECOVER TAB */}
             {activeTab === 'recover' && (
               <form onSubmit={handleRecover} className="space-y-4">
-                <p className="text-slate-400 leading-relaxed text-[11px]">
+                <p className="text-muted-foreground leading-relaxed text-[11px]">
                   Formatted your computer or reinstalled Windows? Restore your active license by matching physical hardware components.
                 </p>
-                <div className="space-y-3 bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                <div className="space-y-3 bg-primary/40 p-4 rounded-xl border border-slate-700/50 shadow-inner">
                   <div className="space-y-1.5">
-                    <label className="font-bold text-slate-300 text-xs tracking-wide">Enter Original License Key</label>
+                    <label className="font-bold text-muted-foreground text-xs tracking-wide">Enter Original License Key</label>
                     <input
                       type="text"
                       placeholder="SPERP-XXXX-XXXX-XXXX-XXXX"
@@ -333,11 +333,11 @@ export default function LicensingView() {
                   </div>
                   <div className="relative flex py-2 items-center">
                     <div className="flex-grow border-t border-slate-700/80"></div>
-                    <span className="flex-shrink mx-3 text-[9px] text-slate-500 font-bold uppercase tracking-widest">Or Registered Contact</span>
+                    <span className="flex-shrink mx-3 text-[9px] text-muted-foreground font-bold uppercase tracking-widest">Or Registered Contact</span>
                     <div className="flex-grow border-t border-slate-700/80"></div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="font-bold text-slate-300 text-xs tracking-wide">Registered Mobile Number</label>
+                    <label className="font-bold text-muted-foreground text-xs tracking-wide">Registered Mobile Number</label>
                     <input
                       type="text"
                       placeholder="+91 98765 43210"
@@ -359,12 +359,12 @@ export default function LicensingView() {
             {/* 4. TRANSFER TAB */}
             {activeTab === 'transfer' && (
               <form onSubmit={handleTransfer} className="space-y-3">
-                <p className="text-slate-500 italic leading-relaxed text-[11px]">
+                <p className="text-muted-foreground italic leading-relaxed text-[11px]">
                   Bought a new computer? Request a license transfer. Requests are capped at 2 resets per year and require Admin review.
                 </p>
                 <div className="space-y-2">
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-600">Active License Key</label>
+                    <label className="font-bold text-muted-foreground">Active License Key</label>
                     <input
                       type="text"
                       required
@@ -375,7 +375,7 @@ export default function LicensingView() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-600">Reason for Hardware Change</label>
+                    <label className="font-bold text-muted-foreground">Reason for Hardware Change</label>
                     <textarea
                       required
                       rows={2}
@@ -388,7 +388,7 @@ export default function LicensingView() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-2 bg-slate-850 hover:bg-slate-750 text-white font-extrabold uppercase rounded shadow-sm border border-slate-900 transition-all"
+                  className="w-full py-2 bg-slate-850 hover:bg-slate-750 text-white font-extrabold uppercase rounded shadow-sm border border-border transition-all"
                 >
                   Submit Device Transfer Request
                 </button>
@@ -398,28 +398,28 @@ export default function LicensingView() {
             {/* 5. SUPPORT TAB */}
             {activeTab === 'support' && (
               <div className="space-y-4">
-                <p className="text-slate-400 leading-relaxed text-[11px]">
+                <p className="text-muted-foreground leading-relaxed text-[11px]">
                   Encountered an issue or blocked by hardware limits? Get in touch with our enterprise licensing desk.
                 </p>
 
-                <div className="divide-y divide-slate-700/50 bg-slate-800/40 p-3 rounded-xl border border-slate-700/50 text-[11px] shadow-inner">
-                  <div className="py-2.5 flex items-center space-x-3 px-2 hover:bg-slate-700/30 transition-colors rounded-t-lg">
+                <div className="divide-y divide-slate-700/50 bg-primary/40 p-3 rounded-xl border border-slate-700/50 text-[11px] shadow-inner">
+                  <div className="py-2.5 flex items-center space-x-3 px-2 hover:bg-primary/30 transition-colors rounded-t-lg">
                     <div className="bg-amber-500/20 p-1.5 rounded-md">
                       <Phone className="h-4 w-4 text-amber-500 shrink-0" />
                     </div>
-                    <span className="text-slate-400">Support Phone: <strong className="text-slate-200 text-xs tracking-wide ml-1">+91 99000-88776</strong></span>
+                    <span className="text-muted-foreground">Support Phone: <strong className="text-slate-200 text-xs tracking-wide ml-1">+91 99000-88776</strong></span>
                   </div>
-                  <div className="py-2.5 flex items-center space-x-3 px-2 hover:bg-slate-700/30 transition-colors">
+                  <div className="py-2.5 flex items-center space-x-3 px-2 hover:bg-primary/30 transition-colors">
                     <div className="bg-blue-500/20 p-1.5 rounded-md">
                       <Mail className="h-4 w-4 text-blue-400 shrink-0" />
                     </div>
-                    <span className="text-slate-400">Support Email: <strong className="text-slate-200 tracking-wide ml-1">licensing@SwarnProERP.com</strong></span>
+                    <span className="text-muted-foreground">Support Email: <strong className="text-slate-200 tracking-wide ml-1">licensing@SwarnProERP.com</strong></span>
                   </div>
-                  <div className="py-2.5 flex items-center space-x-3 px-2 hover:bg-slate-700/30 transition-colors rounded-b-lg">
+                  <div className="py-2.5 flex items-center space-x-3 px-2 hover:bg-primary/30 transition-colors rounded-b-lg">
                     <div className="bg-emerald-500/20 p-1.5 rounded-md">
                       <Laptop className="h-4 w-4 text-emerald-400 shrink-0" />
                     </div>
-                    <span className="text-slate-400">Verification Server: <strong className="text-emerald-400/90 font-mono tracking-wide ml-1">https://jewelleryerp-8l4k.onrender.com</strong></span>
+                    <span className="text-muted-foreground">Verification Server: <strong className="text-emerald-400/90 font-mono tracking-wide ml-1">https://jewellery-erp-pi.vercel.app</strong></span>
                   </div>
                 </div>
               </div>

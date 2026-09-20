@@ -4,50 +4,58 @@
 @config "../../tailwind.config.js";
 @custom-variant dark (&:where(.dark, .dark *));
 
-
 @layer base {
   :root {
     /* Premium Surface Palette: Light Mode */
-    --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
+    --background: 216 20% 95%; /* #eef1f6 */
+    --foreground: 224 71% 10%; /* #070D18 */
     
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card: 0 0% 100%; /* #ffffff */
+    --card-foreground: 224 71% 10%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 224 71% 10%;
     
-    /* Rose/Champagne Gold Primary */
-    --primary: 35 45% 45%;
-    --primary-foreground: 0 0% 100%;
+    /* Luxury Gold Primary */
+    --primary: 43 61% 53%; /* #d4af37 */
+    --primary-foreground: 224 71% 10%;
     
     /* Sidebar: Deep Navy Luxe */
-    --sidebar-bg: 224 71% 4%;
-    --sidebar-text: 215 20% 80%;
-    --sidebar-hover: 224 59% 10%;
-    --sidebar-border: 224 59% 2%;
+    --sidebar-bg: 224 71% 8%; /* #070D18 */
+    --sidebar-text: 215 20% 85%;
+    --sidebar-hover: 224 71% 14%;
+    --sidebar-border: 224 71% 5%;
     
     --secondary: 214 32% 91%;
     --secondary-foreground: 222 47% 11%;
     
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215 16% 47%;
+    --muted-foreground: 215 16% 40%;
     
     --accent: 210 40% 96.1%;
     --accent-foreground: 222 47% 11%;
     
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 224 71% 10%;
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 20% 98%;
     
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 35 45% 45%;
+    --info: 212 96% 47%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 214 32% 80%; /* Stronger border for visibility */
+    --input: 214 32% 80%; /* Stronger border for inputs */
+    --ring: 43 61% 53%;
     
-    --radius: 8px; /* Standardized Windows 11 roundedness */
+    --radius: 4px; /* Flatter, professional desktop edges */
   }
 
   .dark {
-    /* Premium Surface Palette: Dark Mode */
+    /* Premium Surface Palette: Dark Mode (Optional but maintained) */
     --background: 224 71% 4%;
     --foreground: 210 20% 98%;
     
@@ -57,7 +65,7 @@
     --popover: 222 47% 7%;
     --popover-foreground: 210 20% 98%;
     
-    --primary: 38 55% 65%; /* Soft Champagne Gold */
+    --primary: 43 61% 53%;
     --primary-foreground: 222 47% 11%;
     
     --secondary: 222 47% 15%;
@@ -72,9 +80,9 @@
     --destructive: 0 62% 30%;
     --destructive-foreground: 210 20% 98%;
     
-    --border: 217 33% 12%;
-    --input: 217 33% 12%;
-    --ring: 38 55% 65%;
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 43 61% 53%;
 
     --sidebar-bg: 224 71% 2%;
     --sidebar-text: 215 20% 75%;
@@ -94,25 +102,43 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  
+  /* Headings Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.015em;
+  }
+  
+  h1.brand-title {
+    font-family: 'Cinzel', serif;
+  }
 }
 
 @layer base {
-  /* Redesigned Form Elements: Modern Desktop Height & Depth */
+  /* Forms & Inputs: Desktop-first, explicit borders, no clipping */
   input[type="text"],
   input[type="number"],
+  input[type="password"],
   input[type="date"],
+  input[type="email"],
   select,
   textarea {
     background-color: hsl(var(--card));
-    border: 1.5px solid hsl(var(--border));
+    border: 1px solid hsl(var(--border));
     color: hsl(var(--foreground));
     border-radius: var(--radius);
     font-size: 13px;
-    padding: 6px 12px;
-    height: 32px; /* Redesigned for standard desktop ergonomics */
+    padding: 6px 10px;
+    height: 32px;
     line-height: 1.5;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); /* Slight inset for input depth */
+  }
+
+  textarea {
+    min-height: 60px;
+    resize: vertical;
   }
 
   select option {
@@ -120,25 +146,27 @@
     color: hsl(var(--foreground));
   }
 
-  input[type="text"]:focus,
-  input[type="number"]:focus,
-  input[type="date"]:focus,
+  input:focus,
   select:focus,
   textarea:focus {
     outline: none;
     border-color: hsl(var(--primary));
-    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15);
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2), inset 0 1px 2px rgba(0,0,0,0.02);
   }
 
-  input[type="text"]:disabled,
-  input[type="number"]:disabled,
-  input[type="date"]:disabled,
+  input:disabled,
   select:disabled,
   textarea:disabled {
-    opacity: 0.5;
-    background-color: hsl(var(--muted) / 0.5);
+    opacity: 0.6;
+    background-color: hsl(var(--muted));
     cursor: not-allowed;
-    border-style: dashed;
+    border-color: hsl(var(--border));
+  }
+  
+  /* Placeholders clearly visible but distinct */
+  ::placeholder {
+    color: hsl(var(--muted-foreground) / 0.6);
+    font-weight: 400;
   }
 }
 
@@ -152,7 +180,7 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-/* Custom Scrollbar Styles: Minimalist Windows 11 */
+/* Custom Scrollbar Styles: Minimalist Professional */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -163,29 +191,15 @@ input[type="number"] {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--foreground) / 0.1);
-  border-radius: 20px;
-  border: 2px solid transparent;
-  background-clip: content-box;
+  background-color: hsl(var(--foreground) / 0.15);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: hsl(var(--foreground) / 0.2);
+  background-color: hsl(var(--foreground) / 0.3);
 }
 
-/* Premium Keyboard Shortcuts Display */
-.keyboard-key {
-  border: 1px solid hsl(var(--border));
-  background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--secondary) / 0.5) 100%);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  color: hsl(var(--foreground) / 0.8);
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-}
-
+/* Typography Utilities */
 .font-luxury {
   font-family: 'Cinzel', serif;
 }
@@ -194,59 +208,50 @@ input[type="number"] {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Dropdown Menu styling for Desktop Top Bar */
-.menu-dropdown {
-  position: relative;
-}
-
-.menu-dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  min-width: 220px;
-  background-color: hsl(var(--card));
+/* Keyboard Shortcuts Display */
+.keyboard-key {
   border: 1px solid hsl(var(--border));
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  z-index: 100;
+  background: hsl(var(--card));
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: hsl(var(--foreground) / 0.8);
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Button System */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 font-semibold transition-all focus:outline-none select-none;
+  height: 32px;
   border-radius: var(--radius);
-  padding: 6px;
-  margin-top: 4px;
-  backdrop-filter: blur(8px);
-}
-
-.menu-dropdown:hover .menu-dropdown-content {
-  display: block;
-}
-
-.menu-dropdown-item {
-  width: 100%;
-  text-align: left;
-  padding: 8px 12px;
+  padding: 0 16px;
   font-size: 13px;
-  font-weight: 500;
-  color: hsl(var(--foreground));
-  border-radius: calc(var(--radius) - 2px);
-  transition: all 0.15s ease;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
-
-.menu-dropdown-item:hover {
-  background-color: hsl(var(--primary) / 0.1);
-  color: hsl(var(--primary));
+.btn:disabled {
+  @apply opacity-50 cursor-not-allowed;
 }
-
-.menu-divider {
-  height: 1px;
-  background-color: hsl(var(--border));
-  margin: 6px 4px;
+.btn-primary {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm;
+}
+.btn-secondary {
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border/50 shadow-sm;
+}
+.btn-destructive {
+  @apply bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm;
+}
+.btn-ghost {
+  @apply bg-transparent hover:bg-secondary text-foreground hover:text-foreground;
+}
+.btn-icon {
+  @apply p-0 w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors;
 }
 
 /* Redesigned ERP Table: Scan-first High Density */
 .erp-table-container {
-  @apply rounded-lg border border-border bg-card overflow-hidden;
+  @apply rounded border border-border bg-card overflow-hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 }
 
 .ag-grid-dense-table {
@@ -256,79 +261,66 @@ input[type="number"] {
 }
 
 .ag-grid-dense-table th {
-  @apply bg-slate-50/50 dark:bg-slate-900/50 text-foreground/75 font-semibold;
+  @apply bg-slate-50 dark:bg-slate-900 text-foreground font-semibold;
   border-bottom: 1px solid hsl(var(--border));
-  padding: 10px 16px;
+  padding: 8px 12px;
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
   text-align: left;
 }
 
 .ag-grid-dense-table td {
-  border-bottom: 0.5px solid hsl(var(--border) / 0.5);
-  padding: 8px 16px;
+  border-bottom: 1px solid hsl(var(--border) / 0.5);
+  padding: 6px 12px;
   vertical-align: middle;
   color: hsl(var(--foreground));
-  transition: all 0.1s ease;
 }
 
 .ag-grid-dense-table tr:last-child td {
   border-bottom: none;
 }
 
+.ag-grid-dense-table tr:nth-child(even) td {
+  background-color: hsl(var(--secondary) / 0.2);
+}
+
 .ag-grid-dense-table tr:hover td {
-  background-color: hsl(var(--primary) / 0.03);
+  background-color: hsl(var(--primary) / 0.05);
 }
 
 .ag-grid-dense-table tr.selected td {
-  background-color: hsl(var(--primary) / 0.08);
-  @apply font-semibold;
+  background-color: hsl(var(--primary) / 0.1);
+  border-left: 3px solid hsl(var(--primary));
+  padding-left: 9px; /* Compensate for border */
 }
 
-/* Modern ERP Typography Utilities */
+/* Modern ERP Typography & Form Utilities */
 .erp-label {
-  @apply text-xxs font-bold text-muted-foreground uppercase tracking-wider mb-1.5 block;
+  @apply text-[11px] font-semibold text-foreground/80 block mb-1 uppercase tracking-wide;
 }
 
-.erp-input {
-  background-color: hsl(var(--card));
-  border: 1.5px solid hsl(var(--border));
-  color: hsl(var(--foreground));
-  border-radius: var(--radius);
-  font-size: 13px;
-  padding: 6px 12px;
-  height: 32px;
-  line-height: 1.5;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  width: 100%;
+.erp-input-group {
+  @apply flex flex-col gap-1;
 }
 
-.erp-input:focus {
-  outline: none;
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15);
+/* Fixed column grids for predictable layouts */
+.erp-grid-panel {
+  @apply grid grid-cols-12 gap-4 p-4;
 }
 
-.erp-input-dense {
-  height: 28px !important;
-  padding: 2px 8px !important;
-  font-size: 11px !important;
+.erp-panel-header {
+  @apply text-sm font-bold text-foreground border-b border-border pb-2 mb-4 uppercase tracking-wider;
+  font-family: 'Cinzel', serif;
 }
 
-/* Smooth Interactive Elements */
-button, a, input, select, textarea, tr {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Premium Surface Shadows */
+/* Premium Surface Shadows & Containers */
 .surface-premium {
-  @apply bg-card border border-border shadow-premium rounded-lg;
+  @apply bg-card border border-border shadow-sm rounded-md;
 }
 
 .surface-elevated {
-  @apply bg-card border border-border shadow-elevated rounded-xl;
+  @apply bg-card border border-border shadow-md rounded-md;
 }
 
 .no-print {
@@ -343,14 +335,10 @@ button, a, input, select, textarea, tr {
     background: white !important;
     color: black !important;
   }
-  
-  /* Suppress browser headers, footers and margins */
   @page {
     margin: 0 !important;
     size: auto;
   }
-
-  /* Jewellery Tag layout styles */
   .jewellery-tag-container {
     width: 90mm;
     height: 12mm;
@@ -365,7 +353,6 @@ button, a, input, select, textarea, tr {
     page-break-inside: avoid;
     background: white;
   }
-
   .jewellery-tag-left-flap {
     width: 42mm;
     height: 100%;
@@ -375,7 +362,6 @@ button, a, input, select, textarea, tr {
     align-items: center;
     border-right: 1px dashed #ccc;
   }
-
   .jewellery-tag-right-flap {
     width: 42mm;
     height: 100%;
@@ -384,9 +370,62 @@ button, a, input, select, textarea, tr {
     justify-content: center;
     align-items: center;
   }
-
-  /* Hide everything else during printing if printing in Tag Mode */
   body.print-tag-mode .no-print {
     display: none !important;
   }
+}
+
+/* Header Menu Dropdown Styles */
+.menu-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  z-index: 100;
+  padding: 4px 0;
+  border-radius: var(--radius);
+  margin-top: 4px;
+}
+
+.menu-dropdown:hover .menu-dropdown-content,
+.menu-dropdown:focus-within .menu-dropdown-content {
+  display: block;
+  animation: fade-in 0.15s ease-out forwards;
+}
+
+.menu-dropdown-item {
+  width: 100%;
+  text-align: left;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.menu-dropdown-item:hover {
+  background-color: hsl(var(--secondary));
+}
+
+.menu-divider {
+  height: 1px;
+  background-color: hsl(var(--border));
+  margin: 4px 0;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }

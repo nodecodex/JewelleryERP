@@ -191,23 +191,23 @@ export default function BillingView() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-slate-900 overflow-hidden">
+    <div className="flex flex-col h-full bg-background overflow-hidden transition-colors duration-200">
       {/* SCREEN HEADER */}
-      <div className="px-8 py-6 border-b border-border flex items-center justify-between shrink-0">
+      <div className="px-6 py-4 border-b border-border flex items-center justify-between shrink-0 bg-card text-foreground shadow-sm">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <ShoppingCart className="h-6 w-6 text-primary" />
-            Sales Billing Desk
+          <h2 className="text-lg font-bold tracking-wide font-luxury text-primary flex items-center gap-2">
+            <ShoppingCart className="h-5 w-5" />
+            SALES BILLING DESK
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">Create and manage jewelry sales invoices with real-time ledger posting.</p>
+          <p className="text-[12px] text-muted-foreground mt-0.5">Create and manage jewelry sales invoices with real-time ledger posting.</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex bg-secondary p-1 rounded-xl border border-border">
+          <div className="flex bg-secondary p-1 rounded border border-border shadow-sm">
             {['GST', 'Retail', 'Estimate'].map((type) => (
               <button
                 key={type}
                 onClick={() => setInvoiceType(type as any)}
-                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${invoiceType === type ? 'bg-white dark:bg-slate-800 shadow-premium text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`px-4 py-1 text-[12px] font-bold rounded transition-all ${invoiceType === type ? 'bg-card shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 {type}
               </button>
@@ -216,38 +216,38 @@ export default function BillingView() {
         </div>
       </div>
 
-      <div className="flex-1 flex overflow-hidden p-8 gap-8">
+      <div className="flex-1 flex overflow-hidden p-6 gap-6 custom-scrollbar">
         {/* LEFT COLUMN: ITEM ENTRY & LIST */}
         <div className="flex-1 flex flex-col gap-6 overflow-hidden">
           
           {/* CONFIG & BARCODE */}
-          <div className="grid grid-cols-12 gap-6 items-end">
+          <div className="grid grid-cols-12 gap-4 items-end">
             <div className="col-span-3">
               <label className="erp-label">Invoice #</label>
               <div className="relative">
-                <input type="text" disabled className="w-full !bg-secondary/50 !border-dashed font-data font-bold text-primary" value={invoiceNumber} />
-                <FileText className="absolute right-3 top-2 h-4 w-4 text-primary/30" />
+                <input type="text" disabled className="!bg-secondary/50 !border-dashed font-data font-bold text-primary" value={invoiceNumber} />
+                <FileText className="absolute right-2 top-1.5 h-4 w-4 text-primary/40" />
               </div>
             </div>
             <div className="col-span-3">
               <label className="erp-label">Bill Date</label>
-              <input type="date" className="w-full font-data" value={invoiceDate} onChange={(e) => setInvoiceDate(e.target.value)} />
+              <input type="date" className="font-data" value={invoiceDate} onChange={(e) => setInvoiceDate(e.target.value)} />
             </div>
             <div className="col-span-6">
               <label className="erp-label">Scan Jewelry Tag</label>
               <form onSubmit={handleBarcodeScan} className="flex gap-2">
                 <div className="relative flex-1 group">
-                  <Barcode className="absolute left-3 top-2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <Barcode className="absolute left-2.5 top-1.5 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                   <input
                     ref={barcodeInputRef}
                     type="text"
                     placeholder="Scan tag or type barcode ID..."
-                    className="w-full pl-10 font-data font-bold"
+                    className="pl-9 font-data font-bold"
                     value={barcodeQuery}
                     onChange={(e) => setBarcodeQuery(e.target.value)}
                   />
                 </div>
-                <button type="submit" className="px-6 bg-secondary hover:bg-primary hover:text-white border border-border font-bold text-xs uppercase rounded-lg transition-all">
+                <button type="submit" className="btn btn-secondary">
                   Scan
                 </button>
               </form>
@@ -255,27 +255,27 @@ export default function BillingView() {
           </div>
 
           {/* MANUAL ENTRY */}
-          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-border p-5">
-            <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] block mb-4">Manual Line Input</span>
-            <div className="grid grid-cols-12 gap-4 items-end">
+          <div className="surface-premium bg-card p-4">
+            <span className="text-[10px] font-bold text-primary uppercase tracking-widest block mb-3 font-luxury">Manual Line Input</span>
+            <div className="grid grid-cols-12 gap-3 items-end">
               <div className="col-span-4">
                 <label className="erp-label">Product Name / Description</label>
-                <input type="text" placeholder="e.g. 22K Gold Bangles" className="w-full" value={manualItem.product_name} onChange={(e) => setManualItem({ ...manualItem, product_name: e.target.value })} />
+                <input type="text" placeholder="e.g. 22K Gold Bangles" value={manualItem.product_name} onChange={(e) => setManualItem({ ...manualItem, product_name: e.target.value })} />
               </div>
               <div className="col-span-2">
                 <label className="erp-label">Net Wt (g)</label>
-                <input type="number" step="0.001" placeholder="0.000" className="w-full text-right font-data" value={manualItem.net_weight || ''} onChange={(e) => setManualItem({ ...manualItem, net_weight: parseFloat(e.target.value) || 0 })} />
+                <input type="number" step="0.001" placeholder="0.000" className="text-right font-data" value={manualItem.net_weight || ''} onChange={(e) => setManualItem({ ...manualItem, net_weight: parseFloat(e.target.value) || 0 })} />
               </div>
               <div className="col-span-2">
                 <label className="erp-label">Labour (₹)</label>
-                <input type="number" placeholder="0" className="w-full text-right font-data" value={manualItem.making_charges || ''} onChange={(e) => setManualItem({ ...manualItem, making_charges: parseFloat(e.target.value) || 0 })} />
+                <input type="number" placeholder="0" className="text-right font-data" value={manualItem.making_charges || ''} onChange={(e) => setManualItem({ ...manualItem, making_charges: parseFloat(e.target.value) || 0 })} />
               </div>
               <div className="col-span-2">
                 <label className="erp-label">Rate /g</label>
-                <input type="number" placeholder="0" className="w-full text-right font-data" value={manualItem.rate || ''} onChange={(e) => setManualItem({ ...manualItem, rate: parseFloat(e.target.value) || 0 })} />
+                <input type="number" placeholder="0" className="text-right font-data" value={manualItem.rate || ''} onChange={(e) => setManualItem({ ...manualItem, rate: parseFloat(e.target.value) || 0 })} />
               </div>
               <div className="col-span-2">
-                <button onClick={handleAddManualItem} className="w-full h-8 bg-primary text-white font-bold rounded-lg text-xs uppercase shadow-premium hover:shadow-elevated transition-all active:scale-95">
+                <button onClick={handleAddManualItem} className="btn btn-primary w-full shadow-premium">
                   Add Item
                 </button>
               </div>
@@ -283,7 +283,7 @@ export default function BillingView() {
           </div>
 
           {/* ITEM LIST */}
-          <div className="flex-1 erp-table-container">
+          <div className="flex-1 erp-table-container custom-scrollbar overflow-y-auto">
             <table className="ag-grid-dense-table">
               <thead>
                 <tr>
@@ -292,30 +292,30 @@ export default function BillingView() {
                   <th className="text-right">Making Chg</th>
                   <th className="text-right">Metal Rate</th>
                   <th className="text-right">Line Total</th>
-                  <th className="w-12"></th>
+                  <th className="w-10"></th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-slate-900 font-medium">
+              <tbody>
                 {cart.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-20 text-center">
-                      <div className="flex flex-col items-center gap-2 opacity-20">
-                        <ShoppingCart className="h-12 w-12" />
-                        <p className="text-sm font-bold uppercase tracking-widest">No Ornaments in Cart</p>
+                    <td colSpan={6} className="py-16 text-center bg-card">
+                      <div className="flex flex-col items-center gap-2 opacity-30">
+                        <ShoppingCart className="h-10 w-10 text-muted-foreground" />
+                        <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">No Ornaments in Cart</p>
                       </div>
                     </td>
                   </tr>
                 ) : (
                   cart.map((item, index) => (
                     <tr key={index} className="group">
-                      <td className="font-semibold">{item.product_name}</td>
+                      <td className="font-semibold text-[12px]">{item.product_name}</td>
                       <td className="text-right font-data text-muted-foreground">{item.net_weight.toFixed(3)}g</td>
                       <td className="text-right font-data text-muted-foreground">₹{item.making_charges.toLocaleString()}</td>
                       <td className="text-right font-data text-muted-foreground">₹{item.rate.toLocaleString()}</td>
                       <td className="text-right font-bold text-foreground">₹{Math.round(item.subtotal).toLocaleString()}</td>
                       <td className="text-center">
-                        <button onClick={() => setCart(cart.filter((_, i) => i !== index))} className="p-1.5 text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all">
-                          <Trash className="h-4 w-4" />
+                        <button onClick={() => setCart(cart.filter((_, i) => i !== index))} className="btn-icon w-6 h-6 hover:text-destructive hover:bg-destructive/10 mx-auto">
+                          <Trash className="h-3.5 w-3.5" />
                         </button>
                       </td>
                     </tr>
@@ -327,46 +327,46 @@ export default function BillingView() {
         </div>
 
         {/* RIGHT COLUMN: SUMMARY & POSTING */}
-        <div className="w-96 flex flex-col gap-6 shrink-0 overflow-y-auto">
+        <div className="w-80 flex flex-col gap-5 shrink-0 overflow-y-auto custom-scrollbar">
           
           {/* CUSTOMER LEDGER */}
-          <div className="surface-premium p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h4 className="text-sm font-bold tracking-tight flex items-center gap-2">
+          <div className="surface-premium bg-card p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-[13px] font-bold uppercase tracking-wider font-luxury flex items-center gap-2">
                 <User className="h-4 w-4 text-primary" /> Customer Account
               </h4>
               <button onClick={() => setNewCustForm(!newCustForm)} className="text-[10px] font-extrabold text-primary uppercase tracking-widest hover:underline">
-                {newCustForm ? 'Cancel' : '+ Create New'}
+                {newCustForm ? 'Cancel' : '+ New'}
               </button>
             </div>
 
             {newCustForm ? (
-              <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="space-y-3">
                 <div>
                   <label className="erp-label">Full Name</label>
-                  <input type="text" placeholder="Customer name..." className="w-full" value={newCustData.name} onChange={(e) => setNewCustData({ ...newCustData, name: e.target.value })} />
+                  <input type="text" placeholder="Customer name..." value={newCustData.name} onChange={(e) => setNewCustData({ ...newCustData, name: e.target.value })} />
                 </div>
                 <div>
                   <label className="erp-label">Mobile</label>
-                  <input type="text" placeholder="Contact number..." className="w-full" value={newCustData.mobile} onChange={(e) => setNewCustData({ ...newCustData, mobile: e.target.value })} />
+                  <input type="text" placeholder="Contact number..." value={newCustData.mobile} onChange={(e) => setNewCustData({ ...newCustData, mobile: e.target.value })} />
                 </div>
                 <button onClick={async () => {
                   const created = await createCustomer({ company_id: selectedCompany!.id, ...newCustData, loyalty_points: 0 });
                   setSelectedCustomer(created);
                   setNewCustForm(false);
-                }} className="w-full py-2 bg-slate-900 text-white rounded-lg text-xs font-bold uppercase">Create & Associate</button>
+                }} className="btn btn-secondary w-full border-border">Create & Link</button>
               </div>
             ) : (
               <div>
                 <label className="erp-label">Select Ledger</label>
-                <select className="w-full font-bold text-sm" value={selectedCustomer?.id || ''} onChange={(e) => setSelectedCustomer(customers.find(c => c.id === e.target.value) || null)}>
+                <select className="font-bold text-[12px]" value={selectedCustomer?.id || ''} onChange={(e) => setSelectedCustomer(customers.find(c => c.id === e.target.value) || null)}>
                   <option value="">Walk-in Cash Customer</option>
                   {customers.map(c => <option key={c.id} value={c.id}>{c.name} ({c.mobile})</option>)}
                 </select>
                 {selectedCustomer && (
-                  <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/10 flex items-center justify-between">
+                  <div className="mt-3 p-2 bg-primary/10 rounded border border-primary/20 flex items-center justify-between">
                     <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Credit Balance:</span>
-                    <span className="text-sm font-data font-bold text-primary">₹0.00</span>
+                    <span className="text-[13px] font-data font-bold text-primary">₹0.00</span>
                   </div>
                 )}
               </div>
@@ -374,62 +374,64 @@ export default function BillingView() {
           </div>
 
           {/* ACCOUNTING SUMMARY */}
-          <div className="surface-premium p-6 flex-1 flex flex-col">
-            <h4 className="text-sm font-bold tracking-tight mb-6">Financial Summary</h4>
+          <div className="surface-premium bg-card p-5 flex-1 flex flex-col">
+            <h4 className="text-[13px] font-bold uppercase tracking-wider font-luxury mb-5">Financial Summary</h4>
             
-            <div className="space-y-4 mb-8">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground font-medium">Gross Metal Value</span>
-                <span className="font-data font-semibold">₹{grossAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+            <div className="space-y-3 mb-6">
+              <div className="flex justify-between text-[12px]">
+                <span className="text-muted-foreground font-semibold">Gross Metal Value</span>
+                <span className="font-data font-bold">₹{grossAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground font-medium">Making Charges</span>
-                <span className="font-data font-semibold">₹{makingChargesTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+              <div className="flex justify-between text-[12px]">
+                <span className="text-muted-foreground font-semibold">Making Charges</span>
+                <span className="font-data font-bold">₹{makingChargesTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
               </div>
               {invoiceType !== 'Estimate' && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground font-medium">GST Amount (3.0%)</span>
-                  <span className="font-data font-semibold text-primary">₹{taxAmountTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                <div className="flex justify-between text-[12px]">
+                  <span className="text-muted-foreground font-semibold">GST Amount (3.0%)</span>
+                  <span className="font-data font-bold text-primary">₹{taxAmountTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
               )}
-              <div className="border-t border-dashed border-border pt-4 flex justify-between items-center">
-                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Net Amount</span>
-                <span className="text-3xl font-data font-extrabold text-foreground tracking-tighter">
+              <div className="border-t border-border pt-3 mt-1 flex justify-between items-center">
+                <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Net Amount</span>
+                <span className="text-2xl font-data font-extrabold text-foreground tracking-tight">
                   ₹{netAmount.toLocaleString()}
                 </span>
               </div>
             </div>
 
             <div className="space-y-4 mt-auto">
-              <label className="erp-label">Payment Method</label>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { id: 'Cash', icon: Banknote },
-                  { id: 'UPI', icon: Wallet },
-                  { id: 'Bank', icon: Landmark },
-                  { id: 'Card', icon: CreditCard },
-                ].map((mode) => (
-                  <button
-                    key={mode.id}
-                    onClick={() => setPaymentMode(mode.id as any)}
-                    className={`flex items-center gap-2 p-3 rounded-xl border transition-all ${paymentMode === mode.id ? 'bg-primary/10 border-primary text-primary shadow-premium' : 'bg-secondary/50 border-border text-muted-foreground hover:border-muted-foreground/30'}`}
-                  >
-                    <mode.icon className="h-4 w-4" />
-                    <span className="text-xs font-bold">{mode.id}</span>
-                  </button>
-                ))}
+              <div>
+                <label className="erp-label">Payment Method</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { id: 'Cash', icon: Banknote },
+                    { id: 'UPI', icon: Wallet },
+                    { id: 'Bank', icon: Landmark },
+                    { id: 'Card', icon: CreditCard },
+                  ].map((mode) => (
+                    <button
+                      key={mode.id}
+                      onClick={() => setPaymentMode(mode.id as any)}
+                      className={`flex items-center gap-2 p-2.5 rounded border transition-all ${paymentMode === mode.id ? 'bg-primary text-primary-foreground shadow-sm border-primary' : 'bg-card border-border text-muted-foreground hover:bg-secondary'}`}
+                    >
+                      <mode.icon className="h-4 w-4" />
+                      <span className="text-[11px] font-bold uppercase tracking-wider">{mode.id}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <button
                 disabled={cart.length === 0}
                 onClick={handleSaveInvoice}
-                className="w-full py-4 bg-primary text-white rounded-xl shadow-premium hover:shadow-elevated hover:bg-primary/90 transition-all active:scale-95 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
+                className="w-full h-14 bg-primary text-primary-foreground rounded shadow-premium hover:shadow-elevated hover:bg-primary/90 transition-all active:scale-95 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 <div className="flex flex-col items-center">
-                  <span className="text-sm font-bold uppercase tracking-widest flex items-center gap-2">
-                    Save & Post Ledger <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <span className="text-[13px] font-bold uppercase tracking-widest flex items-center gap-2 font-luxury">
+                    Save & Post <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </span>
-                  <span className="text-[10px] opacity-60 font-medium">Automatic Stock Sync & Vouchers</span>
+                  <span className="text-[9px] opacity-70 font-semibold tracking-wide">Syncs Stock & Vouchers</span>
                 </div>
               </button>
             </div>
@@ -437,19 +439,19 @@ export default function BillingView() {
 
           {/* SAVED NOTIFICATION */}
           {savedInvoice && (
-            <div className="p-5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl animate-in zoom-in-95 duration-300">
-              <div className="flex items-start gap-4">
-                <div className="p-2 bg-emerald-500 text-white rounded-lg">
-                  <Check className="h-5 w-5" />
+            <div className="p-4 bg-success/10 border border-success/20 rounded animate-in zoom-in-95 duration-300">
+              <div className="flex items-start gap-3">
+                <div className="p-1.5 bg-success text-success-foreground rounded shadow-sm">
+                  <Check className="h-4 w-4" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-bold text-emerald-900 dark:text-emerald-400">Invoice #{savedInvoice.invoice_number} Saved</p>
-                  <p className="text-[11px] text-emerald-800/60 dark:text-emerald-400/60 mt-1 font-medium">Stock records and accounting ledgers have been updated successfully.</p>
-                  <div className="flex gap-3 mt-4">
-                    <button onClick={() => window.print()} className="flex items-center gap-2 px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-all shadow-premium">
-                      <Printer className="h-3.5 w-3.5" /> Print Bill
+                  <p className="text-[12px] font-bold text-success">Invoice #{savedInvoice.invoice_number} Saved</p>
+                  <p className="text-[10px] text-success/80 mt-1 font-semibold leading-snug">Stock records and accounting ledgers updated successfully.</p>
+                  <div className="flex gap-2 mt-3">
+                    <button onClick={() => window.print()} className="btn btn-primary h-7 text-[10px] px-3">
+                      <Printer className="h-3 w-3" /> Print
                     </button>
-                    <button onClick={() => setSavedInvoice(null)} className="px-4 py-1.5 bg-white border border-border text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all">
+                    <button onClick={() => setSavedInvoice(null)} className="btn btn-secondary h-7 text-[10px] px-3">
                       Dismiss
                     </button>
                   </div>

@@ -133,7 +133,7 @@ const SectionHeader = ({
         type="button"
         onClick={onAdd}
         disabled={addDisabled}
-        className="flex items-center gap-1 px-2.5 py-0.5 bg-white hover:bg-orange-50 border border-gray-300 text-[10px] font-semibold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="flex items-center gap-1 px-2.5 py-0.5 bg-card hover:bg-orange-50 border border-gray-300 text-[10px] font-semibold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
         <Plus className="h-3 w-3" />
         {addLabel}
@@ -770,14 +770,14 @@ export default function PurchaseView() {
 
       {/* ── LEFT SIDEBAR ────────────────────────────────────────────────────── */}
       {showLeftSidebar && (
-        <aside className="w-52 bg-white border-r border-gray-300 flex flex-col shrink-0 shadow-md">
+        <aside className="w-52 bg-card border-r border-gray-300 flex flex-col shrink-0 shadow-md">
           <div className="px-2 py-1.5 border-b border-gray-300 bg-gray-50">
             <div className="relative">
               <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search vouchers…"
-                className="w-full pl-6 pr-2 py-1 border border-gray-300 bg-white text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="w-full pl-6 pr-2 py-1 border border-gray-300 bg-card text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={leftSearch}
                 onChange={(e) => setLeftSearch(e.target.value)}
               />
@@ -829,7 +829,7 @@ export default function PurchaseView() {
               <button
                 type="button"
                 onClick={() => setShowLeftSidebar((p) => !p)}
-                className="px-2.5 py-1 bg-white border border-orange-300 text-orange-700 text-[10px] font-bold hover:bg-orange-50 transition-colors"
+                className="px-2.5 py-1 bg-card border border-orange-300 text-orange-700 text-[10px] font-bold hover:bg-orange-50 transition-colors"
               >
                 {showLeftSidebar ? '◀ HIDE' : '▶ LIST'}
               </button>
@@ -837,7 +837,7 @@ export default function PurchaseView() {
             </div>
             <div className="flex items-center gap-3">
               {/* Quick summary box */}
-              <div className="flex items-center gap-4 border border-orange-200 bg-white px-3 py-1 text-[10.5px] font-mono">
+              <div className="flex items-center gap-4 border border-orange-200 bg-card px-3 py-1 text-[10.5px] font-mono">
                 <span className="text-gray-500">Net Wt: <strong className="text-orange-700">{totalGoldWeight.toFixed(3)}g</strong></span>
                 <span className="text-gray-500">Fine Au: <strong className="text-red-700">{totalFineGold.toFixed(3)}g</strong></span>
                 <span className="text-gray-500">Fine Ag: <strong className="text-blue-700">{totalFineSilver.toFixed(3)}g</strong></span>
@@ -878,7 +878,7 @@ export default function PurchaseView() {
               <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">Date</label>
               <input
                 type="date"
-                className="h-[26px] px-1.5 border border-gray-300 bg-white text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="h-[26px] px-1.5 border border-gray-300 bg-card text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={vchDate}
                 onChange={(e) => setVchDate(e.target.value)}
               />
@@ -900,7 +900,7 @@ export default function PurchaseView() {
               <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">Time</label>
               <input
                 type="text"
-                className="h-[26px] px-1.5 border border-gray-300 bg-white font-mono text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="h-[26px] px-1.5 border border-gray-300 bg-card font-mono text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={vchTime}
                 onChange={(e) => setVchTime(e.target.value)}
               />
@@ -911,7 +911,7 @@ export default function PurchaseView() {
               <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">Ref No</label>
               <input
                 type="text"
-                className="h-[26px] px-1.5 border border-gray-300 bg-white text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="h-[26px] px-1.5 border border-gray-300 bg-card text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={refNo}
                 onChange={(e) => setRefNo(e.target.value)}
               />
@@ -921,7 +921,7 @@ export default function PurchaseView() {
             <div className="flex flex-col flex-1 min-w-[200px] max-w-[320px]">
               <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">Party / Supplier</label>
               <select
-                className="h-[26px] px-1.5 border border-gray-300 bg-white font-semibold text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="h-[26px] px-1.5 border border-gray-300 bg-card font-semibold text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={partyId}
                 onChange={(e) => setPartyId(e.target.value)}
               >
@@ -937,7 +937,7 @@ export default function PurchaseView() {
               <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">SI Bill No</label>
               <input
                 type="text"
-                className="h-[26px] px-1.5 border border-gray-300 bg-white text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="h-[26px] px-1.5 border border-gray-300 bg-card text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={stlBillNo}
                 onChange={(e) => setStlBillNo(e.target.value)}
               />
@@ -947,7 +947,7 @@ export default function PurchaseView() {
         </div>
 
         {/* ── LEVEL 1: PURCHASE SUMMARY ───────────────────────────────────── */}
-        <div className="h-[21%] border-b border-gray-300 bg-white flex flex-col overflow-hidden">
+        <div className="h-[21%] border-b border-gray-300 bg-card flex flex-col overflow-hidden">
           <SectionHeader
             title={`Level 1 — Purchase Summaries (${activeSummaries.length} items)`}
             onAdd={handleAddSummaryRow}
@@ -1051,7 +1051,7 @@ export default function PurchaseView() {
         </div>
 
         {/* ── LEVEL 2: TAG DETAILS ────────────────────────────────────────── */}
-        <div className="h-[21%] border-b border-gray-300 bg-white flex flex-col overflow-hidden">
+        <div className="h-[21%] border-b border-gray-300 bg-card flex flex-col overflow-hidden">
           <SectionHeader
             title={`Level 2 — Tag Details${parentSummary ? ` › Sr ${parentSummary.sr}: ${parentSummary.it_code || '—'}` : ' (Select Summary Row)'}`}
             onAdd={handleAddTagRow}
@@ -1160,7 +1160,7 @@ export default function PurchaseView() {
         <div className="flex-1 flex overflow-hidden min-h-0">
 
           {/* ── LEVEL 3: DIAMONDS ──────────────────────────────────────── */}
-          <div className="w-[36%] min-w-[300px] border-r border-gray-300 flex flex-col bg-white overflow-hidden">
+          <div className="w-[36%] min-w-[300px] border-r border-gray-300 flex flex-col bg-card overflow-hidden">
             <SectionHeader
               title={`Level 3 — Diamonds${parentTag ? ` › ${parentTag.tag_no}` : ' (Select Tag)'}`}
               onAdd={handleAddDiamondRow}
@@ -1242,14 +1242,14 @@ export default function PurchaseView() {
                 <div>
                   <div className="text-[9px] text-gray-500 uppercase font-semibold mb-0.5">Employee</div>
                   <div className="flex gap-1">
-                    <input type="text" className="w-10 h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <input type="text" className="w-10 h-[22px] px-1 border border-gray-300 bg-card font-mono text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={employee} onChange={(e) => setEmployee(e.target.value)} />
                     <input type="text" className="flex-1 h-[22px] px-1 border border-gray-300 bg-gray-100 font-semibold text-gray-500 text-[10px] cursor-default" value="SELF" readOnly />
                   </div>
                 </div>
                 <div>
                   <div className="text-[9px] text-gray-500 uppercase font-semibold mb-0.5">Bank Name</div>
-                  <input type="text" placeholder="Bank name…" className="w-full h-[22px] px-1 border border-gray-300 bg-white text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                  <input type="text" placeholder="Bank name…" className="w-full h-[22px] px-1 border border-gray-300 bg-card text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                     value={bankName} onChange={(e) => setBankName(e.target.value)} />
                 </div>
               </div>
@@ -1258,12 +1258,12 @@ export default function PurchaseView() {
               <div>
                 <div className="text-[9px] text-gray-500 uppercase font-semibold mb-0.5">Voucher Narration</div>
                 <textarea rows={2} placeholder="Purchase remarks or transaction memo…"
-                  className="w-full px-2 py-1 border border-gray-300 bg-white text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400 resize-none"
+                  className="w-full px-2 py-1 border border-gray-300 bg-card text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400 resize-none"
                   value={vchDesc} onChange={(e) => setVchDesc(e.target.value)} />
               </div>
 
               {/* Summary info card */}
-              <div className="border border-orange-200 bg-white rounded-sm p-2 text-[10px] font-mono shadow-sm">
+              <div className="border border-orange-200 bg-card rounded-sm p-2 text-[10px] font-mono shadow-sm">
                 <div className="font-bold text-orange-800 border-b border-orange-100 pb-0.5 mb-1 truncate text-[9.5px]">
                   {parentTag ? `${parentTag.it_code} — ${parentTag.design || 'Tag Info'}` : 'Select a Tag'}
                 </div>
@@ -1294,13 +1294,13 @@ export default function PurchaseView() {
                   {/* Discount */}
                   <div className="flex items-center justify-between gap-1">
                     <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Discount</span>
-                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={discountAmount || ''} onChange={(e) => setDiscountAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Tax Rate & Amt */}
                   <div className="flex items-center justify-between gap-1">
-                    <select className="flex-1 h-[22px] px-1 border border-gray-300 bg-white font-bold text-gray-700 text-[9.5px] focus:outline-none focus:ring-1 focus:ring-orange-400 truncate"
+                    <select className="flex-1 h-[22px] px-1 border border-gray-300 bg-card font-bold text-gray-700 text-[9.5px] focus:outline-none focus:ring-1 focus:ring-orange-400 truncate"
                       value={taxRateId} onChange={(e) => setTaxRateId(e.target.value)}>
                       <option value="">— Tax —</option>
                       {taxes.map((t) => <option key={t.id} value={t.id}>{t.name} ({t.tax_percent}%)</option>)}
@@ -1311,14 +1311,14 @@ export default function PurchaseView() {
                   {/* TCS Amount */}
                   <div className="flex items-center justify-between gap-1">
                     <span className="text-[9.5px] text-gray-500 whitespace-nowrap">TCS Amt</span>
-                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={tcsAmount || ''} onChange={(e) => setTcsAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Round Off */}
                   <div className="flex items-center justify-between gap-1">
                     <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Round Off</span>
-                    <input type="number" step="0.01" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <input type="number" step="0.01" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={roundOff || ''} onChange={(e) => setRoundOff(parseFloat(e.target.value) || 0)} />
                   </div>
 
@@ -1335,32 +1335,32 @@ export default function PurchaseView() {
                   {/* Cheque */}
                   <div className="flex items-center justify-between gap-1">
                     <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Cheque</span>
-                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={chequeAmount || ''} onChange={(e) => setChequeAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Card / Bank A/c */}
                   <div className="flex items-center justify-between gap-1">
-                    <select className="flex-1 h-[22px] px-1 border border-gray-300 bg-white font-bold text-gray-600 text-[9.5px] focus:outline-none focus:ring-1 focus:ring-orange-400 truncate"
+                    <select className="flex-1 h-[22px] px-1 border border-gray-300 bg-card font-bold text-gray-600 text-[9.5px] focus:outline-none focus:ring-1 focus:ring-orange-400 truncate"
                       value={bankAccountId} onChange={(e) => setBankAccountId(e.target.value)}>
                       <option value="">— Bank —</option>
                       {accounts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
                     </select>
-                    <input type="number" className="w-[70px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <input type="number" className="w-[70px] h-[22px] px-1 border border-gray-300 bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={cardAmount || ''} onChange={(e) => setCardAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Cash */}
                   <div className="flex items-center justify-between gap-1">
                     <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Cash</span>
-                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={cashAmount || ''} onChange={(e) => setCashAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Kasar */}
                   <div className="flex items-center justify-between gap-1">
                     <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Kasar</span>
-                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={kasarAmount || ''} onChange={(e) => setKasarAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
@@ -1384,10 +1384,10 @@ export default function PurchaseView() {
         <footer className="bg-orange-500 border-t border-orange-600 px-3 py-1.5 flex items-center justify-between shrink-0 gap-2">
           {/* Nav buttons */}
           <div className="flex items-center gap-1.5">
-            <button onClick={handlePrevVch} className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-100 border border-gray-300 text-[11px] font-bold text-gray-700 transition-colors">
+            <button onClick={handlePrevVch} className="flex items-center gap-1 px-2.5 py-1 bg-card hover:bg-gray-100 border border-gray-300 text-[11px] font-bold text-gray-700 transition-colors">
               <ChevronLeft className="h-3.5 w-3.5" /> Prev
             </button>
-            <button onClick={handleNextVch} className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-100 border border-gray-300 text-[11px] font-bold text-gray-700 transition-colors">
+            <button onClick={handleNextVch} className="flex items-center gap-1 px-2.5 py-1 bg-card hover:bg-gray-100 border border-gray-300 text-[11px] font-bold text-gray-700 transition-colors">
               Next <ChevronRight className="h-3.5 w-3.5" />
             </button>
           </div>
@@ -1408,7 +1408,7 @@ export default function PurchaseView() {
               { label: 'Exit', icon: <LogOut className="h-4 w-4" />, onClick: () => closeTab(useTabStore.getState().activeTabId), disabled: false },
             ].map(({ label, icon, onClick, disabled, title }) => (
               <button key={label} type="button" onClick={onClick} disabled={disabled} title={title}
-                className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-orange-50 border border-gray-200 text-[11px] font-bold text-gray-700 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm">
+                className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-orange-50 border border-gray-200 text-[11px] font-bold text-gray-700 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm">
                 <span className="text-gray-500">{icon}</span>
                 {label}
               </button>
@@ -1419,7 +1419,7 @@ export default function PurchaseView() {
         {/* ── STATUS BAR ───────────────────────────────────────────────────── */}
         <div className="bg-orange-700 text-white py-0.5 px-3 flex items-center justify-between text-[10px] font-mono shrink-0 gap-4">
           <div className="flex items-center gap-4">
-            <span className="bg-white text-orange-700 font-black px-1.5 py-px text-[9px] uppercase tracking-wide">Orange</span>
+            <span className="bg-card text-orange-700 font-black px-1.5 py-px text-[9px] uppercase tracking-wide">Orange</span>
             <label className="flex items-center gap-1 cursor-pointer font-sans">
               <input type="checkbox" checked={liveRateChecked} onChange={(e) => setLiveRateChecked(e.target.checked)} className="accent-orange-300" />
               Live Rate

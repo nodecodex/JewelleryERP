@@ -184,7 +184,7 @@ export default function ScannerSettings() {
   return (
     <div className="space-y-4">
       {statusMsg && (
-        <div className={`p-2 rounded-[2px] text-xs border ${
+        <div className={`p-2 rounded-sm text-xs border ${
           statusMsg.success 
             ? 'bg-emerald-50 border-emerald-200 text-emerald-700 font-semibold' 
             : 'bg-rose-50 border-rose-200 text-rose-700 font-semibold'
@@ -200,8 +200,8 @@ export default function ScannerSettings() {
         {/* LEFT COLUMN: Hardware Scanner Configuration */}
         <div className="col-span-6 space-y-3">
           
-          <div className="bg-white border border-slate-355 rounded-[2px] shadow-sm overflow-hidden">
-            <div className="bg-slate-800 text-slate-100 px-3 py-1.5 border-b border-slate-900 flex justify-between items-center">
+          <div className="bg-card border border-slate-355 rounded-sm shadow-sm overflow-hidden">
+            <div className="bg-card text-foreground px-3 py-1.5 border-b border-border flex justify-between items-center">
               <h3 className="font-bold text-xs uppercase tracking-wider font-luxury flex items-center gap-1.5">
                 <Sliders className="h-4 w-4 text-amber-500" />
                 <span>Scanner Port & Interface Settings</span>
@@ -215,18 +215,18 @@ export default function ScannerSettings() {
                     type="checkbox"
                     checked={scannerEnabled}
                     onChange={(e) => setScannerEnabled(e.target.checked)}
-                    className="h-4 w-4 accent-amber-500 rounded border-slate-300 focus:ring-amber-500"
+                    className="h-4 w-4 accent-amber-500 rounded border-border focus:ring-amber-500"
                   />
-                  <span className="text-xs font-bold text-slate-700 uppercase">Enable Hardware Scanning System</span>
+                  <span className="text-xs font-bold text-foreground uppercase">Enable Hardware Scanning System</span>
                 </label>
-                <p className="text-[10px] text-slate-400 font-semibold uppercase mt-0.5 ml-6">Global switch to hook keyboard and serial listeners.</p>
+                <p className="text-[10px] text-muted-foreground font-semibold uppercase mt-0.5 ml-6">Global switch to hook keyboard and serial listeners.</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 border-t border-slate-200 pt-3">
+              <div className="grid grid-cols-2 gap-3 border-t border-border pt-3">
                 <div>
                   <label className="erp-label block mb-0.5">Connection Interface</label>
                   <select
-                    className="erp-input font-bold bg-slate-50 cursor-pointer"
+                    className="erp-input font-bold bg-secondary/20 cursor-pointer"
                     value={connectionMode}
                     onChange={(e) => setConnectionMode(e.target.value as any)}
                   >
@@ -239,7 +239,7 @@ export default function ScannerSettings() {
                 <div>
                   <label className="erp-label block mb-0.5">Trigger Suffix Key</label>
                   <select
-                    className="erp-input font-bold bg-slate-50 cursor-pointer"
+                    className="erp-input font-bold bg-secondary/20 cursor-pointer"
                     value={suffix}
                     onChange={(e) => setSuffix(e.target.value)}
                   >
@@ -251,11 +251,11 @@ export default function ScannerSettings() {
               </div>
 
               {connectionMode === 'Virtual_COM' && (
-                <div className="grid grid-cols-2 gap-3 bg-amber-50/50 p-2.5 rounded-[2px] border border-amber-200/50">
+                <div className="grid grid-cols-2 gap-3 bg-amber-50/50 p-2.5 rounded-sm border border-amber-200/50">
                   <div>
                     <label className="erp-label block mb-0.5 text-amber-800">Serial COM Port</label>
                     <select
-                      className="erp-input font-mono font-bold bg-white"
+                      className="erp-input font-mono font-bold bg-card"
                       value={comPort}
                       onChange={(e) => setComPort(e.target.value)}
                     >
@@ -269,7 +269,7 @@ export default function ScannerSettings() {
                   <div>
                     <label className="erp-label block mb-0.5 text-amber-800">Baud Rate (bps)</label>
                     <select
-                      className="erp-input font-mono font-bold bg-white"
+                      className="erp-input font-mono font-bold bg-card"
                       value={baudRate}
                       onChange={(e) => setBaudRate(parseInt(e.target.value, 10))}
                     >
@@ -292,13 +292,13 @@ export default function ScannerSettings() {
                     value={prefix}
                     onChange={(e) => setPrefix(e.target.value)}
                   />
-                  <p className="text-[9px] text-slate-400 font-semibold uppercase mt-0.5">Character preceding barcode payload.</p>
+                  <p className="text-[9px] text-muted-foreground font-semibold uppercase mt-0.5">Character preceding barcode payload.</p>
                 </div>
 
                 <div className="flex items-end">
                   <button
                     type="submit"
-                    className="w-full h-[28px] bg-slate-800 hover:bg-slate-700 text-white font-extrabold rounded-[2px] text-xs uppercase transition-all shadow-sm border border-slate-900"
+                    className="w-full h-[28px] bg-primary hover:bg-primary text-white font-extrabold rounded-sm text-xs uppercase transition-all shadow-sm border border-border"
                   >
                     Save Hardware Interface
                   </button>
@@ -308,8 +308,8 @@ export default function ScannerSettings() {
           </div>
 
           {/* Printer Configuration Panel */}
-          <div className="bg-white border border-slate-355 rounded-[2px] shadow-sm overflow-hidden">
-            <div className="bg-slate-800 text-slate-100 px-3 py-1.5 border-b border-slate-900">
+          <div className="bg-card border border-slate-355 rounded-sm shadow-sm overflow-hidden">
+            <div className="bg-card text-foreground px-3 py-1.5 border-b border-border">
               <h3 className="font-bold text-xs uppercase tracking-wider font-luxury flex items-center gap-1.5">
                 <Printer className="h-4 w-4 text-amber-500" />
                 <span>Jewellery Tag & Barcode Printers</span>
@@ -333,7 +333,7 @@ export default function ScannerSettings() {
                 <div>
                   <label className="erp-label block mb-0.5">Printer Hardware Profile</label>
                   <select
-                    className="erp-input font-bold bg-slate-50 cursor-pointer"
+                    className="erp-input font-bold bg-secondary/20 cursor-pointer"
                     value={printerType}
                     onChange={(e) => setPrinterType(e.target.value as any)}
                   >
@@ -348,7 +348,7 @@ export default function ScannerSettings() {
                 <div>
                   <label className="erp-label block mb-0.5">Label Sheet Sizes</label>
                   <select
-                    className="erp-input font-bold bg-slate-50 cursor-pointer"
+                    className="erp-input font-bold bg-secondary/20 cursor-pointer"
                     value={labelSize}
                     onChange={(e) => setLabelSize(e.target.value as any)}
                   >
@@ -366,22 +366,22 @@ export default function ScannerSettings() {
                       checked={isDefaultPrinter}
                       onChange={(e) => setIsDefaultPrinter(e.target.checked)}
                     />
-                    <span className="text-[10px] font-bold text-slate-600 uppercase">Set default print spooler</span>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase">Set default print spooler</span>
                   </label>
                 </div>
               </div>
 
-              <div className="flex justify-between items-center border-t border-slate-200 pt-3">
+              <div className="flex justify-between items-center border-t border-border pt-3">
                 <button
                   type="button"
                   onClick={handlePrintTestLabel}
-                  className="px-3.5 h-[28px] bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-extrabold rounded-[2px] text-xs uppercase transition-all shadow-sm"
+                  className="px-3.5 h-[28px] bg-card hover:bg-secondary/20 text-foreground border border-border font-extrabold rounded-sm text-xs uppercase transition-all shadow-sm"
                 >
                   Print Test Label Tag
                 </button>
                 <button
                   type="submit"
-                  className="px-5 h-[28px] bg-amber-500 hover:bg-amber-600 text-white font-extrabold rounded-[2px] text-xs uppercase border border-amber-600 transition-all shadow-sm"
+                  className="px-5 h-[28px] bg-amber-500 hover:bg-amber-600 text-white font-extrabold rounded-sm text-xs uppercase border border-amber-600 transition-all shadow-sm"
                 >
                   Save Printer Profile
                 </button>
@@ -394,7 +394,7 @@ export default function ScannerSettings() {
         {/* RIGHT COLUMN: Diagnostics Console & Live Scan Logs */}
         <div className="col-span-6 space-y-3">
           
-          <div className="bg-slate-900 border border-slate-950 rounded-[2px] shadow-md overflow-hidden text-slate-100 font-mono">
+          <div className="bg-slate-900 border border-slate-950 rounded-sm shadow-md overflow-hidden text-primary-foreground font-mono">
             <div className="bg-slate-950 px-3 py-1.5 border-b border-slate-950 flex justify-between items-center">
               <h3 className="font-bold text-[10.5px] uppercase tracking-wider text-amber-500 font-sans flex items-center gap-1.5">
                 <Tv className="h-4 w-4" />
@@ -402,33 +402,33 @@ export default function ScannerSettings() {
               </h3>
               <button 
                 onClick={() => setDiagnosticLogs([])}
-                className="text-[9px] text-slate-400 bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded-[1px] uppercase font-sans font-bold"
+                className="text-[9px] text-muted-foreground bg-primary hover:bg-primary px-2 py-0.5 rounded-sm uppercase font-sans font-bold"
               >
                 Clear Console
               </button>
             </div>
 
             <div className="p-3 space-y-2.5">
-              <div className="bg-slate-950/80 p-2 border border-slate-850 rounded-[2px]">
-                <span className="text-[10px] text-slate-400 font-bold block uppercase font-sans mb-1">Click below to test hardware scanner gun keystrokes:</span>
+              <div className="bg-slate-950/80 p-2 border border-slate-850 rounded-sm">
+                <span className="text-[10px] text-muted-foreground font-bold block uppercase font-sans mb-1">Click below to test hardware scanner gun keystrokes:</span>
                 <div className="relative">
                   <input
                     type="text"
                     placeholder="Scan test barcode/QR here..."
-                    className="w-full h-8 bg-slate-900 border border-slate-800 rounded-[2px] px-2.5 text-xs text-amber-400 font-mono focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                    className="w-full h-8 bg-slate-900 border border-slate-800 rounded-sm px-2.5 text-xs text-amber-400 font-mono focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
                     value={testInput}
                     onChange={(e) => setTestInput(e.target.value)}
                     onKeyDown={handleTestInputKeyDown}
                   />
-                  <Play className="absolute right-2.5 top-2.5 h-3 w-3 text-slate-600" />
+                  <Play className="absolute right-2.5 top-2.5 h-3 w-3 text-muted-foreground" />
                 </div>
               </div>
 
               <div>
-                <span className="text-[10px] text-slate-400 font-bold block uppercase font-sans mb-1">Inter-Keystroke Latency Diagnostics:</span>
-                <div className="h-[125px] overflow-y-auto bg-slate-950 p-2 rounded-[2px] border border-slate-850 text-[10px] text-slate-300 space-y-0.5 scrollbar-thin select-text">
+                <span className="text-[10px] text-muted-foreground font-bold block uppercase font-sans mb-1">Inter-Keystroke Latency Diagnostics:</span>
+                <div className="h-[125px] overflow-y-auto bg-slate-950 p-2 rounded-sm border border-slate-850 text-[10px] text-muted-foreground space-y-0.5 scrollbar-thin select-text">
                   {diagnosticLogs.length === 0 ? (
-                    <span className="text-slate-500 italic block py-2 text-center uppercase font-sans">Ready. Inject raw keys to verify speed signature...</span>
+                    <span className="text-muted-foreground italic block py-2 text-center uppercase font-sans">Ready. Inject raw keys to verify speed signature...</span>
                   ) : (
                     diagnosticLogs.map((log, idx) => (
                       <div key={idx} className={log.startsWith('▶') ? 'text-amber-400 font-bold border-b border-slate-850 pb-1 mt-1 font-sans' : 'text-emerald-400/95 font-mono'}>
@@ -442,14 +442,14 @@ export default function ScannerSettings() {
           </div>
 
           {/* Recent Scanned Log Table */}
-          <div className="bg-white border border-slate-355 rounded-[2px] shadow-sm overflow-hidden flex-1 flex flex-col h-[180px]">
-            <div className="bg-slate-800 text-slate-100 px-3 py-1.5 border-b border-slate-900 flex justify-between items-center">
+          <div className="bg-card border border-slate-355 rounded-sm shadow-sm overflow-hidden flex-1 flex flex-col h-[180px]">
+            <div className="bg-card text-foreground px-3 py-1.5 border-b border-border flex justify-between items-center">
               <h3 className="font-bold text-xs uppercase tracking-wider font-luxury">
                 Recent Scans Audit Log
               </h3>
               <button 
                 onClick={loadConfig}
-                className="text-[9.5px] text-slate-300 hover:text-white uppercase font-sans font-bold flex items-center gap-1"
+                className="text-[9.5px] text-muted-foreground hover:text-white uppercase font-sans font-bold flex items-center gap-1"
               >
                 <RefreshCw className="h-3 w-3" />
                 <span>Refresh</span>
@@ -459,7 +459,7 @@ export default function ScannerSettings() {
             <div className="overflow-y-auto flex-1 text-[10px]">
               <table className="w-full border-collapse">
                 <thead>
-                  <tr className="bg-slate-100 border-b border-slate-200 text-slate-500 font-bold uppercase text-[9px]">
+                  <tr className="bg-secondary/50 border-b border-border text-muted-foreground font-bold uppercase text-[9px]">
                     <th className="px-2 py-1 text-left">Time</th>
                     <th className="px-2 py-1 text-left">Value</th>
                     <th className="px-2 py-1 text-center w-12">Type</th>
@@ -467,18 +467,18 @@ export default function ScannerSettings() {
                     <th className="px-2 py-1 text-center w-14">Status</th>
                   </tr>
                 </thead>
-                <tbody className="font-mono text-slate-700 divide-y divide-slate-100 select-text">
+                <tbody className="font-mono text-foreground divide-y divide-slate-100 select-text">
                   {scanHistory.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-center py-6 text-slate-400 font-sans italic">No recent scans logged in database.</td>
+                      <td colSpan={5} className="text-center py-6 text-muted-foreground font-sans italic">No recent scans logged in database.</td>
                     </tr>
                   ) : (
                     scanHistory.map((h, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50">
-                        <td className="px-2 py-1 text-slate-400 whitespace-nowrap">{h.scan_time ? h.scan_time.split(' ')[0] : 'Now'}</td>
-                        <td className="px-2 py-1 text-slate-800 font-bold truncate max-w-[120px]">{h.scanned_value}</td>
-                        <td className="px-2 py-1 text-center font-sans"><span className={`px-1 py-0.2 text-[8px] font-extrabold rounded-[1px] ${h.scan_type === 'QR' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>{h.scan_type}</span></td>
-                        <td className="px-2 py-1 font-sans text-slate-500 truncate max-w-[80px]">{h.screen_name}</td>
+                      <tr key={idx} className="hover:bg-secondary/20">
+                        <td className="px-2 py-1 text-muted-foreground whitespace-nowrap">{h.scan_time ? h.scan_time.split(' ')[0] : 'Now'}</td>
+                        <td className="px-2 py-1 text-foreground font-bold truncate max-w-[120px]">{h.scanned_value}</td>
+                        <td className="px-2 py-1 text-center font-sans"><span className={`px-1 py-0.2 text-[8px] font-extrabold rounded-sm ${h.scan_type === 'QR' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>{h.scan_type}</span></td>
+                        <td className="px-2 py-1 font-sans text-muted-foreground truncate max-w-[80px]">{h.screen_name}</td>
                         <td className="px-2 py-1 text-center font-sans"><span className="text-emerald-600 font-extrabold">OK</span></td>
                       </tr>
                     ))

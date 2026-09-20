@@ -960,13 +960,13 @@ export default function SalesView() {
         ['--primary' as any]: themeAccentColors[themeAccent],
         ['--ring' as any]: themeAccentColors[themeAccent],
       }}
-      className="flex flex-col h-full bg-[#eef1f6] text-slate-800 p-2 font-sans select-none no-print overflow-y-auto text-xs"
+      className="flex flex-col h-full bg-background text-foreground p-2 font-sans select-none no-print overflow-y-auto text-xs"
     >
       {/* 1. SALES VOUCHER HEADER */}
-      <div className="bg-white border border-slate-300 rounded-[2px] p-2 shadow-sm shrink-0 flex flex-col gap-1.5 mb-1.5">
+      <div className="surface-premium bg-card p-3 shrink-0 flex flex-col gap-1.5 mb-1.5">
         
         {/* Banner strip */}
-        <div className="bg-orange-500 text-white py-1 px-4 text-center font-bold text-sm tracking-wider uppercase rounded-[1px] flex justify-between items-center shadow-inner" style={{ backgroundColor: `hsl(${themeAccentColors[themeAccent]})` }}>
+        <div className="bg-orange-500 text-white py-1 px-4 text-center font-bold text-sm tracking-wider uppercase rounded-sm flex justify-between items-center shadow-inner" style={{ backgroundColor: `hsl(${themeAccentColors[themeAccent]})` }}>
           <span className="text-[10px] opacity-75">JewelACC Suite V2026</span>
           <span className="font-extrabold uppercase font-luxury tracking-widest text-[13px]">Gold Tax Invoice</span>
           <span className="text-[10px] opacity-75 font-data">Offline Mode</span>
@@ -977,18 +977,18 @@ export default function SalesView() {
           
           {/* Voucher No & F1 */}
           <div className="col-span-2.5 flex items-center gap-1">
-            <span className="text-[10px] font-bold text-slate-500 uppercase w-12 shrink-0">Vch No</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase w-12 shrink-0">Vch No</span>
             <div className="flex gap-0.5 w-full">
               <input
                 type="text"
-                className="w-full h-7 border border-slate-300 rounded-[2px] text-center font-data font-bold bg-white focus:border-primary px-1.5"
+                className="w-full h-7 border border-border rounded-sm text-center font-data font-bold bg-card focus:border-primary px-1.5"
                 value={vchNo}
                 onChange={(e) => setVchNo(e.target.value)}
               />
               <button
                 type="button"
                 onClick={generateNextVchNo}
-                className="h-7 px-2 bg-slate-200 border border-slate-300 hover:bg-slate-300 rounded-[2px] text-[10px] font-bold text-slate-700 flex items-center justify-center cursor-pointer shadow-sm"
+                className="btn btn-secondary h-7 text-[10px]"
               >
                 F1
               </button>
@@ -997,10 +997,10 @@ export default function SalesView() {
 
           {/* Date */}
           <div className="col-span-2.5 flex items-center gap-1">
-            <span className="text-[10px] font-bold text-slate-500 uppercase w-12 shrink-0 text-center">Vch Date</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase w-12 shrink-0 text-center">Vch Date</span>
             <input
               type="date"
-              className="w-full h-7 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 px-1"
+              className="w-full h-7 border border-border rounded-sm text-xs font-bold text-foreground px-1"
               value={vchDate}
               onChange={(e) => setVchDate(e.target.value)}
             />
@@ -1010,7 +1010,7 @@ export default function SalesView() {
           <div className="col-span-1.5">
             <input
               type="text"
-              className="w-full h-7 border border-slate-300 rounded-[2px] text-center font-data text-xs text-slate-700 bg-white"
+              className="w-full h-7 border border-border rounded-sm text-center font-data text-xs text-foreground bg-card"
               value={vchTime}
               onChange={(e) => setVchTime(e.target.value)}
             />
@@ -1018,25 +1018,25 @@ export default function SalesView() {
 
           {/* Day Name */}
           <div className="col-span-1.5">
-            <span className="h-7 flex items-center justify-center bg-slate-100 border border-slate-300 px-2 rounded-[2px] text-[10px] font-bold text-slate-500 font-sans uppercase">
+            <span className="h-7 flex items-center justify-center bg-secondary/50 border border-border px-2 rounded-sm text-[10px] font-bold text-muted-foreground font-sans uppercase">
               {getDayOfWeek(vchDate)}
             </span>
           </div>
 
           {/* Apr No */}
           <div className="col-span-2 flex items-center gap-1">
-            <span className="text-[10px] font-bold text-slate-500 uppercase whitespace-nowrap">Apr No</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase whitespace-nowrap">Apr No</span>
             <div className="flex gap-0.5 w-full">
-              <input type="text" className="w-1/2 h-7 border border-slate-300 rounded-[2px] text-center font-data text-xs" value={aprNo1} onChange={(e) => setAprNo1(e.target.value)} />
-              <input type="text" className="w-1/2 h-7 border border-slate-300 rounded-[2px] text-center font-data text-xs" value={aprNo2} onChange={(e) => setAprNo2(e.target.value)} />
+              <input type="text" className="w-1/2 h-7 border border-border rounded-sm text-center font-data text-xs" value={aprNo1} onChange={(e) => setAprNo1(e.target.value)} />
+              <input type="text" className="w-1/2 h-7 border border-border rounded-sm text-center font-data text-xs" value={aprNo2} onChange={(e) => setAprNo2(e.target.value)} />
             </div>
           </div>
 
           {/* A Box Indicator / Select Print */}
           <div className="col-span-2 flex items-center gap-1 justify-end">
-            <span className="w-6 h-7 bg-amber-100 text-amber-700 border border-amber-300 rounded-[2px] font-bold text-center flex items-center justify-center text-[10px]">A</span>
+            <span className="w-6 h-7 bg-amber-100 text-amber-700 border border-amber-300 rounded-sm font-bold text-center flex items-center justify-center text-[10px]">A</span>
             <select
-              className="w-full h-7 border border-slate-300 rounded-[2px] text-xs font-bold bg-white cursor-pointer py-0.5 px-1.5"
+              className="w-full h-7 border border-border rounded-sm text-xs font-bold bg-card cursor-pointer py-0.5 px-1.5"
               value={printFileName}
               onChange={(e) => setPrintFileName(e.target.value)}
             >
@@ -1046,7 +1046,7 @@ export default function SalesView() {
             </select>
             <button
               type="button"
-              className="h-7 px-2.5 bg-slate-700 text-white font-bold rounded-[2px] border border-transparent text-[10px] uppercase cursor-pointer hover:bg-slate-800"
+              className="h-7 px-2.5 bg-primary text-white font-bold rounded-sm border border-transparent text-[10px] uppercase cursor-pointer hover:bg-primary/90"
             >
               Set
             </button>
@@ -1055,14 +1055,14 @@ export default function SalesView() {
         </div>
 
         {/* Ref & Party Details Row */}
-        <div className="grid grid-cols-12 gap-2 items-center border-t border-slate-200 pt-1.5">
+        <div className="grid grid-cols-12 gap-2 items-center border-t border-border pt-1.5">
           
           {/* Ref No */}
           <div className="col-span-2.5 flex items-center gap-1">
-            <span className="text-[10px] font-bold text-slate-500 uppercase w-12 shrink-0">Ref No</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase w-12 shrink-0">Ref No</span>
             <input
               type="text"
-              className="w-full h-7 border border-slate-300 rounded-[2px] text-xs px-2"
+              className="w-full h-7 border border-border rounded-sm text-xs px-2"
               value={refNo}
               onChange={(e) => setRefNo(e.target.value)}
             />
@@ -1070,9 +1070,9 @@ export default function SalesView() {
 
           {/* Party Code selection */}
           <div className="col-span-3.5 flex items-center gap-1">
-            <span className="text-[10px] font-bold text-slate-500 uppercase w-16 shrink-0 text-center">Party Code</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase w-16 shrink-0 text-center">Party Code</span>
             <select
-              className="w-full h-7 border border-slate-300 rounded-[2px] text-xs font-bold bg-white cursor-pointer px-1"
+              className="w-full h-7 border border-border rounded-sm text-xs font-bold bg-card cursor-pointer px-1"
               value={partyCode}
               onChange={(e) => handlePartySelect(e.target.value)}
             >
@@ -1085,10 +1085,10 @@ export default function SalesView() {
 
           {/* Party Name */}
           <div className="col-span-4 flex items-center gap-1">
-            <span className="text-[10px] font-bold text-slate-500 uppercase w-16 shrink-0 text-center">Party Name</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase w-16 shrink-0 text-center">Party Name</span>
             <input
               type="text"
-              className="w-full h-7 border border-slate-300 rounded-[2px] text-xs font-bold bg-slate-50"
+              className="w-full h-7 border border-border rounded-sm text-xs font-bold bg-secondary/20"
               value={partyName}
               onChange={(e) => setPartyName(e.target.value)}
               disabled={partyCode !== ''}
@@ -1096,7 +1096,7 @@ export default function SalesView() {
           </div>
 
           {/* Amount Detail summary indicator */}
-          <div className="col-span-2 flex items-center justify-end text-slate-400 font-bold tracking-tight text-[11px] font-data pr-1.5">
+          <div className="col-span-2 flex items-center justify-end text-muted-foreground font-bold tracking-tight text-[11px] font-data pr-1.5">
             : Amt
           </div>
 
@@ -1105,12 +1105,12 @@ export default function SalesView() {
       </div>
 
       {/* 2. PRIMARY SALES ITEM GRID */}
-      <div className="bg-white border border-slate-300 rounded-[2px] shadow-sm flex flex-col h-[280px] shrink-0 mb-1.5">
-        <div className="bg-slate-100 border-b border-slate-200 py-0.5 px-3 flex justify-between items-center text-[10px] shrink-0 select-none">
-          <span className="font-extrabold uppercase text-slate-500 tracking-wide">Ornaments List</span>
+      <div className="surface-premium bg-card flex flex-col h-[280px] shrink-0 mb-1.5">
+        <div className="bg-secondary/50 border-b border-border py-0.5 px-3 flex justify-between items-center text-[10px] shrink-0 select-none">
+          <span className="font-extrabold uppercase text-muted-foreground tracking-wide">Ornaments List</span>
           <button
             onClick={insertMainRow}
-            className="flex items-center gap-0.5 px-2 py-0.5 bg-slate-700 hover:bg-slate-800 text-white font-bold text-[9px] uppercase tracking-wider rounded-[1px] cursor-pointer shadow-sm transition-all"
+            className="flex items-center gap-0.5 px-2 py-0.5 bg-primary hover:bg-primary/90 text-white font-bold text-[9px] uppercase tracking-wider rounded-sm cursor-pointer shadow-sm transition-all"
           >
             <Plus className="h-2.5 w-2.5" />
             <span>Add Item</span>
@@ -1121,188 +1121,188 @@ export default function SalesView() {
         <div className="flex-1 overflow-auto">
           <table className="w-full border-collapse text-left text-xs table-fixed">
             <thead>
-              <tr className="sticky top-0 z-20 bg-slate-200 border-b border-slate-300 text-[10px] font-bold text-slate-600 uppercase select-none">
-                <th className="w-[30px] text-center border-r border-slate-300 py-1">Sr</th>
-                <th className="w-[90px] border-r border-slate-300 px-1 py-1">TagNo</th>
-                <th className="w-[90px] border-r border-slate-300 px-1 py-1">ItCode</th>
-                <th className="w-[60px] border-r border-slate-300 px-1 py-1 text-center">OrdNo</th>
-                <th className="border-r border-slate-300 px-2 py-1 text-left min-w-[120px]">Design</th>
-                <th className="w-[50px] border-r border-slate-300 px-1 py-1 text-center">Size</th>
-                <th className="w-[70px] border-r border-slate-300 px-1 py-1">Huld</th>
-                <th className="w-[40px] border-r border-slate-300 px-1 py-1 text-center">Pcs</th>
-                <th className="w-[65px] border-r border-slate-300 px-1 py-1 text-right">GrWt</th>
-                <th className="w-[65px] border-r border-slate-300 px-1 py-1 text-right">LsWt</th>
-                <th className="w-[65px] border-r border-slate-300 px-1 py-1 text-right">NetWt</th>
-                <th className="w-[85px] border-r border-slate-300 px-1 py-1 text-right">ItRate</th>
-                <th className="w-[95px] border-r border-slate-300 px-1 py-1 text-right">ItAmt</th>
-                <th className="w-[50px] border-r border-slate-300 px-1 py-1 text-center">LType</th>
-                <th className="w-[70px] border-r border-slate-300 px-1 py-1 text-right">LbrRate</th>
-                <th className="w-[90px] border-r border-slate-300 px-1 py-1 text-right">LbrAmt</th>
-                <th className="w-[65px] border-r border-slate-300 px-1 py-1 text-right">GhtAmt</th>
-                <th className="w-[65px] border-r border-slate-300 px-1 py-1 text-right">OthAmt</th>
-                <th className="w-[110px] border-r border-slate-300 px-1 py-1 text-right">TotAmt</th>
+              <tr className="sticky top-0 z-20 bg-secondary border-b border-border text-[10px] font-bold text-muted-foreground uppercase select-none">
+                <th className="w-[30px] text-center border-r border-border py-1">Sr</th>
+                <th className="w-[90px] border-r border-border px-1 py-1">TagNo</th>
+                <th className="w-[90px] border-r border-border px-1 py-1">ItCode</th>
+                <th className="w-[60px] border-r border-border px-1 py-1 text-center">OrdNo</th>
+                <th className="border-r border-border px-2 py-1 text-left min-w-[120px]">Design</th>
+                <th className="w-[50px] border-r border-border px-1 py-1 text-center">Size</th>
+                <th className="w-[70px] border-r border-border px-1 py-1">Huld</th>
+                <th className="w-[40px] border-r border-border px-1 py-1 text-center">Pcs</th>
+                <th className="w-[65px] border-r border-border px-1 py-1 text-right">GrWt</th>
+                <th className="w-[65px] border-r border-border px-1 py-1 text-right">LsWt</th>
+                <th className="w-[65px] border-r border-border px-1 py-1 text-right">NetWt</th>
+                <th className="w-[85px] border-r border-border px-1 py-1 text-right">ItRate</th>
+                <th className="w-[95px] border-r border-border px-1 py-1 text-right">ItAmt</th>
+                <th className="w-[50px] border-r border-border px-1 py-1 text-center">LType</th>
+                <th className="w-[70px] border-r border-border px-1 py-1 text-right">LbrRate</th>
+                <th className="w-[90px] border-r border-border px-1 py-1 text-right">LbrAmt</th>
+                <th className="w-[65px] border-r border-border px-1 py-1 text-right">GhtAmt</th>
+                <th className="w-[65px] border-r border-border px-1 py-1 text-right">OthAmt</th>
+                <th className="w-[110px] border-r border-border px-1 py-1 text-right">TotAmt</th>
                 <th className="w-[35px] text-center">Del</th>
               </tr>
             </thead>
-            <tbody className="font-semibold text-slate-800 font-data" onKeyDown={handleMainGridKeyDown}>
+            <tbody className="font-semibold text-foreground font-data" onKeyDown={handleMainGridKeyDown}>
               {items.map((row, idx) => {
                 const isSelected = selectedItemIndex === idx;
                 return (
                   <tr
                     key={idx}
                     onClick={() => setSelectedItemIndex(idx)}
-                    className={`border-b border-slate-200 transition-colors h-[26px] ${isSelected
-                      ? 'bg-slate-100 border-l-[3px] border-l-orange-500 font-bold'
-                      : 'hover:bg-slate-50'
+                    className={`border-b border-border transition-colors h-[26px] ${isSelected
+                      ? 'bg-secondary/50 border-l-[3px] border-l-orange-500 font-bold'
+                      : 'hover:bg-secondary/20'
                       }`}
                   >
-                    <td className="text-center font-data text-slate-400 bg-slate-50/50 border-r border-slate-200 text-[10px]">{row.sr}</td>
+                    <td className="text-center font-data text-muted-foreground bg-secondary/20/50 border-r border-border text-[10px]">{row.sr}</td>
                     
                     {/* TagNo */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="text"
                         placeholder="Tag no"
                         data-row={idx}
                         data-col-idx={0}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 font-bold text-slate-700 bg-transparent focus:bg-white focus:outline-none placeholder:text-slate-300 placeholder:font-normal uppercase"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 font-bold text-foreground bg-transparent focus:bg-card focus:outline-none placeholder:text-muted-foreground placeholder:font-normal uppercase"
                         value={row.tag_no}
                         onChange={(e) => handleMainCellChange(idx, 'tag_no', e.target.value)}
                       />
                     </td>
 
                     {/* ItCode */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="text"
                         placeholder="ItCode"
                         data-row={idx}
                         data-col-idx={1}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 font-bold text-slate-700 bg-transparent focus:bg-white focus:outline-none placeholder:text-slate-300 placeholder:font-normal uppercase"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 font-bold text-foreground bg-transparent focus:bg-card focus:outline-none placeholder:text-muted-foreground placeholder:font-normal uppercase"
                         value={row.it_code}
                         onChange={(e) => handleMainCellChange(idx, 'it_code', e.target.value)}
                       />
                     </td>
 
                     {/* OrdNo */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="text"
                         data-row={idx}
                         data-col-idx={2}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                         value={row.ord_no}
                         onChange={(e) => handleMainCellChange(idx, 'ord_no', e.target.value)}
                       />
                     </td>
 
                     {/* Design */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="text"
                         data-row={idx}
                         data-col-idx={3}
                         placeholder="Design description"
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-2 font-sans text-slate-700 bg-transparent focus:bg-white focus:outline-none placeholder:text-slate-300"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-2 font-sans text-foreground bg-transparent focus:bg-card focus:outline-none placeholder:text-muted-foreground"
                         value={row.design}
                         onChange={(e) => handleMainCellChange(idx, 'design', e.target.value)}
                       />
                     </td>
 
                     {/* Size */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="text"
                         data-row={idx}
                         data-col-idx={4}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                         value={row.size}
                         onChange={(e) => handleMainCellChange(idx, 'size', e.target.value)}
                       />
                     </td>
 
                     {/* Huld */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="text"
                         data-row={idx}
                         data-col-idx={5}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                         value={row.huld}
                         onChange={(e) => handleMainCellChange(idx, 'huld', e.target.value)}
                       />
                     </td>
 
                     {/* Pcs */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="number"
                         data-row={idx}
                         data-col-idx={6}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                         value={row.pcs || ''}
                         onChange={(e) => handleMainCellChange(idx, 'pcs', e.target.value)}
                       />
                     </td>
 
                     {/* GrWt */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="number"
                         step="0.001"
                         placeholder="0.000"
                         data-row={idx}
                         data-col-idx={7}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                         value={row.gr_wt || ''}
                         onChange={(e) => handleMainCellChange(idx, 'gr_wt', e.target.value)}
                       />
                     </td>
 
                     {/* LsWt */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="number"
                         step="0.001"
                         placeholder="0.000"
                         data-row={idx}
                         data-col-idx={8}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                         value={row.ls_wt || ''}
                         onChange={(e) => handleMainCellChange(idx, 'ls_wt', e.target.value)}
                       />
                     </td>
 
                     {/* NetWt (ReadOnly) */}
-                    <td className="px-1 text-right border-r border-slate-200 font-data text-slate-500 bg-slate-50/30 text-[11px]">
+                    <td className="px-1 text-right border-r border-border font-data text-muted-foreground bg-secondary/20/30 text-[11px]">
                       {row.net_wt > 0 ? row.net_wt.toFixed(3) : '-'}
                     </td>
 
                     {/* ItRate */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="number"
                         step="0.01"
                         placeholder="0.00"
                         data-row={idx}
                         data-col-idx={9}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                         value={row.it_rate || ''}
                         onChange={(e) => handleMainCellChange(idx, 'it_rate', e.target.value)}
                       />
                     </td>
 
                     {/* ItAmt (ReadOnly) */}
-                    <td className="px-1 text-right border-r border-slate-200 font-data text-slate-500 bg-slate-50/30 text-[11px]">
+                    <td className="px-1 text-right border-r border-border font-data text-muted-foreground bg-secondary/20/30 text-[11px]">
                       {row.it_amt > 0 ? row.it_amt.toFixed(2) : '-'}
                     </td>
 
                     {/* LType */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <select
                         data-row={idx}
                         data-col-idx={10}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !p-0 text-center font-bold text-slate-700 bg-transparent focus:bg-white focus:outline-none cursor-pointer"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !p-0 text-center font-bold text-foreground bg-transparent focus:bg-card focus:outline-none cursor-pointer"
                         value={row.l_type}
                         onChange={(e) => handleMainCellChange(idx, 'l_type', e.target.value)}
                       >
@@ -1313,51 +1313,51 @@ export default function SalesView() {
                     </td>
 
                     {/* LbrRate */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="number"
                         step="0.01"
                         data-row={idx}
                         data-col-idx={11}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                         value={row.lbr_rate || ''}
                         onChange={(e) => handleMainCellChange(idx, 'lbr_rate', e.target.value)}
                       />
                     </td>
 
                     {/* LbrAmt (ReadOnly) */}
-                    <td className="px-1 text-right border-r border-slate-200 font-data text-slate-500 bg-slate-50/30 text-[11px]">
+                    <td className="px-1 text-right border-r border-border font-data text-muted-foreground bg-secondary/20/30 text-[11px]">
                       {row.lbr_amt > 0 ? row.lbr_amt.toFixed(2) : '-'}
                     </td>
 
                     {/* GhtAmt */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="number"
                         step="0.01"
                         data-row={idx}
                         data-col-idx={12}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                         value={row.ght_amt || ''}
                         onChange={(e) => handleMainCellChange(idx, 'ght_amt', e.target.value)}
                       />
                     </td>
 
                     {/* OthAmt */}
-                    <td className="p-0 border-r border-slate-200">
+                    <td className="p-0 border-r border-border">
                       <input
                         type="number"
                         step="0.01"
                         data-row={idx}
                         data-col-idx={13}
-                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                        className="main-grid-input w-full h-[25px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                         value={row.oth_amt || ''}
                         onChange={(e) => handleMainCellChange(idx, 'oth_amt', e.target.value)}
                       />
                     </td>
 
                     {/* TotAmt (ReadOnly) */}
-                    <td className="px-1 text-right border-r border-slate-200 font-data text-slate-700 bg-slate-100/40 text-[11px] font-bold">
+                    <td className="px-1 text-right border-r border-border font-data text-foreground bg-secondary/50/40 text-[11px] font-bold">
                       {row.tot_amt > 0 ? row.tot_amt.toFixed(2) : '-'}
                     </td>
 
@@ -1378,20 +1378,20 @@ export default function SalesView() {
             </tbody>
             {/* Totals Row aligned to columns */}
             <tfoot>
-              <tr className="bg-slate-200 border-t-2 border-slate-400 font-bold text-slate-700 font-data h-[26px]">
-                <td colSpan={7} className="px-2 text-left uppercase text-[10px] tracking-wider font-extrabold text-slate-500">Total :</td>
-                <td className="text-center border-r border-slate-300 font-bold">{totalPcs}</td>
-                <td className="text-right border-r border-slate-300 px-1 font-bold">{totalGrWt.toFixed(3)}</td>
-                <td className="text-right border-r border-slate-300 px-1 font-bold">{totalLsWt.toFixed(3)}</td>
-                <td className="text-right border-r border-slate-300 px-1 font-bold">{totalNetWt.toFixed(3)}</td>
-                <td className="border-r border-slate-300"></td>
-                <td className="text-right border-r border-slate-300 px-1 font-bold">{totalItAmt.toFixed(2)}</td>
-                <td className="border-r border-slate-300"></td>
-                <td className="border-r border-slate-300"></td>
-                <td className="text-right border-r border-slate-300 px-1 font-bold">{totalLbrAmt.toFixed(2)}</td>
-                <td className="text-right border-r border-slate-300 px-1 font-bold">{totalGhtAmt.toFixed(2)}</td>
-                <td className="text-right border-r border-slate-300 px-1 font-bold">{totalOthAmt.toFixed(2)}</td>
-                <td className="text-right border-r border-slate-300 px-1 text-orange-600 font-extrabold text-[12px]">{totalTotAmt.toFixed(2)}</td>
+              <tr className="bg-secondary border-t-2 border-primary/30 font-bold text-foreground font-data h-[26px]">
+                <td colSpan={7} className="px-2 text-left uppercase text-[10px] tracking-wider font-extrabold text-muted-foreground">Total :</td>
+                <td className="text-center border-r border-border font-bold">{totalPcs}</td>
+                <td className="text-right border-r border-border px-1 font-bold">{totalGrWt.toFixed(3)}</td>
+                <td className="text-right border-r border-border px-1 font-bold">{totalLsWt.toFixed(3)}</td>
+                <td className="text-right border-r border-border px-1 font-bold">{totalNetWt.toFixed(3)}</td>
+                <td className="border-r border-border"></td>
+                <td className="text-right border-r border-border px-1 font-bold">{totalItAmt.toFixed(2)}</td>
+                <td className="border-r border-border"></td>
+                <td className="border-r border-border"></td>
+                <td className="text-right border-r border-border px-1 font-bold">{totalLbrAmt.toFixed(2)}</td>
+                <td className="text-right border-r border-border px-1 font-bold">{totalGhtAmt.toFixed(2)}</td>
+                <td className="text-right border-r border-border px-1 font-bold">{totalOthAmt.toFixed(2)}</td>
+                <td className="text-right border-r border-border px-1 text-orange-600 font-extrabold text-[12px]">{totalTotAmt.toFixed(2)}</td>
                 <td></td>
               </tr>
             </tfoot>
@@ -1400,21 +1400,21 @@ export default function SalesView() {
       </div>
 
       {/* 3. PRINT / ITEM DETAILS SECTION */}
-      <div className="bg-white border border-slate-300 rounded-[2px] p-2 shadow-sm shrink-0 grid grid-cols-12 gap-3 mb-1.5">
+      <div className="surface-premium bg-card p-3 shrink-0 grid grid-cols-12 gap-3 mb-1.5">
         <div className="col-span-6 flex items-center gap-2">
-          <span className="text-[10px] font-bold text-slate-500 uppercase whitespace-nowrap">Print Name</span>
+          <span className="text-[10px] font-bold text-muted-foreground uppercase whitespace-nowrap">Print Name</span>
           <input
             type="text"
-            className="w-full h-7 border border-slate-300 rounded-[2px] text-xs px-2 font-bold bg-slate-50 text-slate-600"
+            className="w-full h-7 border border-border rounded-sm text-xs px-2 font-bold bg-secondary/20 text-muted-foreground"
             value={selectedItem ? (selectedItem.design || selectedItem.it_code) : ''}
             disabled
           />
         </div>
         <div className="col-span-6 flex items-center gap-2">
-          <span className="text-[10px] font-bold text-slate-500 uppercase whitespace-nowrap">Itm Name</span>
+          <span className="text-[10px] font-bold text-muted-foreground uppercase whitespace-nowrap">Itm Name</span>
           <input
             type="text"
-            className="w-full h-7 border border-slate-300 rounded-[2px] text-xs px-2 font-bold bg-slate-50 text-slate-600"
+            className="w-full h-7 border border-border rounded-sm text-xs px-2 font-bold bg-secondary/20 text-muted-foreground"
             value={selectedItem ? selectedItem.it_code : ''}
             disabled
           />
@@ -1431,96 +1431,96 @@ export default function SalesView() {
           <div className="grid grid-cols-12 gap-2 h-[290px] shrink-0">
             
             {/* 4. DIAMOND / STONE DETAILS GRID */}
-            <div className="col-span-6 bg-white border border-slate-300 rounded-[2px] flex flex-col overflow-hidden shadow-sm">
-              <div className="bg-slate-100 px-2.5 py-1 border-b border-slate-200 flex justify-between items-center text-[10px] shrink-0 font-bold">
-                <span className="uppercase tracking-wider text-slate-500 font-luxury">Diamond / Stone Details</span>
-                <span className="text-[9px] text-slate-400 font-data">Item SR: {selectedItemIndex + 1}</span>
+            <div className="col-span-6 surface-premium bg-card flex flex-col overflow-hidden shadow-sm">
+              <div className="bg-secondary/50 px-2.5 py-1 border-b border-border flex justify-between items-center text-[10px] shrink-0 font-bold">
+                <span className="uppercase tracking-wider text-muted-foreground font-luxury">Diamond / Stone Details</span>
+                <span className="text-[9px] text-muted-foreground font-data">Item SR: {selectedItemIndex + 1}</span>
               </div>
               <div className="flex-1 overflow-auto">
                 <table className="border-collapse text-left text-xs table-fixed min-w-[580px] w-full">
                   <thead>
-                    <tr className="bg-slate-200 border-b border-slate-300 text-[9px] font-bold text-slate-500 uppercase select-none">
-                      <th className="w-[30px] text-center border-r border-slate-300 py-1">Sr</th>
-                      <th className="w-[60px] border-r border-slate-300 px-1">ItCode</th>
-                      <th className="border-r border-slate-300 px-1 text-left min-w-[70px]">ItName</th>
-                      <th className="w-[50px] border-r border-slate-300 px-1 text-center">DmColor</th>
-                      <th className="w-[50px] border-r border-slate-300 px-1 text-center">DmOrigin</th>
-                      <th className="w-[70px] border-r border-slate-300 px-1">DmRemark</th>
-                      <th className="w-[60px] border-r border-slate-300 px-1">DmSfNo</th>
-                      <th className="w-[35px] border-r border-slate-300 px-1 text-center">Pcs</th>
+                    <tr className="bg-secondary border-b border-border text-[9px] font-bold text-muted-foreground uppercase select-none">
+                      <th className="w-[30px] text-center border-r border-border py-1">Sr</th>
+                      <th className="w-[60px] border-r border-border px-1">ItCode</th>
+                      <th className="border-r border-border px-1 text-left min-w-[70px]">ItName</th>
+                      <th className="w-[50px] border-r border-border px-1 text-center">DmColor</th>
+                      <th className="w-[50px] border-r border-border px-1 text-center">DmOrigin</th>
+                      <th className="w-[70px] border-r border-border px-1">DmRemark</th>
+                      <th className="w-[60px] border-r border-border px-1">DmSfNo</th>
+                      <th className="w-[35px] border-r border-border px-1 text-center">Pcs</th>
                       <th className="w-[50px] text-right px-1">Weight</th>
                     </tr>
                   </thead>
-                  <tbody className="font-semibold text-slate-700 font-data" onKeyDown={handleDiamondKeyDown}>
+                  <tbody className="font-semibold text-foreground font-data" onKeyDown={handleDiamondKeyDown}>
                     {activeDiamonds.map((acc, accIdx) => (
-                      <tr key={accIdx} className="hover:bg-slate-50 border-b border-slate-200 h-[24px]">
-                        <td className="text-center text-slate-400 bg-slate-50/50 border-r border-slate-200 text-[10px]">{acc.sr}</td>
-                        <td className="p-0 border-r border-slate-200">
+                      <tr key={accIdx} className="hover:bg-secondary/20 border-b border-border h-[24px]">
+                        <td className="text-center text-muted-foreground bg-secondary/20/50 border-r border-border text-[10px]">{acc.sr}</td>
+                        <td className="p-0 border-r border-border">
                           <input
                             type="text"
                             data-row={accIdx}
                             data-col-idx={0}
-                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-[11px] font-bold text-slate-700 bg-transparent focus:bg-white focus:outline-none uppercase"
+                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-[11px] font-bold text-foreground bg-transparent focus:bg-card focus:outline-none uppercase"
                             value={acc.it_code}
                             onChange={(e) => handleDiamondCellChange(selectedItemIndex, accIdx, 'it_code', e.target.value)}
                           />
                         </td>
-                        <td className="p-0 border-r border-slate-200">
+                        <td className="p-0 border-r border-border">
                           <input
                             type="text"
                             data-row={accIdx}
                             data-col-idx={1}
-                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1.5 text-[11px] text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1.5 text-[11px] text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={acc.it_name}
                             onChange={(e) => handleDiamondCellChange(selectedItemIndex, accIdx, 'it_name', e.target.value)}
                           />
                         </td>
-                        <td className="p-0 border-r border-slate-200">
+                        <td className="p-0 border-r border-border">
                           <input
                             type="text"
                             data-row={accIdx}
                             data-col-idx={2}
-                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-center text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-center text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={acc.dm_color}
                             onChange={(e) => handleDiamondCellChange(selectedItemIndex, accIdx, 'dm_color', e.target.value)}
                           />
                         </td>
-                        <td className="p-0 border-r border-slate-200">
+                        <td className="p-0 border-r border-border">
                           <input
                             type="text"
                             data-row={accIdx}
                             data-col-idx={3}
-                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-center text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-center text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={acc.dm_origin}
                             onChange={(e) => handleDiamondCellChange(selectedItemIndex, accIdx, 'dm_origin', e.target.value)}
                           />
                         </td>
-                        <td className="p-0 border-r border-slate-200">
+                        <td className="p-0 border-r border-border">
                           <input
                             type="text"
                             data-row={accIdx}
                             data-col-idx={4}
-                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={acc.dm_remark}
                             onChange={(e) => handleDiamondCellChange(selectedItemIndex, accIdx, 'dm_remark', e.target.value)}
                           />
                         </td>
-                        <td className="p-0 border-r border-slate-200">
+                        <td className="p-0 border-r border-border">
                           <input
                             type="text"
                             data-row={accIdx}
                             data-col-idx={5}
-                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={acc.dm_sf_no}
                             onChange={(e) => handleDiamondCellChange(selectedItemIndex, accIdx, 'dm_sf_no', e.target.value)}
                           />
                         </td>
-                        <td className="p-0 border-r border-slate-200">
+                        <td className="p-0 border-r border-border">
                           <input
                             type="number"
                             data-row={accIdx}
                             data-col-idx={6}
-                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={acc.pcs || ''}
                             onChange={(e) => handleDiamondCellChange(selectedItemIndex, accIdx, 'pcs', e.target.value)}
                           />
@@ -1531,7 +1531,7 @@ export default function SalesView() {
                             step="0.001"
                             data-row={accIdx}
                             data-col-idx={7}
-                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="diamond-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={acc.weight || ''}
                             onChange={(e) => handleDiamondCellChange(selectedItemIndex, accIdx, 'weight', e.target.value)}
                           />
@@ -1544,12 +1544,12 @@ export default function SalesView() {
             </div>
 
             {/* 5. GOLD / FINE SUMMARY GRID (OLD GOLD/METAL RETURNS) */}
-            <div className="col-span-6 bg-white border border-slate-300 rounded-[2px] flex flex-col overflow-hidden shadow-sm">
-              <div className="bg-slate-100 px-2.5 py-1 border-b border-slate-200 flex justify-between items-center text-[10px] shrink-0 font-bold">
-                <span className="uppercase tracking-wider text-slate-500 font-luxury">Gold / Fine Summary</span>
+            <div className="col-span-6 surface-premium bg-card flex flex-col overflow-hidden shadow-sm">
+              <div className="bg-secondary/50 px-2.5 py-1 border-b border-border flex justify-between items-center text-[10px] shrink-0 font-bold">
+                <span className="uppercase tracking-wider text-muted-foreground font-luxury">Gold / Fine Summary</span>
                 <button
                   onClick={insertReturnRow}
-                  className="px-2 py-0.5 bg-slate-700 text-white text-[8px] font-bold uppercase tracking-wider rounded-[1px] cursor-pointer hover:bg-slate-800 transition-colors"
+                  className="px-2 py-0.5 bg-primary text-white text-[8px] font-bold uppercase tracking-wider rounded-sm cursor-pointer hover:bg-primary/90 transition-colors"
                 >
                   + Add Metal
                 </button>
@@ -1557,126 +1557,126 @@ export default function SalesView() {
               <div className="flex-1 overflow-auto">
                 <table className="border-collapse text-left text-xs table-fixed min-w-[620px] w-full">
                   <thead>
-                    <tr className="bg-slate-200 border-b border-slate-300 text-[9px] font-bold text-slate-500 uppercase select-none">
-                      <th className="w-[30px] text-center border-r border-slate-300 py-1">Sr</th>
-                      <th className="w-[45px] border-r border-slate-300 px-1">ItCode</th>
-                      <th className="border-r border-slate-300 px-1 text-left min-w-[70px]">ItName</th>
-                      <th className="w-[30px] border-r border-slate-300 px-1 text-center">Pcs</th>
-                      <th className="w-[45px] border-r border-slate-300 px-1 text-right">GrWt</th>
-                      <th className="w-[45px] border-r border-slate-300 px-1 text-right">LsWt</th>
-                      <th className="w-[50px] border-r border-slate-300 px-1 text-right">NetWt</th>
-                      <th className="w-[45px] border-r border-slate-300 px-1 text-center">Touch</th>
-                      <th className="w-[55px] border-r border-slate-300 px-1 text-right bg-amber-50 dark:bg-amber-950/20 text-amber-800">Fine</th>
-                      <th className="w-[50px] border-r border-slate-300 px-1 text-right">Rate</th>
+                    <tr className="bg-secondary border-b border-border text-[9px] font-bold text-muted-foreground uppercase select-none">
+                      <th className="w-[30px] text-center border-r border-border py-1">Sr</th>
+                      <th className="w-[45px] border-r border-border px-1">ItCode</th>
+                      <th className="border-r border-border px-1 text-left min-w-[70px]">ItName</th>
+                      <th className="w-[30px] border-r border-border px-1 text-center">Pcs</th>
+                      <th className="w-[45px] border-r border-border px-1 text-right">GrWt</th>
+                      <th className="w-[45px] border-r border-border px-1 text-right">LsWt</th>
+                      <th className="w-[50px] border-r border-border px-1 text-right">NetWt</th>
+                      <th className="w-[45px] border-r border-border px-1 text-center">Touch</th>
+                      <th className="w-[55px] border-r border-border px-1 text-right bg-amber-50 dark:bg-amber-950/20 text-amber-800">Fine</th>
+                      <th className="w-[50px] border-r border-border px-1 text-right">Rate</th>
                       <th className="w-[75px] text-right px-1">NetAmt</th>
                     </tr>
                   </thead>
-                  <tbody className="font-semibold text-slate-700 font-data" onKeyDown={handleReturnKeyDown}>
+                  <tbody className="font-semibold text-foreground font-data" onKeyDown={handleReturnKeyDown}>
                     {returnMetals.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50 border-b border-slate-200 h-[24px]">
-                        <td className="text-center text-slate-400 bg-slate-50/50 border-r border-slate-200 text-[10px]">{row.sr}</td>
+                      <tr key={idx} className="hover:bg-secondary/20 border-b border-border h-[24px]">
+                        <td className="text-center text-muted-foreground bg-secondary/20/50 border-r border-border text-[10px]">{row.sr}</td>
                         
                         {/* ItCode */}
-                        <td className="p-0 border-r border-slate-200">
+                        <td className="p-0 border-r border-border">
                           <input
                             type="text"
                             data-row={idx}
                             data-col-idx={0}
                             placeholder="OG"
-                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-[11px] font-bold text-slate-700 bg-transparent focus:bg-white focus:outline-none uppercase"
+                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-[11px] font-bold text-foreground bg-transparent focus:bg-card focus:outline-none uppercase"
                             value={row.it_code}
                             onChange={(e) => handleReturnCellChange(idx, 'it_code', e.target.value)}
                           />
                         </td>
 
                         {/* ItName */}
-                        <td className="p-0 border-r border-slate-200">
+                        <td className="p-0 border-r border-border">
                           <input
                             type="text"
                             data-row={idx}
                             data-col-idx={1}
                             placeholder="Old Gold Ring"
-                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-[11px] text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-[11px] text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={row.it_name}
                             onChange={(e) => handleReturnCellChange(idx, 'it_name', e.target.value)}
                           />
                         </td>
 
                         {/* Pcs */}
-                        <td className="p-0 border-r border-slate-200 text-center">
+                        <td className="p-0 border-r border-border text-center">
                           <input
                             type="number"
                             data-row={idx}
                             data-col-idx={2}
-                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={row.pcs || ''}
                             onChange={(e) => handleReturnCellChange(idx, 'pcs', e.target.value)}
                           />
                         </td>
 
                         {/* GrWt */}
-                        <td className="p-0 border-r border-slate-200 text-right">
+                        <td className="p-0 border-r border-border text-right">
                           <input
                             type="number"
                             step="0.001"
                             data-row={idx}
                             data-col-idx={3}
-                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={row.gr_wt || ''}
                             onChange={(e) => handleReturnCellChange(idx, 'gr_wt', e.target.value)}
                           />
                         </td>
 
                         {/* LsWt */}
-                        <td className="p-0 border-r border-slate-200 text-right">
+                        <td className="p-0 border-r border-border text-right">
                           <input
                             type="number"
                             step="0.001"
                             data-row={idx}
                             data-col-idx={4}
-                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={row.ls_wt || ''}
                             onChange={(e) => handleReturnCellChange(idx, 'ls_wt', e.target.value)}
                           />
                         </td>
 
                         {/* NetWt (Calculated) */}
-                        <td className="px-1 text-right border-r border-slate-200 font-data text-slate-500 bg-slate-50/20 text-[10px]">
+                        <td className="px-1 text-right border-r border-border font-data text-muted-foreground bg-secondary/20/20 text-[10px]">
                           {row.net_wt > 0 ? row.net_wt.toFixed(3) : '-'}
                         </td>
 
                         {/* Touch */}
-                        <td className="p-0 border-r border-slate-200 text-center">
+                        <td className="p-0 border-r border-border text-center">
                           <input
                             type="number"
                             step="0.01"
                             data-row={idx}
                             data-col-idx={5}
-                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-center font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={row.touch || ''}
                             onChange={(e) => handleReturnCellChange(idx, 'touch', e.target.value)}
                           />
                         </td>
 
                         {/* Fine (Calculated, Golden Highlighted) */}
-                        <td className="px-1 text-right border-r border-slate-300 font-data text-amber-700 bg-amber-100 font-bold text-[10.5px]">
+                        <td className="px-1 text-right border-r border-border font-data text-amber-700 bg-amber-100 font-bold text-[10.5px]">
                           {row.fine > 0 ? row.fine.toFixed(3) : '-'}
                         </td>
 
                         {/* Rate */}
-                        <td className="p-0 border-r border-slate-200 text-right">
+                        <td className="p-0 border-r border-border text-right">
                           <input
                             type="number"
                             data-row={idx}
                             data-col-idx={6}
-                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-slate-700 bg-transparent focus:bg-white focus:outline-none"
+                            className="return-grid-input w-full h-[23px] !border-none !rounded-none !shadow-none !px-1 text-right font-data text-foreground bg-transparent focus:bg-card focus:outline-none"
                             value={row.rate || ''}
                             onChange={(e) => handleReturnCellChange(idx, 'rate', e.target.value)}
                           />
                         </td>
 
                         {/* NetAmt (Calculated) */}
-                        <td className="px-1 text-right font-data text-slate-700 bg-slate-100/30 text-[10.5px]">
+                        <td className="px-1 text-right font-data text-foreground bg-secondary/50/30 text-[10.5px]">
                           {row.net_amt > 0 ? row.net_amt.toFixed(2) : '-'}
                         </td>
                       </tr>
@@ -1684,16 +1684,16 @@ export default function SalesView() {
                   </tbody>
                   {/* Totals row for returns grid */}
                   <tfoot>
-                    <tr className="bg-slate-150 border-t border-slate-300 text-[9px] font-bold text-slate-600 font-data h-[24px]">
-                      <td colSpan={3} className="px-1.5 uppercase font-bold text-slate-500">Exch Total:</td>
-                      <td className="text-center border-r border-slate-200">{returnPcs}</td>
-                      <td className="text-right border-r border-slate-200 px-1">{returnGrWt.toFixed(3)}</td>
-                      <td className="text-right border-r border-slate-200 px-1">{returnLsWt.toFixed(3)}</td>
-                      <td className="text-right border-r border-slate-200 px-1">{returnNetWt.toFixed(3)}</td>
-                      <td className="border-r border-slate-200"></td>
-                      <td className="text-right border-r border-slate-300 px-1 text-amber-800 bg-amber-50 font-bold">{returnTotalFine.toFixed(3)}</td>
-                      <td className="border-r border-slate-200"></td>
-                      <td className="text-right text-slate-700 font-bold px-1">{totalReturnAmt.toFixed(2)}</td>
+                    <tr className="bg-slate-150 border-t border-border text-[9px] font-bold text-muted-foreground font-data h-[24px]">
+                      <td colSpan={3} className="px-1.5 uppercase font-bold text-muted-foreground">Exch Total:</td>
+                      <td className="text-center border-r border-border">{returnPcs}</td>
+                      <td className="text-right border-r border-border px-1">{returnGrWt.toFixed(3)}</td>
+                      <td className="text-right border-r border-border px-1">{returnLsWt.toFixed(3)}</td>
+                      <td className="text-right border-r border-border px-1">{returnNetWt.toFixed(3)}</td>
+                      <td className="border-r border-border"></td>
+                      <td className="text-right border-r border-border px-1 text-amber-800 bg-amber-50 font-bold">{returnTotalFine.toFixed(3)}</td>
+                      <td className="border-r border-border"></td>
+                      <td className="text-right text-foreground font-bold px-1">{totalReturnAmt.toFixed(2)}</td>
                     </tr>
                   </tfoot>
                 </table>
@@ -1703,10 +1703,10 @@ export default function SalesView() {
           </div>
 
           {/* 6. IMAGE + EMPLOYEE SECTION & 7. ORDER ADJUSTMENT PANEL */}
-          <div className="bg-white border border-slate-300 rounded-[2px] p-2 shadow-sm shrink-0 grid grid-cols-12 gap-3 items-center h-[110px]">
+          <div className="surface-premium bg-card p-3 shrink-0 grid grid-cols-12 gap-3 items-center h-[110px]">
             
             {/* Image Preview Area */}
-            <div className="col-span-2 flex items-center justify-center border border-slate-200 rounded-[2px] bg-slate-50 h-[90px] w-full relative overflow-hidden select-none">
+            <div className="col-span-2 flex items-center justify-center border border-border rounded-sm bg-secondary/20 h-[90px] w-full relative overflow-hidden select-none">
               <img
                 src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=120&auto=format&fit=crop&q=60"
                 alt="Product preview"
@@ -1725,35 +1725,35 @@ export default function SalesView() {
               
               {/* Employee */}
               <div className="col-span-7 flex items-center gap-1">
-                <span className="text-[10px] font-bold text-slate-500 uppercase w-14 shrink-0">Employee</span>
-                <input type="text" className="w-10 h-7 border border-slate-300 rounded-[2px] text-center font-data text-xs font-bold bg-slate-50 text-slate-500" value={employee} disabled />
-                <input type="text" className="flex-1 h-7 border border-slate-300 rounded-[2px] text-xs font-bold bg-slate-50 text-slate-500" value={employeeName} disabled />
+                <span className="text-[10px] font-bold text-muted-foreground uppercase w-14 shrink-0">Employee</span>
+                <input type="text" className="w-10 h-7 border border-border rounded-sm text-center font-data text-xs font-bold bg-secondary/20 text-muted-foreground" value={employee} disabled />
+                <input type="text" className="flex-1 h-7 border border-border rounded-sm text-xs font-bold bg-secondary/20 text-muted-foreground" value={employeeName} disabled />
               </div>
 
               {/* Credit days */}
               <div className="col-span-5 flex items-center gap-1.5">
-                <span className="text-[10px] font-bold text-slate-500 uppercase whitespace-nowrap">CrDay</span>
-                <input type="number" className="w-full h-7 border border-slate-300 rounded-[2px] text-center font-data font-bold text-slate-700" value={crDay} onChange={(e) => setCrDay(parseInt(e.target.value, 10) || 0)} />
+                <span className="text-[10px] font-bold text-muted-foreground uppercase whitespace-nowrap">CrDay</span>
+                <input type="number" className="w-full h-7 border border-border rounded-sm text-center font-data font-bold text-foreground" value={crDay} onChange={(e) => setCrDay(parseInt(e.target.value, 10) || 0)} />
               </div>
 
               {/* Bank Name */}
               <div className="col-span-6 flex items-center gap-1">
-                <span className="text-[10px] font-bold text-slate-500 uppercase w-14 shrink-0">Bank Name</span>
-                <input type="text" placeholder="Cheque bank" className="w-full h-7 border border-slate-300 rounded-[2px] text-xs" value={bankName} onChange={(e) => setBankName(e.target.value)} />
+                <span className="text-[10px] font-bold text-muted-foreground uppercase w-14 shrink-0">Bank Name</span>
+                <input type="text" placeholder="Cheque bank" className="w-full h-7 border border-border rounded-sm text-xs" value={bankName} onChange={(e) => setBankName(e.target.value)} />
               </div>
 
               {/* Narration/VchDesc */}
               <div className="col-span-6 flex items-center gap-1">
-                <span className="text-[10px] font-bold text-slate-500 uppercase w-12 shrink-0">Narration</span>
-                <input type="text" placeholder="Comments..." className="w-full h-7 border border-slate-300 rounded-[2px] text-xs" value={vchDesc} onChange={(e) => setVchDesc(e.target.value)} />
+                <span className="text-[10px] font-bold text-muted-foreground uppercase w-12 shrink-0">Narration</span>
+                <input type="text" placeholder="Comments..." className="w-full h-7 border border-border rounded-sm text-xs" value={vchDesc} onChange={(e) => setVchDesc(e.target.value)} />
               </div>
 
             </div>
 
             {/* 7. ORDER ADJUSTMENT PANEL */}
-            <div className="col-span-4 bg-slate-50 border border-slate-300 rounded-[2px] p-1.5 flex flex-col h-[90px] overflow-hidden">
+            <div className="col-span-4 bg-secondary/20 border border-border rounded-sm p-1.5 flex flex-col h-[90px] overflow-hidden">
               <div className="flex justify-between items-center mb-1 shrink-0">
-                <span className="text-[9px] font-extrabold text-slate-500 uppercase tracking-wider">Order Adjustments</span>
+                <span className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-wider">Order Adjustments</span>
                 <button
                   onClick={insertOrderRow}
                   className="text-[9px] font-extrabold text-primary hover:underline cursor-pointer"
@@ -1764,21 +1764,21 @@ export default function SalesView() {
               <div className="flex-1 overflow-y-auto">
                 <table className="w-full border-collapse text-[10px]">
                   <thead>
-                    <tr className="border-b border-slate-300 text-[8px] text-slate-400 font-bold uppercase">
+                    <tr className="border-b border-border text-[8px] text-muted-foreground font-bold uppercase">
                       <th className="w-6 text-center py-0.5">Sr</th>
                       <th className="pl-1">Order No</th>
                       <th className="text-right pr-1">Order Amount</th>
                     </tr>
                   </thead>
-                  <tbody className="font-data font-semibold text-slate-700">
+                  <tbody className="font-data font-semibold text-foreground">
                     {orderAdjustments.map((o, idx) => (
-                      <tr key={idx} className="border-b border-slate-200 h-5">
-                        <td className="text-center text-slate-400">{o.sr}</td>
+                      <tr key={idx} className="border-b border-border h-5">
+                        <td className="text-center text-muted-foreground">{o.sr}</td>
                         <td className="p-0">
                           <input
                             type="text"
                             placeholder="e.g. 0001"
-                            className="w-full h-4 !border-none !rounded-none !shadow-none p-0 text-[10px] font-bold text-slate-700 bg-transparent focus:outline-none"
+                            className="w-full h-4 !border-none !rounded-none !shadow-none p-0 text-[10px] font-bold text-foreground bg-transparent focus:outline-none"
                             value={o.ord_no}
                             onChange={(e) => handleOrderCellChange(idx, 'ord_no', e.target.value)}
                           />
@@ -1787,7 +1787,7 @@ export default function SalesView() {
                           <input
                             type="number"
                             placeholder="0.00"
-                            className="w-full h-4 !border-none !rounded-none !shadow-none p-0 text-[10px] text-right font-data text-slate-700 bg-transparent focus:outline-none"
+                            className="w-full h-4 !border-none !rounded-none !shadow-none p-0 text-[10px] text-right font-data text-foreground bg-transparent focus:outline-none"
                             value={o.ord_amt || ''}
                             onChange={(e) => handleOrderCellChange(idx, 'ord_amt', e.target.value)}
                           />
@@ -1804,25 +1804,25 @@ export default function SalesView() {
         </div>
 
         {/* 8. ACCOUNTING SUMMARY PANEL (RIGHT SIDEBAR) */}
-        <div className="col-span-3 bg-white border border-slate-300 rounded-[2px] shadow-sm flex flex-col p-2 h-full overflow-y-auto">
-          <div className="bg-slate-100 border border-slate-200 py-1 px-2 mb-2 text-center uppercase tracking-widest font-extrabold text-[10px] text-slate-500 font-luxury">
+        <div className="col-span-3 surface-premium bg-card flex flex-col p-2 h-full overflow-y-auto">
+          <div className="bg-secondary/50 border border-border py-1 px-2 mb-2 text-center uppercase tracking-widest font-extrabold text-[10px] text-muted-foreground font-luxury">
             Ledger Settlement Summary
           </div>
 
-          <div className="flex flex-col gap-1.5 text-[10.5px] font-semibold text-slate-700">
+          <div className="flex flex-col gap-1.5 text-[10.5px] font-semibold text-foreground">
             
             {/* Net Amt */}
-            <div className="flex justify-between items-center h-6 border-b border-slate-100">
-              <span className="text-slate-500">Net Amt (Sales)</span>
+            <div className="flex justify-between items-center h-6 border-b border-border">
+              <span className="text-muted-foreground">Net Amt (Sales)</span>
               <span className="font-data font-bold">₹{Math.round(netAmt).toLocaleString()}</span>
             </div>
 
             {/* Disc Amt */}
             <div className="flex justify-between items-center h-6 gap-2">
-              <span className="text-slate-500 w-1/3">Disc Amt</span>
+              <span className="text-muted-foreground w-1/3">Disc Amt</span>
               <input
                 type="number"
-                className="w-2/3 h-5.5 text-right font-data border border-slate-300 rounded-[2px] px-1 text-[10.5px]"
+                className="w-2/3 h-5.5 text-right font-data border border-border rounded-sm px-1 text-[10.5px]"
                 value={discAmt || ''}
                 onChange={(e) => setDiscAmt(parseFloat(e.target.value) || 0)}
               />
@@ -1830,10 +1830,10 @@ export default function SalesView() {
 
             {/* Tax Amt selection & calculation */}
             <div className="flex justify-between items-center h-6 gap-2">
-              <span className="text-slate-500 w-1/3">Tax Amt</span>
+              <span className="text-muted-foreground w-1/3">Tax Amt</span>
               <div className="w-2/3 flex gap-0.5 items-center">
                 <select
-                  className="w-full h-5.5 text-xs font-bold bg-white border border-slate-300 rounded-[2px] py-0 px-1"
+                  className="w-full h-5.5 text-xs font-bold surface-premium bg-card py-0 px-1"
                   value={taxRate}
                   onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)}
                 >
@@ -1841,48 +1841,48 @@ export default function SalesView() {
                   <option value="1.5">GST 1.5%</option>
                   <option value="0.0">Exempt</option>
                 </select>
-                <span className="font-data text-slate-400 w-20 text-right shrink-0">₹{Math.round(taxAmt).toLocaleString()}</span>
+                <span className="font-data text-muted-foreground w-20 text-right shrink-0">₹{Math.round(taxAmt).toLocaleString()}</span>
               </div>
             </div>
 
             {/* TCS Amt */}
             <div className="flex justify-between items-center h-6 gap-2">
-              <span className="text-slate-500 w-1/3">TCS Amt %</span>
+              <span className="text-muted-foreground w-1/3">TCS Amt %</span>
               <div className="w-2/3 flex gap-0.5 items-center">
                 <input
                   type="number"
                   step="0.001"
-                  className="w-full h-5.5 text-right font-data border border-slate-300 rounded-[2px] px-1 text-[10.5px]"
+                  className="w-full h-5.5 text-right font-data border border-border rounded-sm px-1 text-[10.5px]"
                   value={tcsRate || ''}
                   onChange={(e) => setTcsRate(parseFloat(e.target.value) || 0.0)}
                 />
-                <span className="font-data text-slate-400 w-20 text-right shrink-0">₹{Math.round(tcsAmt).toLocaleString()}</span>
+                <span className="font-data text-muted-foreground w-20 text-right shrink-0">₹{Math.round(tcsAmt).toLocaleString()}</span>
               </div>
             </div>
 
             {/* Rof Amt */}
-            <div className="flex justify-between items-center h-6 border-b border-slate-100">
-              <span className="text-slate-500">Rof Amt (Round)</span>
-              <span className="font-data text-slate-400">₹{rofAmt.toFixed(2)}</span>
+            <div className="flex justify-between items-center h-6 border-b border-border">
+              <span className="text-muted-foreground">Rof Amt (Round)</span>
+              <span className="font-data text-muted-foreground">₹{rofAmt.toFixed(2)}</span>
             </div>
 
             {/* Total Amt (Grand Total) */}
-            <div className="flex justify-between items-center py-1 bg-amber-500/10 border border-amber-500/20 px-2 rounded-[2px] my-0.5 font-bold">
+            <div className="flex justify-between items-center py-1 bg-amber-500/10 border border-amber-500/20 px-2 rounded-sm my-0.5 font-bold">
               <span className="uppercase text-[10px] text-amber-800">Total Amt</span>
               <span className="text-sm font-data font-extrabold text-amber-700">₹{totalAmt.toLocaleString()}</span>
             </div>
 
             {/* Cheque Amt */}
             <div className="flex justify-between items-center gap-1 h-6">
-              <span className="text-slate-500 w-1/4">Cheque</span>
-              <select className="w-5/12 h-5.5 text-[9px] bg-white border border-slate-300 rounded-[2px]" value={chequeBank} onChange={(e) => setChequeBank(e.target.value)}>
+              <span className="text-muted-foreground w-1/4">Cheque</span>
+              <select className="w-5/12 h-5.5 text-[9px] surface-premium bg-card" value={chequeBank} onChange={(e) => setChequeBank(e.target.value)}>
                 <option value="BANK A/C">BANK A/C</option>
                 <option value="HDFC BANK">HDFC BANK</option>
                 <option value="SBI BANK">SBI BANK</option>
               </select>
               <input
                 type="number"
-                className="w-1/3 h-5.5 text-right font-data border border-slate-300 rounded-[2px] px-1"
+                className="w-1/3 h-5.5 text-right font-data border border-border rounded-sm px-1"
                 value={chequeAmt || ''}
                 onChange={(e) => setChequeAmt(parseFloat(e.target.value) || 0)}
               />
@@ -1890,49 +1890,49 @@ export default function SalesView() {
 
             {/* Card Amt */}
             <div className="flex justify-between items-center gap-1 h-6">
-              <span className="text-slate-500 w-1/4">Card</span>
-              <select className="w-5/12 h-5.5 text-[9px] bg-white border border-slate-300 rounded-[2px]" value={cardBank} onChange={(e) => setCardBank(e.target.value)}>
+              <span className="text-muted-foreground w-1/4">Card</span>
+              <select className="w-5/12 h-5.5 text-[9px] surface-premium bg-card" value={cardBank} onChange={(e) => setCardBank(e.target.value)}>
                 <option value="CARD A/C">CARD A/C</option>
                 <option value="POS MACHINE">POS MACHINE</option>
               </select>
               <input
                 type="number"
-                className="w-1/3 h-5.5 text-right font-data border border-slate-300 rounded-[2px] px-1"
+                className="w-1/3 h-5.5 text-right font-data border border-border rounded-sm px-1"
                 value={cardAmt || ''}
                 onChange={(e) => setCardAmt(parseFloat(e.target.value) || 0)}
               />
             </div>
 
             {/* Order Amt (sum from bottom adjustments) */}
-            <div className="flex justify-between items-center h-6 border-b border-slate-100">
-              <span className="text-slate-500">Order Amt</span>
-              <span className="font-data text-slate-700 font-bold">₹{totalOrderAdjAmt.toLocaleString()}</span>
+            <div className="flex justify-between items-center h-6 border-b border-border">
+              <span className="text-muted-foreground">Order Amt</span>
+              <span className="font-data text-foreground font-bold">₹{totalOrderAdjAmt.toLocaleString()}</span>
             </div>
 
             {/* Old Gold Amt (calculated from returns) */}
             <div className="flex justify-between items-center h-6">
-              <span className="text-slate-500">Old Gold Amt</span>
+              <span className="text-muted-foreground">Old Gold Amt</span>
               <div className="flex gap-1 items-center font-data">
-                <span className="text-[9.5px] text-slate-400">{oldGoldWt.toFixed(3)}g</span>
-                <span className="text-slate-600 font-bold">₹{oldGoldAmt.toLocaleString()}</span>
+                <span className="text-[9.5px] text-muted-foreground">{oldGoldWt.toFixed(3)}g</span>
+                <span className="text-muted-foreground font-bold">₹{oldGoldAmt.toLocaleString()}</span>
               </div>
             </div>
 
             {/* Old Silver Amt (calculated from returns) */}
-            <div className="flex justify-between items-center h-6 border-b border-slate-100">
-              <span className="text-slate-500">Old Silver Amt</span>
+            <div className="flex justify-between items-center h-6 border-b border-border">
+              <span className="text-muted-foreground">Old Silver Amt</span>
               <div className="flex gap-1 items-center font-data">
-                <span className="text-[9.5px] text-slate-400">{oldSilverWt.toFixed(3)}g</span>
-                <span className="text-slate-600 font-bold">₹{oldSilverAmt.toLocaleString()}</span>
+                <span className="text-[9.5px] text-muted-foreground">{oldSilverWt.toFixed(3)}g</span>
+                <span className="text-muted-foreground font-bold">₹{oldSilverAmt.toLocaleString()}</span>
               </div>
             </div>
 
             {/* Scheme Amt */}
             <div className="flex justify-between items-center h-6 gap-2">
-              <span className="text-slate-500 w-1/3">Scheme Amt</span>
+              <span className="text-muted-foreground w-1/3">Scheme Amt</span>
               <input
                 type="number"
-                className="w-2/3 h-5.5 text-right font-data border border-slate-300 rounded-[2px] px-1"
+                className="w-2/3 h-5.5 text-right font-data border border-border rounded-sm px-1"
                 value={schemeAmt || ''}
                 onChange={(e) => setSchemeAmt(parseFloat(e.target.value) || 0)}
               />
@@ -1940,10 +1940,10 @@ export default function SalesView() {
 
             {/* Cash Amt (Received) */}
             <div className="flex justify-between items-center h-6 gap-2">
-              <span className="text-slate-500 w-1/3">Cash Amt</span>
+              <span className="text-muted-foreground w-1/3">Cash Amt</span>
               <input
                 type="number"
-                className="w-2/3 h-5.5 text-right font-data border border-slate-300 rounded-[2px] px-1 font-bold text-slate-800"
+                className="w-2/3 h-5.5 text-right font-data border border-border rounded-sm px-1 font-bold text-foreground"
                 value={cashAmt || ''}
                 onChange={(e) => setCashAmt(parseFloat(e.target.value) || 0)}
               />
@@ -1951,28 +1951,28 @@ export default function SalesView() {
 
             {/* Cash Paid Amt (Payments Out) */}
             <div className="flex justify-between items-center h-6 gap-2">
-              <span className="text-slate-500 w-1/3">Cash Paid Amt</span>
+              <span className="text-muted-foreground w-1/3">Cash Paid Amt</span>
               <input
                 type="number"
-                className="w-2/3 h-5.5 text-right font-data border border-slate-300 rounded-[2px] px-1"
+                className="w-2/3 h-5.5 text-right font-data border border-border rounded-sm px-1"
                 value={cashPaidAmt || ''}
                 onChange={(e) => setCashPaidAmt(parseFloat(e.target.value) || 0)}
               />
             </div>
 
             {/* Kasar Amt */}
-            <div className="flex justify-between items-center h-6 gap-2 border-b border-slate-100 pb-1">
-              <span className="text-slate-500 w-1/3">Kasar Amt</span>
+            <div className="flex justify-between items-center h-6 gap-2 border-b border-border pb-1">
+              <span className="text-muted-foreground w-1/3">Kasar Amt</span>
               <input
                 type="number"
-                className="w-2/3 h-5.5 text-right font-data border border-slate-300 rounded-[2px] px-1"
+                className="w-2/3 h-5.5 text-right font-data border border-border rounded-sm px-1"
                 value={kasarAmt || ''}
                 onChange={(e) => setKasarAmt(parseFloat(e.target.value) || 0)}
               />
             </div>
 
             {/* Os Amt (Outstanding - highlighted red/rose) */}
-            <div className="flex justify-between items-center py-1 bg-red-500/10 border border-red-500/25 px-2 rounded-[2px] mt-1 font-extrabold text-[12px] text-red-600">
+            <div className="flex justify-between items-center py-1 bg-red-500/10 border border-red-500/25 px-2 rounded-sm mt-1 font-extrabold text-[12px] text-red-600">
               <span className="uppercase text-[9px] tracking-wider text-red-800 font-luxury">Outstanding (Os)</span>
               <span className="font-data text-[13px]">₹{osAmt.toLocaleString()}</span>
             </div>
@@ -1983,15 +1983,15 @@ export default function SalesView() {
       </div>
 
       {/* 9. ACTION TOOLBAR */}
-      <div className="bg-slate-100 border border-slate-300 rounded-[2px] px-4 py-1.5 flex items-center justify-between shrink-0 select-none mt-1.5 shadow-sm">
+      <div className="bg-secondary/50 border border-border rounded-sm px-4 py-1.5 flex items-center justify-between shrink-0 select-none mt-1.5 shadow-sm">
         <div className="flex items-center gap-2">
           
           {/* Navigation Controls */}
-          <div className="flex gap-0.5 border border-slate-300 rounded-[2px] overflow-hidden shadow-sm">
+          <div className="flex gap-0.5 border border-border rounded-sm overflow-hidden shadow-sm">
             <button
               type="button"
               onClick={handlePrev}
-              className="w-8 h-8 flex items-center justify-center bg-white hover:bg-slate-50 text-slate-700 transition-colors border-r border-slate-300 cursor-pointer"
+              className="w-8 h-8 flex items-center justify-center bg-card hover:bg-secondary/20 text-foreground transition-colors border-r border-border cursor-pointer"
               title="Previous Voucher"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -1999,23 +1999,23 @@ export default function SalesView() {
             <button
               type="button"
               onClick={handleNext}
-              className="w-8 h-8 flex items-center justify-center bg-white hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer"
+              className="w-8 h-8 flex items-center justify-center bg-card hover:bg-secondary/20 text-foreground transition-colors cursor-pointer"
               title="Next Voucher"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
 
-          <span className="text-[9.5px] font-extrabold tracking-wider text-slate-500 uppercase ml-2 bg-white px-2 py-1.5 border border-slate-200 rounded-[2px] font-data">
+          <span className="text-[9.5px] font-extrabold tracking-wider text-muted-foreground uppercase ml-2 bg-card px-2 py-1.5 border border-border rounded-sm font-data">
             {activeInvoiceId ? 'EDIT VOUCHER' : 'NEW INVOICE'}
           </span>
 
-          <label className="flex items-center gap-1 text-[11px] font-bold text-slate-500 cursor-pointer ml-3 select-none">
+          <label className="flex items-center gap-1 text-[11px] font-bold text-muted-foreground cursor-pointer ml-3 select-none">
             <input type="checkbox" className="h-3.5 w-3.5 cursor-pointer accent-primary" />
             <span>Whatsapp</span>
           </label>
           
-          <label className="flex items-center gap-1 text-[11px] font-bold text-slate-500 cursor-pointer ml-3 select-none">
+          <label className="flex items-center gap-1 text-[11px] font-bold text-muted-foreground cursor-pointer ml-3 select-none">
             <input type="checkbox" className="h-3.5 w-3.5 cursor-pointer accent-primary" />
             <span>Huld Print</span>
           </label>
@@ -2028,9 +2028,9 @@ export default function SalesView() {
           <button
             type="button"
             onClick={() => window.print()}
-            className="flex items-center gap-1 px-3 h-8 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-[2px] uppercase shadow-sm transition-all text-[11px] cursor-pointer"
+            className="flex items-center gap-1 px-3 h-8 bg-card hover:bg-secondary/20 text-foreground border border-border rounded-sm uppercase shadow-sm transition-all text-[11px] cursor-pointer"
           >
-            <Printer className="h-3.5 w-3.5 text-slate-400" />
+            <Printer className="h-3.5 w-3.5 text-muted-foreground" />
             <span>Print</span>
           </button>
 
@@ -2041,7 +2041,7 @@ export default function SalesView() {
               const res = await (window as any).api.saveToPDF(`SalesInvoice_${vchNo || 'New'}.pdf`);
               showToast(res.message, res.success ? 'success' : 'info');
             }}
-            className="flex items-center gap-1.5 px-3 h-8 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-[2px] uppercase shadow-sm transition-all text-[11px] font-bold cursor-pointer"
+            className="flex items-center gap-1.5 px-3 h-8 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-sm uppercase shadow-sm transition-all text-[11px] font-bold cursor-pointer"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mr-0.5 animate-pulse" />
             <span>PDF</span>
@@ -2050,7 +2050,7 @@ export default function SalesView() {
           {/* Save */}
           <button
             onClick={handleSave}
-            className="flex items-center gap-1.5 px-4.5 h-8 text-white font-bold uppercase rounded-[2px] shadow-sm transition-all text-[11px] cursor-pointer"
+            className="flex items-center gap-1.5 px-4.5 h-8 text-white font-bold uppercase rounded-sm shadow-sm transition-all text-[11px] cursor-pointer"
             style={{ backgroundColor: `hsl(${themeAccentColors[themeAccent]})` }}
           >
             <Save className="h-3.5 w-3.5" />
@@ -2060,9 +2060,9 @@ export default function SalesView() {
           {/* Cancel */}
           <button
             onClick={handleCancel}
-            className="flex items-center gap-1 px-3.5 h-8 bg-white hover:bg-slate-50 text-slate-600 border border-slate-300 rounded-[2px] uppercase shadow-sm transition-all text-[11px] cursor-pointer"
+            className="flex items-center gap-1 px-3.5 h-8 bg-card hover:bg-secondary/20 text-muted-foreground border border-border rounded-sm uppercase shadow-sm transition-all text-[11px] cursor-pointer"
           >
-            <Undo2 className="h-3.5 w-3.5 text-slate-400" />
+            <Undo2 className="h-3.5 w-3.5 text-muted-foreground" />
             <span>Cancel</span>
           </button>
 
@@ -2070,7 +2070,7 @@ export default function SalesView() {
           <button
             onClick={handleDelete}
             disabled={!activeInvoiceId}
-            className="flex items-center gap-1 px-3.5 h-8 bg-red-600 hover:bg-red-700 text-white rounded-[2px] uppercase shadow-sm transition-all text-[11px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-1 px-3.5 h-8 bg-red-600 hover:bg-red-700 text-white rounded-sm uppercase shadow-sm transition-all text-[11px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Trash2 className="h-3.5 w-3.5" />
             <span>Delete</span>
@@ -2079,9 +2079,9 @@ export default function SalesView() {
           {/* Exit */}
           <button
             onClick={handleExit}
-            className="flex items-center gap-1 px-3.5 h-8 bg-slate-200 hover:bg-slate-300 text-slate-700 border border-slate-300 rounded-[2px] uppercase shadow-sm transition-all text-[11px] cursor-pointer"
+            className="flex items-center gap-1 px-3.5 h-8 bg-secondary hover:bg-slate-300 text-foreground border border-border rounded-sm uppercase shadow-sm transition-all text-[11px] cursor-pointer"
           >
-            <LogOut className="h-3.5 w-3.5 text-slate-500" />
+            <LogOut className="h-3.5 w-3.5 text-muted-foreground" />
             <span>Exit</span>
           </button>
 
@@ -2089,18 +2089,18 @@ export default function SalesView() {
       </div>
 
       {/* 10. STATUS BAR */}
-      <footer className="bg-slate-800 text-slate-300 px-4 py-1.5 flex items-center justify-between text-[10.5px] font-semibold shrink-0 select-none mt-1 rounded-[2px] shadow-inner select-none">
+      <footer className="bg-primary text-muted-foreground px-4 py-1.5 flex items-center justify-between text-[10.5px] font-semibold shrink-0 select-none mt-1 rounded-sm shadow-inner select-none">
         
         {/* Live Rates display */}
         <div className="flex items-center gap-3">
           
           {/* Dynamic Theme Color Selector */}
           <div className="flex items-center gap-1 border-r border-slate-700 pr-3.5">
-            <span className="text-[9px] text-slate-500 uppercase">Theme</span>
+            <span className="text-[9px] text-muted-foreground uppercase">Theme</span>
             <select
               value={themeAccent}
               onChange={(e) => setThemeAccent(e.target.value as ThemeAccent)}
-              className="h-5 py-0 px-1 border border-slate-700 rounded-[1px] bg-slate-900 text-slate-300 font-bold cursor-pointer text-[10px]"
+              className="h-5 py-0 px-1 border border-slate-700 rounded-sm bg-slate-900 text-muted-foreground font-bold cursor-pointer text-[10px]"
             >
               <option value="orange">Orange (Default)</option>
               <option value="gold">Gold (Luxe)</option>
@@ -2109,7 +2109,7 @@ export default function SalesView() {
             </select>
           </div>
 
-          <label className="flex items-center gap-1 text-[10px] text-slate-400 select-none cursor-pointer">
+          <label className="flex items-center gap-1 text-[10px] text-muted-foreground select-none cursor-pointer">
             <input type="checkbox" defaultChecked className="h-3 w-3 accent-amber-500 cursor-pointer" />
             <span>Live Rate</span>
           </label>
@@ -2120,7 +2120,7 @@ export default function SalesView() {
           
           <span className="opacity-40">|</span>
           
-          <span>Fine Silver: <strong className="text-slate-100 font-data">₹{defaultSilverRate.toLocaleString()}</strong></span>
+          <span>Fine Silver: <strong className="text-primary-foreground font-data">₹{defaultSilverRate.toLocaleString()}</strong></span>
         </div>
 
         {/* System & Rates Context */}
@@ -2129,7 +2129,7 @@ export default function SalesView() {
           <span className="opacity-40">|</span>
           <span>Service End: <span className="font-data text-emerald-400">01/01/2030</span></span>
           <span className="opacity-40">|</span>
-          <label className="flex items-center gap-1 select-none text-[10px] text-slate-400 cursor-pointer">
+          <label className="flex items-center gap-1 select-none text-[10px] text-muted-foreground cursor-pointer">
             <input type="checkbox" defaultChecked className="h-3 w-3 accent-emerald-500 cursor-pointer" />
             <span>Whatsapp Open</span>
           </label>
