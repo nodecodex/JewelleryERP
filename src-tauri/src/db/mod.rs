@@ -9,17 +9,26 @@ pub type DbState = Arc<Mutex<Connection>>;
 pub fn get_database_path() -> PathBuf {
     #[cfg(debug_assertions)]
     {
-        PathBuf::from("database.sqlite")
+        // In development, store in project root outside src-tauri so Tauri's dev watcher is never triggered
+        let cwd = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
+        let root = if cwd.ends_with("src-tauri") {
+            cwd.parent().unwrap_or(&cwd).to_path_buf()
+        } else {
+            cwd
+        };
+        root.join("database.sqlite")
     }
     #[cfg(not(debug_assertions))]
     {
-        let mut path = dirs::data_dir().unwrap_or_else(|| PathBuf::from("."));
-        path.push("com.SwarnProERP.app");
-        if !path.exists() {
-            let _ = fs::create_dir_all(&path);
+        let base_dir = std::env::var("APPDATA")
+            .map(PathBuf::from)
+            .or_else(|_| std::env::var("HOME").map(|h| PathBuf::from(h).join(".local/share")))
+            .unwrap_or_else(|_| PathBuf::from("."));
+        let app_dir = base_dir.join("SwarnProERP");
+        if !app_dir.exists() {
+            let _ = std::fs::create_dir_all(&app_dir);
         }
-        path.push("database.sqlite");
-        path
+        app_dir.join("database.sqlite")
     }
 }
 
