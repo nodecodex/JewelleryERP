@@ -45,11 +45,14 @@ let copiedCount = 0;
 if (fs.existsSync(nsisDir)) {
   const nsisFiles = fs.readdirSync(nsisDir).filter(f => f.endsWith('.exe'));
   if (nsisFiles.length > 0) {
-    const srcPath = path.join(nsisDir, nsisFiles[0]);
+    // Prioritize exact match for current version, then fallback to newest file by modified time
+    const matchingFile = nsisFiles.find(f => f.includes(`_${version}_`)) ||
+      nsisFiles.sort((a, b) => fs.statSync(path.join(nsisDir, b)).mtimeMs - fs.statSync(path.join(nsisDir, a)).mtimeMs)[0];
+    const srcPath = path.join(nsisDir, matchingFile);
     const destPath = path.join(releaseDir, `SwarnPro_ERP_v${version}_Setup.exe`);
     fs.copyFileSync(srcPath, destPath);
     const stat = fs.statSync(destPath);
-    console.log(`✔ Copied NSIS Setup: SwarnPro_ERP_v${version}_Setup.exe (${(stat.size / (1024 * 1024)).toFixed(2)} MB)`);
+    console.log(`✔ Copied NSIS Setup: SwarnPro_ERP_v${version}_Setup.exe from ${matchingFile} (${(stat.size / (1024 * 1024)).toFixed(2)} MB)`);
     copiedCount++;
   }
 }
@@ -58,11 +61,14 @@ if (fs.existsSync(nsisDir)) {
 if (fs.existsSync(msiDir)) {
   const msiFiles = fs.readdirSync(msiDir).filter(f => f.endsWith('.msi'));
   if (msiFiles.length > 0) {
-    const srcPath = path.join(msiDir, msiFiles[0]);
+    // Prioritize exact match for current version, then fallback to newest file by modified time
+    const matchingFile = msiFiles.find(f => f.includes(`_${version}_`)) ||
+      msiFiles.sort((a, b) => fs.statSync(path.join(msiDir, b)).mtimeMs - fs.statSync(path.join(msiDir, a)).mtimeMs)[0];
+    const srcPath = path.join(msiDir, matchingFile);
     const destPath = path.join(releaseDir, `SwarnPro_ERP_v${version}_Setup.msi`);
     fs.copyFileSync(srcPath, destPath);
     const stat = fs.statSync(destPath);
-    console.log(`✔ Copied MSI Installer: SwarnPro_ERP_v${version}_Setup.msi (${(stat.size / (1024 * 1024)).toFixed(2)} MB)`);
+    console.log(`✔ Copied MSI Installer: SwarnPro_ERP_v${version}_Setup.msi from ${matchingFile} (${(stat.size / (1024 * 1024)).toFixed(2)} MB)`);
     copiedCount++;
   }
 }
