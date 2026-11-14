@@ -270,7 +270,7 @@ export default function LabourView() {
           ) : (
             <table className="w-full border-collapse text-left text-xs ag-grid-dense-table select-text">
               <thead>
-                <tr className="sticky top-0 z-20 bg-secondary/80 dark:bg-slate-900/80 backdrop-blur-xs border-b border-border">
+                <tr className="sticky top-0 z-20 bg-secondary border-b border-border">
                   <th className="w-12 text-center">Sr</th>
                   <th className="w-32">Pr Code</th>
                   <th>Pr Name</th>

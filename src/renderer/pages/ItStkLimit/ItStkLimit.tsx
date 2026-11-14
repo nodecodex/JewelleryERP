@@ -222,15 +222,15 @@ export default function ItStkLimitView() {
       <div className="flex-1 grid grid-cols-12 gap-4 overflow-hidden min-h-0 py-3">
         
         {/* LEFT WORKSPACE: Record Search Sidebar */}
-        <div className="col-span-4 bg-card border border-border rounded-lg shadow-sm flex flex-col overflow-hidden transition-colors duration-200">
-          <div className="bg-secondary/40 dark:bg-slate-900/40 text-foreground px-4 py-3 border-b border-border shrink-0 font-luxury text-[10.5px] font-bold uppercase tracking-wider">
+        <div className="col-span-4 bg-card border border-border rounded-none shadow-none flex flex-col overflow-hidden transition-colors duration-200">
+          <div className="bg-secondary text-foreground px-4 py-3 border-b border-border shrink-0 font-luxury text-[10.5px] font-bold uppercase tracking-wider">
             Search Record
           </div>
-          <div className="p-3 border-b border-border shrink-0 bg-muted/20">
+          <div className="p-3 border-b border-border shrink-0 bg-secondary/50">
             <input
               type="text"
               placeholder="Search code or name..."
-              className="w-full bg-card text-foreground border border-border rounded px-3 py-1.5 text-xs focus:outline-none focus:border-primary font-semibold h-7"
+              className="w-full bg-card text-foreground border border-border rounded-none px-3 py-1.5 text-xs focus:outline-none focus:border-primary font-semibold h-7"
               value={leftSearch}
               onChange={(e) => setLeftSearch(e.target.value)}
             />
@@ -310,11 +310,11 @@ export default function ItStkLimitView() {
             </div>
           </div>
 
-          <div className="bg-secondary/40 dark:bg-slate-900/40 text-foreground px-4 py-2 border-b border-border flex justify-between items-center shrink-0">
+          <div className="bg-secondary text-foreground px-4 py-2 border-b border-border flex justify-between items-center shrink-0">
             <span className="text-[10px] font-bold uppercase tracking-wider font-luxury">Limits & Labor Breakdowns</span>
             <button
               onClick={handleAddRow}
-              className="flex items-center gap-1 px-3 py-1 bg-primary/10 hover:bg-primary/20 text-primary font-bold text-[9.5px] uppercase tracking-wider rounded transition-all active:scale-95 cursor-pointer"
+              className="flex items-center gap-1 px-3 py-1 bg-[#FFC000] text-black font-extrabold text-[9.5px] uppercase tracking-wider rounded-none hover:bg-[#917300] transition-all cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Add Limit Row</span>

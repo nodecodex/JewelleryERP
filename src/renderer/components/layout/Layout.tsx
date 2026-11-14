@@ -255,10 +255,10 @@ export default function Layout() {
   ];
 
   return (
-    <div className="flex flex-col h-screen bg-black text-white font-sans overflow-hidden select-none no-print">
+    <div className="flex flex-col h-screen bg-background text-foreground font-sans overflow-hidden select-none no-print">
 
-      {/* LAMBORGHINI NOCTURNAL TOP BAR (Unified Win11 Header) */}
-      <header className="h-11 bg-[#121212] border-b border-[#262626] flex items-center justify-between px-4 lg:px-5 z-50 shrink-0 text-white transition-colors duration-200">
+      {/* LAMBORGHINI PRECISION TOP BAR (Dual-Theme Header) */}
+      <header className="h-11 bg-card border-b border-border flex items-center justify-between px-4 lg:px-5 z-50 shrink-0 text-foreground transition-colors duration-200">
         <div className="flex items-center gap-6">
           {/* Lamborghini Refined Luxury Branding */}
           <div className="flex items-center gap-2.5">
@@ -267,7 +267,7 @@ export default function Layout() {
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-[13px] font-black tracking-wider uppercase font-luxury text-[#FFC000]">SWARNPRO ERP</span>
-              <span className="text-[8px] font-bold text-[#7D7D7D] uppercase tracking-widest mt-0.5">v{APP_VERSION} · LUXURY EDITION</span>
+              <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">v{APP_VERSION} · LUXURY EDITION</span>
             </div>
           </div>
 
@@ -275,7 +275,7 @@ export default function Layout() {
           <nav className="flex items-center gap-0.5">
             {['File', 'Masters', 'Transactions', 'Reports', 'System'].map((menu) => (
               <div key={menu} className="menu-dropdown">
-                <button className="px-2.5 py-1 text-xs font-bold uppercase tracking-wider hover:bg-[#202020] rounded-none transition-all text-[#7D7D7D] hover:text-white cursor-pointer">
+                <button className="px-2.5 py-1 text-xs font-bold uppercase tracking-wider hover:bg-secondary rounded-none transition-all text-muted-foreground hover:text-foreground cursor-pointer">
                   {menu}
                 </button>
                 <div className="menu-dropdown-content surface-elevated">
@@ -301,47 +301,47 @@ export default function Layout() {
         {/* Global Utilities */}
         <div className="flex items-center gap-4">
           {/* Profit Fine Tracker */}
-          <div className="hidden xl:flex items-center gap-2.5 bg-[#181818] px-2.5 py-1 rounded-none border border-[#262626]">
+          <div className="hidden xl:flex items-center gap-2.5 bg-secondary/80 dark:bg-[#181818] px-2.5 py-1 rounded-none border border-border">
             <div className="flex flex-col items-end leading-tight">
-              <span className="text-[8px] font-bold text-[#7D7D7D] uppercase tracking-wider">Init Fine</span>
+              <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">Init Fine</span>
               <span className="text-[10px] font-mono font-bold text-[#FFC000]">{initialFine.toFixed(3)}g</span>
             </div>
-            <div className="w-px h-5 bg-[#262626]"></div>
+            <div className="w-px h-5 bg-border"></div>
             <div className="flex flex-col items-end leading-tight">
-              <span className="text-[8px] font-bold text-[#7D7D7D] uppercase tracking-wider">Total Fine</span>
+              <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">Total Fine</span>
               <span className="text-[10px] font-mono font-bold text-[#29ABE2]">{totalFine.toFixed(3)}g</span>
             </div>
-            <div className="w-px h-5 bg-[#262626]"></div>
+            <div className="w-px h-5 bg-border"></div>
             <div className="flex flex-col items-end leading-tight">
-              <span className="text-[8px] font-bold text-[#7D7D7D] uppercase tracking-wider">
+              <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">
                 {profitFine >= 0 ? 'Profit PG' : 'Loss PG'}
               </span>
-              <span className={`text-[10px] font-mono font-extrabold ${profitFine >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+              <span className={`text-[10px] font-mono font-extrabold ${profitFine >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
                 {profitFine > 0 ? '+' : (profitFine < 0 ? '-' : '')}{Math.abs(profitFine).toFixed(3)}g
               </span>
             </div>
           </div>
 
           {/* Quick Search */}
-          <div className="hidden lg:flex items-center bg-[#181818] border border-[#262626] px-2.5 py-1 rounded-none gap-2 w-52 focus-within:border-[#FFC000] transition-all">
-            <Search className="h-3.5 w-3.5 text-[#7D7D7D]" />
-            <input type="text" placeholder="QUICK SEARCH (CTRL+K)..." className="bg-transparent border-none p-0 h-auto text-xs focus:ring-0 w-full font-medium uppercase text-white placeholder-[#7D7D7D]" />
+          <div className="hidden lg:flex items-center bg-secondary/80 dark:bg-[#181818] border border-border px-2.5 py-1 rounded-none gap-2 w-52 focus-within:border-[#FFC000] transition-all">
+            <Search className="h-3.5 w-3.5 text-muted-foreground" />
+            <input type="text" placeholder="QUICK SEARCH (CTRL+K)..." className="bg-transparent border-none p-0 h-auto text-xs focus:ring-0 w-full font-medium uppercase text-foreground placeholder:text-muted-foreground" />
           </div>
 
           <div className="flex items-center gap-2">
-            <button onClick={toggleTheme} className="p-1.5 hover:bg-[#202020] rounded-none transition-all text-[#7D7D7D] hover:text-[#FFC000] cursor-pointer" title="Toggle Theme">
+            <button onClick={toggleTheme} className="p-1.5 hover:bg-secondary rounded-none transition-all text-muted-foreground hover:text-[#FFC000] cursor-pointer" title="Toggle Theme">
               {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             </button>
-            <button className="p-1.5 hover:bg-[#202020] rounded-none transition-all text-[#7D7D7D] hover:text-white relative cursor-pointer" title="Notifications">
+            <button className="p-1.5 hover:bg-secondary rounded-none transition-all text-muted-foreground hover:text-foreground relative cursor-pointer" title="Notifications">
               <Bell className="h-4 w-4" />
               <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#FFC000] rounded-none"></span>
             </button>
-            <div className="h-6 w-px bg-[#262626] mx-1"></div>
+            <div className="h-6 w-px bg-border mx-1"></div>
             <div className="flex items-center gap-2 pl-0.5">
               <div className="flex flex-col items-end leading-tight">
-                <span className="text-xs font-bold text-white uppercase truncate max-w-[160px]">{selectedCompany?.name || 'SELECT COMPANY'}</span>
-                <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-none bg-emerald-400"></span>
+                <span className="text-xs font-bold text-foreground uppercase truncate max-w-[160px]">{selectedCompany?.name || 'SELECT COMPANY'}</span>
+                <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-none bg-emerald-500"></span>
                   Active
                 </span>
               </div>
@@ -354,7 +354,7 @@ export default function Layout() {
       </header>
 
       {/* QUICK ACTIONS RIBBON */}
-      <section className="h-11 bg-[#181818] text-white border-b border-[#262626] flex items-center justify-between px-4 lg:px-5 shrink-0 shadow-none transition-colors duration-200">
+      <section className="h-11 bg-card border-b border-border flex items-center justify-between px-4 lg:px-5 shrink-0 shadow-none transition-colors duration-200">
         <div className="flex items-center gap-1.5">
           {[
             { label: 'Sales Bill', icon: ShoppingCart, type: 'billing', key: 'F3' },
@@ -366,14 +366,14 @@ export default function Layout() {
             <button
               key={item.label}
               onClick={() => addTab({ title: item.label, type: item.type })}
-              className="flex items-center gap-1.5 px-3 py-1 h-7.5 hover:bg-[#202020] rounded-none transition-all group relative border border-transparent hover:border-[#333333] cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1 h-7.5 hover:bg-secondary rounded-none transition-all group relative border border-transparent hover:border-border cursor-pointer"
             >
-              <item.icon className="h-3.5 w-3.5 text-[#7D7D7D] group-hover:text-[#FFC000] transition-colors" />
-              <span className="text-[11px] font-bold text-zinc-300 group-hover:text-white uppercase tracking-wider">{item.label}</span>
-              <span className="text-[9px] font-mono font-bold text-[#FFC000]/70 group-hover:text-[#FFC000] bg-black/40 px-1 py-0.5 rounded-none ml-0.5">{item.key}</span>
+              <item.icon className="h-3.5 w-3.5 text-muted-foreground group-hover:text-[#FFC000] transition-colors" />
+              <span className="text-[11px] font-bold text-muted-foreground group-hover:text-foreground uppercase tracking-wider">{item.label}</span>
+              <span className="text-[9px] font-mono font-bold text-[#FFC000] bg-secondary/80 dark:bg-black/40 px-1 py-0.5 rounded-none ml-0.5 border border-border/50">{item.key}</span>
             </button>
           ))}
-          <div className="h-6 w-px bg-[#262626] mx-2"></div>
+          <div className="h-6 w-px bg-border mx-2"></div>
           <button
             onClick={() => addTab({ title: 'Sales Billing Desk', type: 'billing' })}
             className="flex items-center gap-1.5 px-4 py-1 h-7.5 bg-[#FFC000] text-black font-extrabold rounded-none shadow-none hover:bg-[#917300] transition-all text-xs uppercase tracking-wider cursor-pointer"
@@ -385,21 +385,21 @@ export default function Layout() {
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-[#7D7D7D] uppercase tracking-wider">Workspace:</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Workspace:</span>
             <div className="relative workspace-dropdown-container">
               <button
                 type="button"
                 onClick={() => setWorkspaceDropdownOpen(!workspaceDropdownOpen)}
-                className="flex items-center gap-1.5 bg-[#202020] hover:bg-[#282828] px-2.5 py-1 rounded-none text-xs font-bold text-white hover:text-[#FFC000] transition-all duration-200 cursor-pointer border border-[#2c2c2c] uppercase"
+                className="flex items-center gap-1.5 bg-secondary hover:bg-secondary/80 px-2.5 py-1 rounded-none text-xs font-bold text-foreground hover:text-[#FFC000] transition-all duration-200 cursor-pointer border border-border uppercase"
               >
                 <FolderOpen className="h-3.5 w-3.5 text-[#FFC000]" />
                 <span className="max-w-[180px] truncate">{selectedCompany?.name || 'Select Company'}</span>
-                <ChevronDown className={`h-3.5 w-3.5 text-[#7D7D7D] transition-transform duration-200 ${workspaceDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-200 ${workspaceDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {workspaceDropdownOpen && (
-                <div className="absolute right-0 top-full mt-1.5 w-64 bg-[#181818] border border-[#2c2c2c] rounded-none shadow-2xl z-50 py-1">
-                  <div className="px-3 py-1.5 text-[9px] font-bold text-[#7D7D7D] uppercase tracking-wider border-b border-[#262626]">
+                <div className="absolute right-0 top-full mt-1.5 w-64 bg-card border border-border rounded-none shadow-2xl z-50 py-1">
+                  <div className="px-3 py-1.5 text-[9px] font-bold text-muted-foreground uppercase tracking-wider border-b border-border">
                     Available Company Workspaces
                   </div>
                   {companies.map((c) => {
@@ -412,8 +412,8 @@ export default function Layout() {
                           setSelectedCompany(c);
                           setWorkspaceDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-2 text-xs font-bold uppercase tracking-wider flex items-center justify-between hover:bg-[#202020] transition-colors cursor-pointer ${
-                          isActive ? 'text-[#FFC000] bg-[#FFC000]/10 font-black' : 'text-zinc-300'
+                        className={`w-full text-left px-3 py-2 text-xs font-bold uppercase tracking-wider flex items-center justify-between hover:bg-secondary transition-colors cursor-pointer ${
+                          isActive ? 'text-[#FFC000] bg-[#FFC000]/10 font-black' : 'text-foreground'
                         }`}
                       >
                         <span className="truncate">{c.name}</span>
@@ -421,7 +421,7 @@ export default function Layout() {
                       </button>
                     );
                   })}
-                  <div className="border-t border-[#262626] mt-1 pt-1">
+                  <div className="border-t border-border mt-1 pt-1">
                     <button
                       onClick={() => {
                         addTab({ title: 'Company Master', type: 'company' });
@@ -439,18 +439,18 @@ export default function Layout() {
         </div>
       </section>
 
-      {/* MAIN LAYOUT CANVAS - CATHEDRAL OF DARKNESS */}
-      <div className="flex-1 flex overflow-hidden bg-black">
+      {/* MAIN LAYOUT CANVAS */}
+      <div className="flex-1 flex overflow-hidden bg-background">
 
-        {/* LAMBORGHINI NOCTURNAL SIDEBAR */}
+        {/* SIDEBAR */}
         <aside
-          className={`bg-[#0a0a0a] border-r border-[#262626] text-white flex flex-col transition-all duration-200 ${sidebarCollapsed ? 'w-14' : 'w-56'}`}
+          className={`bg-sidebar-bg border-r border-sidebar-border text-sidebar-text flex flex-col transition-all duration-200 ${sidebarCollapsed ? 'w-14' : 'w-56'}`}
         >
           <div className="flex-1 overflow-y-auto py-3 space-y-4">
             {menuGroups.map((g, idx) => (
               <div key={idx} className="px-3">
                 {!sidebarCollapsed && (
-                  <span className="px-3 text-[10px] font-black text-[#7D7D7D] uppercase tracking-[0.2em] block mb-2">
+                  <span className="px-3 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] block mb-2">
                     {g.group}
                   </span>
                 )}
@@ -459,7 +459,7 @@ export default function Layout() {
                     <button
                       key={item.type}
                       onClick={() => addTab({ title: item.label, type: item.type })}
-                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-[#181818] rounded-none text-zinc-400 hover:text-white transition-all group cursor-pointer"
+                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-sidebar-hover rounded-none text-sidebar-text hover:text-foreground transition-all group cursor-pointer"
                       title={item.label}
                     >
                       <item.icon className="h-4.5 w-4.5 shrink-0 group-hover:text-[#FFC000] transition-colors" />
@@ -475,16 +475,16 @@ export default function Layout() {
 
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="p-3 bg-[#121212] hover:bg-[#181818] text-[#7D7D7D] hover:text-white flex items-center justify-center transition-all shrink-0 border-t border-[#262626] cursor-pointer"
+            className="p-3 bg-sidebar-bg hover:bg-sidebar-hover text-muted-foreground hover:text-foreground flex items-center justify-center transition-all shrink-0 border-t border-sidebar-border cursor-pointer"
           >
             {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
           </button>
         </aside>
 
         {/* WORKSPACE AREA */}
-        <main className="flex-1 flex flex-col overflow-hidden bg-black">
+        <main className="flex-1 flex flex-col overflow-hidden bg-background">
           {/* RAZOR-SHARP TAB STRIP */}
-          <div className="bg-[#121212] border-b border-[#262626] h-10 flex items-end px-3 shrink-0">
+          <div className="bg-card dark:bg-[#121212] border-b border-border h-10 flex items-end px-3 shrink-0">
             <div className="flex gap-1 overflow-x-auto h-full items-end scrollbar-none">
               {tabs.map((t) => {
                 const isActive = t.id === activeTabId;
@@ -492,16 +492,16 @@ export default function Layout() {
                   <div
                     key={t.id}
                     onClick={() => setActiveTab(t.id)}
-                    className={`flex items-center gap-2.5 px-4 h-9 rounded-none transition-all cursor-pointer text-xs font-bold uppercase tracking-wider relative select-none border-r border-[#262626] ${isActive
-                      ? 'bg-[#202020] text-white border-t-2 border-t-[#FFC000]'
-                      : 'text-[#7D7D7D] hover:text-white hover:bg-[#181818]'
+                    className={`flex items-center gap-2.5 px-4 h-9 rounded-none transition-all cursor-pointer text-xs font-bold uppercase tracking-wider relative select-none border-r border-border ${isActive
+                      ? 'bg-background text-foreground border-t-2 border-t-[#FFC000] font-extrabold shadow-xs'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
                       }`}
                   >
                     <span>{t.title}</span>
                     {t.id !== 'dashboard' && (
                       <button
                         onClick={(e) => { e.stopPropagation(); closeTab(t.id); }}
-                        className="p-0.5 rounded-none hover:bg-rose-500/20 text-[#7D7D7D] hover:text-rose-400 transition-colors ml-1 cursor-pointer"
+                        className="p-0.5 rounded-none hover:bg-rose-500/20 text-muted-foreground hover:text-rose-500 transition-colors ml-1 cursor-pointer"
                       >
                         <X className="h-3 w-3" />
                       </button>
@@ -513,13 +513,13 @@ export default function Layout() {
           </div>
 
           {/* VIEWPORT CANVAS */}
-          <div className="flex-1 overflow-hidden relative p-2 sm:p-2.5 lg:p-3 bg-black">
+          <div className="flex-1 overflow-hidden relative p-2 sm:p-2.5 lg:p-3 bg-background">
             {tabs.map((t) => (
               <div
                 key={t.id}
                 className={`h-full ${t.id === activeTabId ? 'block' : 'hidden'}`}
               >
-                <div className="h-full bg-[#202020] border border-[#262626] rounded-none overflow-hidden">
+                <div className="h-full bg-card border border-border rounded-none overflow-hidden text-foreground">
                   {renderActiveView(t.type)}
                 </div>
               </div>
@@ -528,29 +528,29 @@ export default function Layout() {
         </main>
       </div>
 
-      {/* STATUS BAR (Nocturnal Precision) */}
-      <footer className="h-8 bg-[#121212] text-white border-t border-[#262626] flex items-center justify-between px-6 shrink-0">
+      {/* STATUS BAR */}
+      <footer className="h-8 bg-card text-muted-foreground border-t border-border flex items-center justify-between px-6 shrink-0">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-none bg-emerald-400"></div>
-            <span className="text-[11px] font-bold text-[#7D7D7D] uppercase tracking-wider">SYSTEM ONLINE</span>
+            <div className="w-2 h-2 rounded-none bg-emerald-500"></div>
+            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">SYSTEM ONLINE</span>
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-[#7D7D7D]">
+          <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
             <Database className="h-3.5 w-3.5" />
-            <span className="font-mono text-xs uppercase text-zinc-300">SQLITE ENCRYPTED</span>
+            <span className="font-mono text-xs uppercase text-foreground">SQLITE ENCRYPTED</span>
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-[#7D7D7D] border-l border-[#262626] pl-4">
+          <div className="flex items-center gap-2 text-[11px] text-muted-foreground border-l border-border pl-4">
             <Clock className="h-3.5 w-3.5 text-[#FFC000]" />
             <StatusBarClock />
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <span className="text-[10px] font-bold text-[#7D7D7D] tracking-widest uppercase">SHORTCUTS:</span>
+          <span className="text-[10px] font-bold text-muted-foreground tracking-widest uppercase">SHORTCUTS:</span>
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1.5"><span className="keyboard-key">F2</span> <span className="text-[11px] font-bold uppercase text-[#7D7D7D]">Save</span></span>
-            <span className="flex items-center gap-1.5"><span className="keyboard-key">F12</span> <span className="text-[11px] font-bold uppercase text-[#7D7D7D]">Print</span></span>
-            <span className="flex items-center gap-1.5"><span className="keyboard-key">Alt+X</span> <span className="text-[11px] font-bold uppercase text-[#7D7D7D]">Exit</span></span>
+            <span className="flex items-center gap-1.5"><span className="keyboard-key">F2</span> <span className="text-[11px] font-bold uppercase text-muted-foreground">Save</span></span>
+            <span className="flex items-center gap-1.5"><span className="keyboard-key">F12</span> <span className="text-[11px] font-bold uppercase text-muted-foreground">Print</span></span>
+            <span className="flex items-center gap-1.5"><span className="keyboard-key">Alt+X</span> <span className="text-[11px] font-bold uppercase text-muted-foreground">Exit</span></span>
           </div>
         </div>
       </footer>

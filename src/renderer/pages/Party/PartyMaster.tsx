@@ -275,7 +275,7 @@ export default function PartyMasterView() {
       <div className="flex-1 grid grid-cols-12 gap-3 overflow-hidden min-h-0 pb-2">
         
         {/* LEFT PANEL: Search List & Opening Balances (col-span-5) */}
-        <div className="col-span-5 bg-card text-card-foreground border border-border rounded-lg shadow-sm flex flex-col overflow-hidden transition-colors duration-200">
+        <div className="col-span-5 bg-card text-card-foreground border border-border rounded-none shadow-sm flex flex-col overflow-hidden transition-colors duration-200">
           
           <div className="bg-secondary/40 px-3 py-1.5 border-b border-border flex justify-between items-center shrink-0">
             <span className="text-[10px] font-bold uppercase tracking-wider font-luxury text-foreground/80">Search Name - Mobile</span>
@@ -290,7 +290,7 @@ export default function PartyMasterView() {
 
           {/* Search box input */}
           <div className="p-2 border-b border-border bg-secondary/10 shrink-0">
-            <div className="flex items-center gap-1.5 bg-card border border-border rounded-lg px-2.5 py-1 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 transition-all">
+            <div className="flex items-center gap-1.5 bg-card border border-border rounded-none px-2.5 py-1 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 transition-all">
               <Search className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 type="text"
@@ -348,7 +348,7 @@ export default function PartyMasterView() {
             
             {/* Photo Box Placeholder */}
             <div className="col-span-5 flex flex-col items-center justify-between">
-              <div className="w-full h-28 border border-border rounded-lg bg-card flex flex-col items-center justify-center relative overflow-hidden shadow-inner group">
+              <div className="w-full h-28 border border-border rounded-none bg-card flex flex-col items-center justify-center relative overflow-hidden shadow-inner group">
                 {selectedRecord ? (
                   <div className="text-center p-2 text-muted-foreground">
                     <User className="h-9 w-9 mx-auto text-primary mb-1" />
@@ -357,11 +357,11 @@ export default function PartyMasterView() {
                 ) : (
                   <div className="text-center p-2 text-muted-foreground/60">
                     <User className="h-9 w-9 mx-auto mb-1 text-muted-foreground/40" />
-                    <span className="text-[8px] font-sans block font-bold uppercase tracking-wider text-slate-450">No Image</span>
+                    <span className="text-[8px] font-sans block font-bold uppercase tracking-wider text-muted-foreground">No Image</span>
                   </div>
                 )}
               </div>
-              <div className="flex w-full gap-1 border border-border rounded-lg p-0.5 bg-card shadow-xs mt-1.5">
+              <div className="flex w-full gap-1 border border-border rounded-none p-0.5 bg-card shadow-xs mt-1.5">
                 <button type="button" className="flex-1 py-1 hover:bg-secondary flex items-center justify-center border border-transparent rounded-md transition-colors cursor-pointer text-muted-foreground hover:text-foreground" title="Capture Image">
                   <Camera className="h-3.5 w-3.5" />
                 </button>
@@ -463,7 +463,7 @@ export default function PartyMasterView() {
         </div>
 
         {/* RIGHT PANEL: Party Details Input Form (col-span-7) */}
-        <div className="col-span-7 bg-card text-card-foreground border border-border rounded-lg shadow-sm flex flex-col overflow-hidden transition-colors duration-200">
+        <div className="col-span-7 bg-card text-card-foreground border border-border rounded-none shadow-sm flex flex-col overflow-hidden transition-colors duration-200">
           
           {/* Main title bar */}
           <div className="bg-secondary/40 px-3 py-2 border-b border-border flex justify-between items-center shrink-0">
@@ -483,27 +483,27 @@ export default function PartyMasterView() {
                   
                   {/* Ac Code */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Ac Code</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Ac Code</label>
                     <div className="col-span-4 flex gap-1">
                       <input 
                         type="text" 
                         required 
-                        className="erp-input font-data text-amber-700 font-bold select-text" 
+                        className="erp-input font-data text-[#FFC000] font-bold select-text" 
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
                       />
-                      <button type="button" className="px-2 bg-slate-100 hover:bg-slate-200 border border-slate-350 text-[10px] font-extrabold rounded-[2px]">F1</button>
+                      <button type="button" className="px-2 bg-secondary hover:bg-secondary/80 border border-border text-foreground text-[] font-extrabold rounded-none cursor-pointer">F1</button>
                     </div>
                     <div className="col-span-5 flex gap-1 justify-end select-none">
-                      <button type="button" className="px-2 bg-slate-100 hover:bg-slate-200 border border-slate-350 text-[9px] font-extrabold rounded-[2px]">A</button>
-                      <button type="button" className="px-2 bg-slate-100 hover:bg-slate-200 border border-slate-350 text-[9px] font-extrabold rounded-[2px]">D</button>
-                      <button type="button" className="px-2 bg-slate-100 hover:bg-slate-200 border border-slate-350 text-[9px] font-extrabold rounded-[2px]">S</button>
+                      <button type="button" className="px-2 bg-secondary hover:bg-secondary/80 border border-border text-foreground text-[] font-extrabold rounded-none cursor-pointer">A</button>
+                      <button type="button" className="px-2 bg-secondary hover:bg-secondary/80 border border-border text-foreground text-[] font-extrabold rounded-none cursor-pointer">D</button>
+                      <button type="button" className="px-2 bg-secondary hover:bg-secondary/80 border border-border text-foreground text-[] font-extrabold rounded-none cursor-pointer">S</button>
                     </div>
                   </div>
 
                   {/* Ac Name */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Ac Name *</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Ac Name *</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -518,7 +518,7 @@ export default function PartyMasterView() {
 
                   {/* Ac Group */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Ac Group</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Ac Group</label>
                     <div className="col-span-2">
                       <input 
                         type="text" 
@@ -547,13 +547,13 @@ export default function PartyMasterView() {
                       </select>
                     </div>
                     <div className="col-span-1 text-right">
-                      <button type="button" className="px-2 bg-slate-100 hover:bg-slate-200 border border-slate-350 text-[10px] font-extrabold rounded-[2px]">6</button>
+                      <button type="button" className="px-2 bg-secondary hover:bg-secondary/80 border border-border text-foreground text-[] font-extrabold rounded-none cursor-pointer">6</button>
                     </div>
                   </div>
 
                   {/* Mobile & Phone */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Mobile No</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Mobile No</label>
                     <div className="col-span-4">
                       <input 
                         type="text" 
@@ -563,7 +563,7 @@ export default function PartyMasterView() {
                         onChange={(e) => setMobile(e.target.value)}
                       />
                     </div>
-                    <label className="col-span-1 text-[10px] font-bold text-slate-500 text-right pr-1 uppercase">Phone</label>
+                    <label className="col-span-1 text-[10px] font-bold text-muted-foreground text-right pr-1 uppercase">Phone</label>
                     <div className="col-span-4">
                       <input 
                         type="text" 
@@ -577,7 +577,7 @@ export default function PartyMasterView() {
 
                   {/* Con Person & Ac Short */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Con Person</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Con Person</label>
                     <div className="col-span-5">
                       <input 
                         type="text" 
@@ -587,7 +587,7 @@ export default function PartyMasterView() {
                         onChange={(e) => setContactPerson(e.target.value)}
                       />
                     </div>
-                    <label className="col-span-1 text-[10px] font-bold text-slate-500 text-right pr-1 uppercase">Short</label>
+                    <label className="col-span-1 text-[10px] font-bold text-muted-foreground text-right pr-1 uppercase">Short</label>
                     <div className="col-span-3">
                       <input 
                         type="text" 
@@ -601,7 +601,7 @@ export default function PartyMasterView() {
 
                   {/* Address 1 */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Address 1</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Address 1</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -615,7 +615,7 @@ export default function PartyMasterView() {
 
                   {/* Address 2 */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Address 2</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Address 2</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -629,7 +629,7 @@ export default function PartyMasterView() {
 
                   {/* Address 3 */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Address 3</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Address 3</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -643,7 +643,7 @@ export default function PartyMasterView() {
 
                   {/* City & Pin Code */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">City</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">City</label>
                     <div className="col-span-4">
                       <select 
                         className="erp-input font-bold" 
@@ -657,7 +657,7 @@ export default function PartyMasterView() {
                         <option value="MUMBAI">MUMBAI</option>
                       </select>
                     </div>
-                    <label className="col-span-2 text-[10px] font-bold text-slate-500 text-right pr-1 uppercase">Pin Code</label>
+                    <label className="col-span-2 text-[10px] font-bold text-muted-foreground text-right pr-1 uppercase">Pin Code</label>
                     <div className="col-span-3">
                       <input 
                         type="text" 
@@ -671,7 +671,7 @@ export default function PartyMasterView() {
 
                   {/* City Area */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">City Area</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">City Area</label>
                     <div className="col-span-9">
                       <select 
                         className="erp-input font-bold" 
@@ -696,7 +696,7 @@ export default function PartyMasterView() {
                   
                   {/* GST No */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Gst No</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Gst No</label>
                     <div className="col-span-5">
                       <input 
                         type="text" 
@@ -721,7 +721,7 @@ export default function PartyMasterView() {
 
                   {/* Pan No */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Pan No</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Pan No</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -735,7 +735,7 @@ export default function PartyMasterView() {
 
                   {/* State & District */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">State</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">State</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -747,7 +747,7 @@ export default function PartyMasterView() {
                   </div>
 
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">District</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">District</label>
                     <div className="col-span-9">
                       <select 
                         className="erp-input font-bold" 
@@ -765,7 +765,7 @@ export default function PartyMasterView() {
 
                   {/* Email */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Email</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Email</label>
                     <div className="col-span-9">
                       <input 
                         type="email" 
@@ -779,7 +779,7 @@ export default function PartyMasterView() {
 
                   {/* Ref By */}
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Ref By</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Ref By</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -799,7 +799,7 @@ export default function PartyMasterView() {
                 <div className="space-y-3">
                   
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Spouse Name</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Spouse Name</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -812,7 +812,7 @@ export default function PartyMasterView() {
                   </div>
 
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Anniversary</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Anniversary</label>
                     <div className="col-span-9">
                       <input 
                         type="text" 
@@ -825,7 +825,7 @@ export default function PartyMasterView() {
                   </div>
 
                   <div className="grid grid-cols-12 gap-1 items-center">
-                    <label className="col-span-3 text-[10px] font-bold text-slate-500 text-right pr-2 uppercase">Children</label>
+                    <label className="col-span-3 text-[10px] font-bold text-muted-foreground text-right pr-2 uppercase">Children</label>
                     <div className="col-span-3">
                       <input 
                         type="number" 
@@ -886,14 +886,14 @@ export default function PartyMasterView() {
       </div>
 
       {/* 2. BOTTOM ACTION BUTTONS TOOLBAR */}
-      <footer className="bg-secondary/20 border border-border rounded-lg p-2 flex justify-end gap-3 shrink-0 shadow-sm select-none mt-2 transition-colors">
+      <footer className="bg-secondary/20 border border-border rounded-none p-2 flex justify-end gap-3 shrink-0 shadow-sm select-none mt-2 transition-colors">
         
         {/* Print Button */}
         <button
           onClick={handlePrint}
           className="flex items-center gap-1.5 px-4 py-1.5 bg-card hover:bg-muted border border-border hover:border-border/80 rounded-md font-semibold uppercase shadow-xs transition-all text-xs active:scale-[0.98] cursor-pointer text-foreground animate-in duration-200"
         >
-          <Printer className="h-4 w-4 text-slate-500" />
+          <Printer className="h-4 w-4 text-muted-foreground" />
           <span>Print</span>
         </button>
 
@@ -911,7 +911,7 @@ export default function PartyMasterView() {
           onClick={handleCancel}
           className="flex items-center gap-1.5 px-4 py-1.5 bg-card hover:bg-muted border border-border hover:border-border/80 rounded-md font-semibold uppercase shadow-xs transition-all text-xs active:scale-[0.98] cursor-pointer text-foreground animate-in duration-200"
         >
-          <Undo2 className="h-4 w-4 text-slate-500" />
+          <Undo2 className="h-4 w-4 text-muted-foreground" />
           <span>Cancel</span>
         </button>
 

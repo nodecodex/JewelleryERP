@@ -314,13 +314,13 @@ export default function StockReportView() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-black text-white p-3 font-sans select-none no-print overflow-y-auto text-xs">
+    <div className="flex flex-col h-full bg-background text-foreground p-3 font-sans select-none no-print overflow-y-auto text-xs">
       
       {/* HEADER SECTION WITH FILTERS */}
-      <div className="bg-[#181818] text-white border border-[#262626] rounded-none p-3 shrink-0 flex flex-col gap-2 mb-2 no-print">
+      <div className="bg-card text-foreground border border-border rounded-none p-3 shrink-0 flex flex-col gap-2 mb-2 no-print">
         
         {/* Banner Strip */}
-        <div className="bg-[#121212] border border-[#262626] py-1.5 px-3 rounded-none flex justify-between items-center text-xs mb-1">
+        <div className="bg-secondary border border-border py-1.5 px-3 rounded-none flex justify-between items-center text-xs mb-1">
           <label className="flex items-center gap-1.5 text-[10.5px] select-none cursor-pointer">
             <input 
               type="checkbox" 
@@ -328,27 +328,27 @@ export default function StockReportView() {
               checked={grossWiseWeight}
               onChange={(e) => setGrossWiseWeight(e.target.checked)}
             />
-            <span className="font-bold text-white uppercase tracking-wider">Gross Wise Weight</span>
+            <span className="font-bold text-foreground uppercase tracking-wider">Gross Wise Weight</span>
           </label>
           <span className="font-extrabold tracking-widest text-xs uppercase text-[#FFC000]">INVENTORY STOCK VALUATION & MOVEMENT</span>
-          <span className="text-[10px] font-mono text-[#7D7D7D] uppercase">Tag Valuation Ledger</span>
+          <span className="text-[10px] font-mono text-muted-foreground uppercase">Tag Valuation Ledger</span>
         </div>
 
         {/* Filters Grid Row 1 */}
         <div className="grid grid-cols-12 gap-2 items-center">
           {/* Dates */}
           <div className="col-span-3 flex items-center gap-1">
-            <span className="text-[9.5px] font-bold text-[#7D7D7D] uppercase w-10 shrink-0">Date</span>
+            <span className="text-[9.5px] font-bold text-muted-foreground uppercase w-10 shrink-0">Date</span>
             <input
               type="date"
-              className="w-1/2 h-7 border border-[#2c2c2c] rounded-none text-xs font-bold text-white px-1 bg-black focus:border-[#FFC000] focus:outline-none"
+              className="w-1/2 h-7 border border-border rounded-none text-xs font-bold text-foreground px-1 bg-secondary focus:border-[#FFC000] focus:outline-none"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
             />
-            <span className="text-[#7D7D7D] font-bold">-</span>
+            <span className="text-muted-foreground font-bold">-</span>
             <input
               type="date"
-              className="w-1/2 h-7 border border-[#2c2c2c] rounded-none text-xs font-bold text-white px-1 bg-black focus:border-[#FFC000] focus:outline-none"
+              className="w-1/2 h-7 border border-border rounded-none text-xs font-bold text-foreground px-1 bg-secondary focus:border-[#FFC000] focus:outline-none"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
             />
@@ -356,26 +356,26 @@ export default function StockReportView() {
 
           {/* Item Type Dropdown */}
           <div className="col-span-3 flex items-center gap-1">
-            <span className="text-[9.5px] font-bold text-[#7D7D7D] uppercase w-16 shrink-0">Item Type</span>
+            <span className="text-[9.5px] font-bold text-muted-foreground uppercase w-16 shrink-0">Item Type</span>
             <select
-              className="w-full h-7 border border-[#2c2c2c] rounded-none text-xs font-bold bg-black text-white cursor-pointer px-1 focus:border-[#FFC000] focus:outline-none uppercase"
+              className="w-full h-7 border border-border rounded-none text-xs font-bold bg-secondary text-foreground cursor-pointer px-1 focus:border-[#FFC000] focus:outline-none uppercase"
               value={itemType}
               onChange={(e) => setItemType(e.target.value as ItemTypeFilter)}
             >
-              <option value="All" className="bg-[#181818]">All Metals</option>
-              <option value="Gold" className="bg-[#181818]">Gold</option>
-              <option value="Silver" className="bg-[#181818]">Silver</option>
-              <option value="Diamond" className="bg-[#181818]">Diamond</option>
+              <option value="All" className="bg-card text-foreground">All Metals</option>
+              <option value="Gold" className="bg-card text-foreground">Gold</option>
+              <option value="Silver" className="bg-card text-foreground">Silver</option>
+              <option value="Diamond" className="bg-card text-foreground">Diamond</option>
             </select>
           </div>
 
           {/* Gr Code Input */}
           <div className="col-span-2.5 flex items-center gap-1.5">
-            <span className="text-[9.5px] font-bold text-[#7D7D7D] uppercase w-12 shrink-0">Gr Code</span>
+            <span className="text-[9.5px] font-bold text-muted-foreground uppercase w-12 shrink-0">Gr Code</span>
             <input
               type="text"
               placeholder="e.g. 916"
-              className="w-full h-7 border border-[#2c2c2c] rounded-none font-bold text-white bg-black focus:border-[#FFC000] focus:outline-none px-2 uppercase"
+              className="w-full h-7 border border-border rounded-none font-bold text-foreground bg-secondary focus:border-[#FFC000] focus:outline-none px-2 uppercase"
               value={grCode}
               onChange={(e) => setGrCode(e.target.value)}
             />
@@ -383,60 +383,60 @@ export default function StockReportView() {
 
           {/* Safe Name Dropdown */}
           <div className="col-span-3.5 flex items-center gap-1.5">
-            <span className="text-[9.5px] font-bold text-[#7D7D7D] uppercase w-16 shrink-0">Safe Name</span>
+            <span className="text-[9.5px] font-bold text-muted-foreground uppercase w-16 shrink-0">Safe Name</span>
             <select
-              className="w-full h-7 border border-[#2c2c2c] rounded-none text-xs font-bold bg-black text-white cursor-pointer px-1 focus:border-[#FFC000] focus:outline-none uppercase"
+              className="w-full h-7 border border-border rounded-none text-xs font-bold bg-secondary text-foreground cursor-pointer px-1 focus:border-[#FFC000] focus:outline-none uppercase"
               value={safeName}
               onChange={(e) => setSafeName(e.target.value)}
             >
-              <option value="All" className="bg-[#181818]">ALL SAFES</option>
-              <option value="Vault 1" className="bg-[#181818]">MAIN VAULT</option>
-              <option value="Showroom" className="bg-[#181818]">SHOWROOM COUNTER</option>
+              <option value="All" className="bg-card text-foreground">ALL SAFES</option>
+              <option value="Vault 1" className="bg-card text-foreground">MAIN VAULT</option>
+              <option value="Showroom" className="bg-card text-foreground">SHOWROOM COUNTER</option>
             </select>
           </div>
         </div>
 
         {/* Filters Grid Row 2 */}
-        <div className="grid grid-cols-12 gap-2 items-center border-t border-[#262626] pt-2">
+        <div className="grid grid-cols-12 gap-2 items-center border-t border-border pt-2">
           
           {/* Search Item field */}
           <div className="col-span-3.5 flex items-center gap-1">
-            <span className="text-[9.5px] font-bold text-[#7D7D7D] uppercase w-10 shrink-0">Item</span>
+            <span className="text-[9.5px] font-bold text-muted-foreground uppercase w-10 shrink-0">Item</span>
             <div className="relative w-full">
               <input
                 type="text"
                 placeholder="Advance Search"
-                className="w-full h-7 border border-[#2c2c2c] rounded-none pl-6 pr-2 text-xs bg-black text-white uppercase focus:border-[#FFC000] focus:outline-none"
+                className="w-full h-7 border border-border rounded-none pl-6 pr-2 text-xs bg-secondary text-foreground uppercase focus:border-[#FFC000] focus:outline-none placeholder-muted-foreground"
                 value={searchItem}
                 onChange={(e) => setSearchItem(e.target.value)}
               />
-              <Search className="absolute left-2 top-2 h-3 w-3 text-[#7D7D7D]" />
+              <Search className="absolute left-2 top-2 h-3 w-3 text-muted-foreground" />
             </div>
           </div>
 
           {/* Stock Type Dropdown */}
           <div className="col-span-2.5 flex items-center gap-1">
-            <span className="text-[9.5px] font-bold text-[#7D7D7D] uppercase w-16 shrink-0 whitespace-nowrap">Stock Type</span>
+            <span className="text-[9.5px] font-bold text-muted-foreground uppercase w-16 shrink-0 whitespace-nowrap">Stock Type</span>
             <select
-              className="w-full h-7 border border-[#2c2c2c] rounded-none text-xs font-bold bg-black text-white cursor-pointer px-1 focus:border-[#FFC000] focus:outline-none uppercase"
+              className="w-full h-7 border border-border rounded-none text-xs font-bold bg-secondary text-foreground cursor-pointer px-1 focus:border-[#FFC000] focus:outline-none uppercase"
               value={stockType}
               onChange={(e) => setStockType(e.target.value as StockTypeFilter)}
             >
-              <option value="All" className="bg-[#181818]">All Stock</option>
-              <option value="Opening" className="bg-[#181818]">Opening Bal</option>
-              <option value="Inward" className="bg-[#181818]">Inwards Only</option>
-              <option value="Purchase" className="bg-[#181818]">Purchase Desk</option>
-              <option value="Sales" className="bg-[#181818]">Sales desk</option>
+              <option value="All" className="bg-card text-foreground">All Stock</option>
+              <option value="Opening" className="bg-card text-foreground">Opening Bal</option>
+              <option value="Inward" className="bg-card text-foreground">Inwards Only</option>
+              <option value="Purchase" className="bg-card text-foreground">Purchase Desk</option>
+              <option value="Sales" className="bg-card text-foreground">Sales desk</option>
             </select>
           </div>
 
           {/* Pr Code Input */}
           <div className="col-span-2.5 flex items-center gap-1.5">
-            <span className="text-[9.5px] font-bold text-slate-500 uppercase w-12 shrink-0">Pr Code</span>
+            <span className="text-[9.5px] font-bold text-muted-foreground uppercase w-12 shrink-0">Pr Code</span>
             <input
               type="text"
               placeholder="Code"
-              className="w-full h-7 border border-slate-300 rounded-[2px] font-bold text-slate-700 bg-slate-50 focus:bg-white focus:outline-none px-2 uppercase"
+              className="w-full h-7 border border-border rounded-none font-bold text-foreground bg-secondary focus:border-[#FFC000] focus:outline-none px-2 uppercase"
               value={prCode}
               onChange={(e) => setPrCode(e.target.value)}
             />
@@ -444,15 +444,15 @@ export default function StockReportView() {
 
           {/* Table Name Dropdown */}
           <div className="col-span-3.5 flex items-center gap-1.5">
-            <span className="text-[9.5px] font-bold text-slate-500 uppercase w-16 shrink-0">Table Name</span>
+            <span className="text-[9.5px] font-bold text-muted-foreground uppercase w-16 shrink-0">Table Name</span>
             <select
-              className="w-full h-7 border border-slate-300 rounded-[2px] text-xs font-bold bg-slate-50 cursor-pointer px-1 focus:bg-white focus:outline-none"
+              className="w-full h-7 border border-border rounded-none text-xs font-bold bg-secondary text-foreground cursor-pointer px-1 focus:border-[#FFC000] focus:outline-none"
               value={tableName}
               onChange={(e) => setTableName(e.target.value)}
             >
-              <option value="All">ALL TABLES</option>
-              <option value="Table 1">SALES DESK 1</option>
-              <option value="Table 2">REPAIR COUNTER</option>
+              <option value="All" className="bg-card text-foreground">ALL TABLES</option>
+              <option value="Table 1" className="bg-card text-foreground">SALES DESK 1</option>
+              <option value="Table 2" className="bg-card text-foreground">REPAIR COUNTER</option>
             </select>
           </div>
         </div>
@@ -460,7 +460,7 @@ export default function StockReportView() {
       </div>
 
       {/* TABS CONTROL BAR */}
-      <div className="bg-[#181818] border border-[#2c2c2c] h-9 flex items-center px-3 gap-1 shrink-0 select-none no-print">
+      <div className="bg-card border border-border h-9 flex items-center px-3 gap-1 shrink-0 select-none no-print">
         {(['Group', 'Product', 'Item', 'Design', 'Safe', 'Counter', 'Trading'] as ActiveTabType[]).map((tab) => {
           const isActive = tab === activeTab;
           return (
@@ -469,8 +469,8 @@ export default function StockReportView() {
               onClick={() => setActiveTab(tab)}
               className={`h-7 px-4 text-[11px] font-bold uppercase transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-[#202020] border-t-2 border-t-[#FFC000] border-x border-b-0 border-[#2c2c2c] text-[#FFC000]'
-                  : 'bg-[#121212] hover:bg-[#1a1a1a] border border-[#2c2c2c] text-[#7D7D7D] hover:text-[#969696]'
+                  ? 'bg-secondary border-t-2 border-t-[#FFC000] border-x border-b-0 border-border text-[#FFC000]'
+                  : 'bg-muted hover:bg-secondary border border-border text-muted-foreground hover:text-foreground'
               }`}
             >
               {tab}
@@ -481,17 +481,17 @@ export default function StockReportView() {
 
       {/* TABLE GRID SUMMARY WRAPPED WITH DETAILS DRAWER */}
       <div className="flex gap-2 flex-1 overflow-hidden select-text min-h-[350px] w-full">
-        <div className="bg-[#202020] border border-[#2c2c2c] flex-1 overflow-auto flex flex-col">
+        <div className="bg-card border border-border flex-1 overflow-auto flex flex-col">
           
           {/* Printable Header - Shown only during printing/saving PDF */}
-          <div className="hidden print:block text-center py-4 border-b border-[#2c2c2c] bg-[#181818]">
+          <div className="hidden print:block text-center py-4 border-b border-border bg-card">
             <h1 className="text-lg font-extrabold uppercase font-luxury tracking-widest text-[#FFC000]">
               {selectedCompany?.name || 'JEWEL ACC'}
             </h1>
-            <p className="text-xs text-[#969696] uppercase font-bold tracking-wider mt-1">
+            <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider mt-1">
               Stock Report Statement ({activeTab} Analysis)
             </p>
-            <p className="text-[10px] text-[#7D7D7D] font-mono mt-0.5">
+            <p className="text-[10px] text-muted-foreground font-mono mt-0.5">
               Duration: {dateFrom} to {dateTo}
             </p>
           </div>
@@ -499,83 +499,83 @@ export default function StockReportView() {
           <div className="flex-1 overflow-y-auto">
             <table className="w-full border-collapse text-left text-xs table-fixed min-w-[950px]">
               <thead>
-                <tr className="sticky top-0 z-20 bg-[#181818] border-b border-[#2c2c2c] text-[9px] font-mono font-bold text-[#969696] uppercase select-none tracking-wider">
-                  <th className="w-[45px] border-r border-[#2c2c2c] px-2 py-2 text-center">SrNo</th>
-                  <th className="border-r border-[#2c2c2c] px-3 py-2 text-left min-w-[140px]">Item Name</th>
-                  <th className="w-[50px] border-r border-[#2c2c2c] px-1 py-2 text-center">OpPcs</th>
-                  <th className="w-[75px] border-r border-[#2c2c2c] px-2 py-2 text-right">OpWt</th>
-                  <th className="w-[50px] border-r border-[#2c2c2c] px-1 py-2 text-center bg-[#141414]">PrPcs</th>
-                  <th className="w-[75px] border-r border-[#2c2c2c] px-2 py-2 text-right bg-[#141414]">PrWt</th>
-                  <th className="w-[50px] border-r border-[#2c2c2c] px-1 py-2 text-center">InPcs</th>
-                  <th className="w-[75px] border-r border-[#2c2c2c] px-2 py-2 text-right">InWt</th>
-                  <th className="w-[50px] border-r border-[#2c2c2c] px-1 py-2 text-center">OuPcs</th>
-                  <th className="w-[75px] border-r border-[#2c2c2c] px-2 py-2 text-right">OuWt</th>
-                  <th className="w-[50px] border-r border-[#2c2c2c] px-1 py-2 text-center bg-[#141414]">SIPcs</th>
-                  <th className="w-[75px] border-r border-[#2c2c2c] px-2 py-2 text-right bg-[#141414]">SIWt</th>
-                  <th className="w-[60px] border-r border-[#2c2c2c] px-1 py-2 text-center bg-[#181818] text-[#FFC000]">CIPcs</th>
-                  <th className="w-[85px] text-right px-3 py-2 bg-[#181818] text-[#FFC000]">CIWt</th>
+                <tr className="sticky top-0 z-20 bg-secondary border-b border-border text-[9px] font-mono font-bold text-muted-foreground uppercase select-none tracking-wider">
+                  <th className="w-[45px] border-r border-border px-2 py-2 text-center">SrNo</th>
+                  <th className="border-r border-border px-3 py-2 text-left min-w-[140px]">Item Name</th>
+                  <th className="w-[50px] border-r border-border px-1 py-2 text-center">OpPcs</th>
+                  <th className="w-[75px] border-r border-border px-2 py-2 text-right">OpWt</th>
+                  <th className="w-[50px] border-r border-border px-1 py-2 text-center bg-muted/40">PrPcs</th>
+                  <th className="w-[75px] border-r border-border px-2 py-2 text-right bg-muted/40">PrWt</th>
+                  <th className="w-[50px] border-r border-border px-1 py-2 text-center">InPcs</th>
+                  <th className="w-[75px] border-r border-border px-2 py-2 text-right">InWt</th>
+                  <th className="w-[50px] border-r border-border px-1 py-2 text-center">OuPcs</th>
+                  <th className="w-[75px] border-r border-border px-2 py-2 text-right">OuWt</th>
+                  <th className="w-[50px] border-r border-border px-1 py-2 text-center bg-muted/40">SIPcs</th>
+                  <th className="w-[75px] border-r border-border px-2 py-2 text-right bg-muted/40">SIWt</th>
+                  <th className="w-[60px] border-r border-border px-1 py-2 text-center bg-secondary text-[#FFC000]">CIPcs</th>
+                  <th className="w-[85px] text-right px-3 py-2 bg-secondary text-[#FFC000]">CIWt</th>
                 </tr>
               </thead>
-              <tbody className="font-semibold text-white font-mono text-[11px] select-text">
+              <tbody className="font-semibold text-foreground font-mono text-[11px] select-text">
                 {gridRows.map((row) => (
                   <tr
                     key={row.srNo}
                     id={`stock-row-${row.srNo}`}
-                    className={`border-b border-[#2c2c2c] hover:bg-[#282828] transition-colors h-[28px] ${
-                      highlightedRowIndex === row.srNo ? 'bg-[#2a2412] border-l-2 border-l-[#FFC000]' : ''
+                    className={`border-b border-border hover:bg-secondary/40 transition-colors h-[28px] ${
+                      highlightedRowIndex === row.srNo ? 'bg-[#FFC000]/10 border-l-2 border-l-[#FFC000]' : ''
                     }`}
                   >
-                    <td className="text-center text-[#7D7D7D] border-r border-[#2c2c2c]">{row.srNo}</td>
-                    <td className="px-3 border-r border-[#2c2c2c] font-sans font-bold text-white uppercase tracking-tight">{row.itemName}</td>
-                    <td className="text-center border-r border-[#2c2c2c] text-[#969696]">{row.opPcs || ''}</td>
-                    <td className="text-right px-2 border-r border-[#2c2c2c] text-[#969696]">{row.opWt > 0 ? row.opWt.toFixed(3) : ''}</td>
-                    <td className="text-center border-r border-[#2c2c2c] bg-[#181818]/40 text-[#969696]">{row.prPcs || ''}</td>
-                    <td className="text-right px-2 border-r border-[#2c2c2c] bg-[#181818]/40 text-[#969696]">{row.prWt > 0 ? row.prWt.toFixed(3) : ''}</td>
-                    <td className="text-center border-r border-[#2c2c2c] text-[#969696]">{row.inPcs || ''}</td>
-                    <td className="text-right px-2 border-r border-[#2c2c2c] text-[#969696]">{row.inWt > 0 ? row.inWt.toFixed(3) : ''}</td>
-                    <td className="text-center border-r border-[#2c2c2c] text-[#969696]">{row.ouPcs || ''}</td>
-                    <td className="text-right px-2 border-r border-[#2c2c2c] text-[#969696]">{row.ouWt > 0 ? row.ouWt.toFixed(3) : ''}</td>
-                    <td className="text-center border-r border-[#2c2c2c] bg-[#181818]/40 text-[#969696]">{row.siPcs || ''}</td>
-                    <td className="text-right px-2 border-r border-[#2c2c2c] bg-[#181818]/40 text-[#969696]">{row.siWt > 0 ? row.siWt.toFixed(3) : ''}</td>
+                    <td className="text-center text-muted-foreground border-r border-border">{row.srNo}</td>
+                    <td className="px-3 border-r border-border font-sans font-bold text-foreground uppercase tracking-tight">{row.itemName}</td>
+                    <td className="text-center border-r border-border text-muted-foreground">{row.opPcs || ''}</td>
+                    <td className="text-right px-2 border-r border-border text-muted-foreground">{row.opWt > 0 ? row.opWt.toFixed(3) : ''}</td>
+                    <td className="text-center border-r border-border bg-muted/30 text-muted-foreground">{row.prPcs || ''}</td>
+                    <td className="text-right px-2 border-r border-border bg-muted/30 text-muted-foreground">{row.prWt > 0 ? row.prWt.toFixed(3) : ''}</td>
+                    <td className="text-center border-r border-border text-muted-foreground">{row.inPcs || ''}</td>
+                    <td className="text-right px-2 border-r border-border text-muted-foreground">{row.inWt > 0 ? row.inWt.toFixed(3) : ''}</td>
+                    <td className="text-center border-r border-border text-muted-foreground">{row.ouPcs || ''}</td>
+                    <td className="text-right px-2 border-r border-border text-muted-foreground">{row.ouWt > 0 ? row.ouWt.toFixed(3) : ''}</td>
+                    <td className="text-center border-r border-border bg-muted/30 text-muted-foreground">{row.siPcs || ''}</td>
+                    <td className="text-right px-2 border-r border-border bg-muted/30 text-muted-foreground">{row.siWt > 0 ? row.siWt.toFixed(3) : ''}</td>
                     
                     {/* Closing Stock Balances */}
-                    <td className="text-center border-r border-[#2c2c2c] bg-[#181818] text-[#FFC000] font-bold">
+                    <td className="text-center border-r border-border bg-secondary text-[#FFC000] font-bold">
                       {row.ciPcs}
                     </td>
-                    <td className="text-right px-3 bg-[#181818] text-[#FFC000] font-bold">
+                    <td className="text-right px-3 bg-secondary text-[#FFC000] font-bold">
                       {row.ciWt.toFixed(3)}
                     </td>
                   </tr>
                 ))}
                 {isLoading && (
                   <tr>
-                    <td colSpan={14} className="text-center py-8 font-bold text-[#7D7D7D]">Loading stock records and balances...</td>
+                    <td colSpan={14} className="text-center py-8 font-bold text-muted-foreground">Loading stock records and balances...</td>
                   </tr>
                 )}
                 {!isLoading && gridRows.length === 0 && (
                   <tr>
-                    <td colSpan={14} className="text-center py-8 font-bold text-[#7D7D7D]">No stock movements found matching current filters.</td>
+                    <td colSpan={14} className="text-center py-8 font-bold text-muted-foreground">No stock movements found matching current filters.</td>
                   </tr>
                 )}
               </tbody>
               {/* Totals Row aligned to columns */}
               <tfoot>
-                <tr className="bg-[#181818] border-t-2 border-[#2c2c2c] font-bold text-white font-mono text-[11px] h-[28px] select-none">
-                  <td colSpan={2} className="px-3 text-left uppercase text-[9.5px] font-mono tracking-widest text-[#7D7D7D]">Totals :</td>
-                  <td className="text-center border-r border-[#2c2c2c]">{totalOpPcs || ''}</td>
-                  <td className="text-right border-r border-[#2c2c2c] px-2">{totalOpWt > 0 ? totalOpWt.toFixed(3) : ''}</td>
-                  <td className="text-center border-r border-[#2c2c2c] bg-[#141414]">{totalPrPcs || ''}</td>
-                  <td className="text-right border-r border-[#2c2c2c] px-2 bg-[#141414]">{totalPrWt > 0 ? totalPrWt.toFixed(3) : ''}</td>
-                  <td className="text-center border-r border-[#2c2c2c]">{totalInPcs || ''}</td>
-                  <td className="text-right border-r border-[#2c2c2c] px-2">{totalInWt > 0 ? totalInWt.toFixed(3) : ''}</td>
-                  <td className="text-center border-r border-[#2c2c2c]">{totalOuPcs || ''}</td>
-                  <td className="text-right border-r border-[#2c2c2c] px-2">{totalOuWt > 0 ? totalOuWt.toFixed(3) : ''}</td>
-                  <td className="text-center border-r border-[#2c2c2c] bg-[#141414]">{totalSIPcs || ''}</td>
-                  <td className="text-right border-r border-[#2c2c2c] px-2 bg-[#141414]">{totalSIWt > 0 ? totalSIWt.toFixed(3) : ''}</td>
+                <tr className="bg-card border-t-2 border-border font-bold text-foreground font-mono text-[11px] h-[28px] select-none">
+                  <td colSpan={2} className="px-3 text-left uppercase text-[9.5px] font-mono tracking-widest text-muted-foreground">Totals :</td>
+                  <td className="text-center border-r border-border">{totalOpPcs || ''}</td>
+                  <td className="text-right border-r border-border px-2">{totalOpWt > 0 ? totalOpWt.toFixed(3) : ''}</td>
+                  <td className="text-center border-r border-border bg-muted/40">{totalPrPcs || ''}</td>
+                  <td className="text-right border-r border-border px-2 bg-muted/40">{totalPrWt > 0 ? totalPrWt.toFixed(3) : ''}</td>
+                  <td className="text-center border-r border-border">{totalInPcs || ''}</td>
+                  <td className="text-right border-r border-border px-2">{totalInWt > 0 ? totalInWt.toFixed(3) : ''}</td>
+                  <td className="text-center border-r border-border">{totalOuPcs || ''}</td>
+                  <td className="text-right border-r border-border px-2">{totalOuWt > 0 ? totalOuWt.toFixed(3) : ''}</td>
+                  <td className="text-center border-r border-border bg-muted/40">{totalSIPcs || ''}</td>
+                  <td className="text-right border-r border-border px-2 bg-muted/40">{totalSIWt > 0 ? totalSIWt.toFixed(3) : ''}</td>
                   
                   {/* Closing grand totals */}
-                  <td className="text-center border-r border-[#2c2c2c] font-bold text-[#FFC000] bg-[#121212]">{totalCIPcs}</td>
-                  <td className="text-right px-3 font-bold text-[#FFC000] bg-[#121212]">{totalCIWt.toFixed(3)}</td>
+                  <td className="text-center border-r border-border font-bold text-[#FFC000] bg-secondary">{totalCIPcs}</td>
+                  <td className="text-right px-3 font-bold text-[#FFC000] bg-secondary">{totalCIWt.toFixed(3)}</td>
                 </tr>
               </tfoot>
             </table>
@@ -584,67 +584,67 @@ export default function StockReportView() {
 
         {/* Side Panel for Image Preview and Item details */}
         {scannedItemDetails && (
-          <div className="w-80 bg-[#181818] border border-[#2c2c2c] flex flex-col no-print shrink-0">
-            <div className="bg-[#121212] text-white px-3 py-2 border-b border-[#2c2c2c] flex justify-between items-center">
+          <div className="w-80 bg-card border border-border flex flex-col no-print shrink-0">
+            <div className="bg-secondary text-foreground px-3 py-2 border-b border-border flex justify-between items-center">
               <span className="font-bold text-xs uppercase tracking-wider font-mono text-[#FFC000]">Scanned Item Details</span>
               <button 
                 onClick={() => { setScannedItemDetails(null); setHighlightedRowIndex(null); }}
-                className="text-[10px] text-[#7D7D7D] hover:text-white uppercase font-bold"
+                className="text-[10px] text-muted-foreground hover:text-foreground uppercase font-bold"
               >
                 Close [✕]
               </button>
             </div>
             <div className="p-3 space-y-3.5 flex-1 overflow-y-auto">
-              <div className="w-full h-32 bg-[#202020] border border-[#2c2c2c] flex items-center justify-center relative overflow-hidden">
+              <div className="w-full h-32 bg-secondary border border-border flex items-center justify-center relative overflow-hidden">
                 <div className="text-center p-4">
-                  <div className="mx-auto w-12 h-12 bg-[#2a2412] border border-[#FFC000]/40 flex items-center justify-center mb-1 text-[#FFC000] font-extrabold text-sm uppercase">
+                  <div className="mx-auto w-12 h-12 bg-[#FFC000]/15 border border-[#FFC000]/40 flex items-center justify-center mb-1 text-[#FFC000] font-extrabold text-sm uppercase">
                     {scannedItemDetails.type.substring(0,2)}
                   </div>
-                  <span className="text-[10px] text-[#969696] font-bold uppercase tracking-wider">Catalog Photo Preview</span>
-                  <p className="text-[9px] text-[#7D7D7D] mt-0.5">High-Resolution RFID Asset Capture</p>
+                  <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Catalog Photo Preview</span>
+                  <p className="text-[9px] text-muted-foreground mt-0.5">High-Resolution RFID Asset Capture</p>
                 </div>
               </div>
 
               <div className="space-y-2 text-[11px]">
-                <div className="flex justify-between border-b border-[#2c2c2c] pb-1">
-                  <span className="text-[#7D7D7D] font-mono uppercase text-[9.5px]">Entity Type</span>
-                  <span className="font-bold text-white uppercase">{scannedItemDetails.type}</span>
+                <div className="flex justify-between border-b border-border pb-1">
+                  <span className="text-muted-foreground font-mono uppercase text-[9.5px]">Entity Type</span>
+                  <span className="font-bold text-foreground uppercase">{scannedItemDetails.type}</span>
                 </div>
-                <div className="flex justify-between border-b border-[#2c2c2c] pb-1">
-                  <span className="text-[#7D7D7D] font-mono uppercase text-[9.5px]">Item Code / SKU</span>
+                <div className="flex justify-between border-b border-border pb-1">
+                  <span className="text-muted-foreground font-mono uppercase text-[9.5px]">Item Code / SKU</span>
                   <span className="font-mono font-bold text-[#FFC000]">{scannedItemDetails.code}</span>
                 </div>
-                <div className="flex justify-between border-b border-[#2c2c2c] pb-1">
-                  <span className="text-[#7D7D7D] font-mono uppercase text-[9.5px]">Design Description</span>
-                  <span className="font-bold text-white uppercase">{scannedItemDetails.name}</span>
+                <div className="flex justify-between border-b border-border pb-1">
+                  <span className="text-muted-foreground font-mono uppercase text-[9.5px]">Design Description</span>
+                  <span className="font-bold text-foreground uppercase">{scannedItemDetails.name}</span>
                 </div>
                 {scannedItemDetails.details.weight !== undefined && (
-                  <div className="flex justify-between border-b border-[#2c2c2c] pb-1">
-                    <span className="text-[#7D7D7D] font-mono uppercase text-[9.5px]">Gross Weight</span>
-                    <span className="font-mono font-bold text-white">{scannedItemDetails.details.weight || scannedItemDetails.details.gr_wt} g</span>
+                  <div className="flex justify-between border-b border-border pb-1">
+                    <span className="text-muted-foreground font-mono uppercase text-[9.5px]">Gross Weight</span>
+                    <span className="font-mono font-bold text-foreground">{scannedItemDetails.details.weight || scannedItemDetails.details.gr_wt} g</span>
                   </div>
                 )}
                 {scannedItemDetails.details.fine !== undefined && (
-                  <div className="flex justify-between items-center py-2 border-b border-[#2c2c2c]">
-                    <span className="text-[#7D7D7D] font-mono uppercase text-[9.5px]">Fine Weight</span>
-                    <span className="font-mono font-bold text-white">{scannedItemDetails.details.fine || scannedItemDetails.details.net_wt} g</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="text-muted-foreground font-mono uppercase text-[9.5px]">Fine Weight</span>
+                    <span className="font-mono font-bold text-foreground">{scannedItemDetails.details.fine || scannedItemDetails.details.net_wt} g</span>
                   </div>
                 )}
                 {scannedItemDetails.details.purity && (
-                  <div className="flex justify-between border-b border-[#2c2c2c] pb-1">
-                    <span className="text-[#7D7D7D] font-mono uppercase text-[9.5px]">Purity (Carat)</span>
-                    <span className="font-bold text-white">{scannedItemDetails.details.purity || scannedItemDetails.details.size}</span>
+                  <div className="flex justify-between border-b border-border pb-1">
+                    <span className="text-muted-foreground font-mono uppercase text-[9.5px]">Purity (Carat)</span>
+                    <span className="font-bold text-foreground">{scannedItemDetails.details.purity || scannedItemDetails.details.size}</span>
                   </div>
                 )}
                 {(scannedItemDetails.details.selling_price !== undefined || scannedItemDetails.details.mrp !== undefined) && (
-                  <div className="flex justify-between border-b border-[#2c2c2c] pb-1">
-                    <span className="text-[#7D7D7D] font-mono uppercase text-[9.5px]">Market Selling Price</span>
+                  <div className="flex justify-between border-b border-border pb-1">
+                    <span className="text-muted-foreground font-mono uppercase text-[9.5px]">Market Selling Price</span>
                     <span className="font-mono font-bold text-[#FFC000]">₹{(scannedItemDetails.details.selling_price || scannedItemDetails.details.mrp || 0).toLocaleString()}</span>
                   </div>
                 )}
                 {scannedItemDetails.details.current_stock !== undefined && (
-                  <div className="flex justify-between border-b border-[#2c2c2c] pb-1">
-                    <span className="text-[#7D7D7D] font-mono uppercase text-[9.5px]">Active Inventory Stock</span>
+                  <div className="flex justify-between border-b border-border pb-1">
+                    <span className="text-muted-foreground font-mono uppercase text-[9.5px]">Active Inventory Stock</span>
                     <span className={`font-bold font-mono ${scannedItemDetails.details.current_stock > 0 ? 'text-[#29ABE2]' : 'text-rose-500'}`}>{scannedItemDetails.details.current_stock} pcs</span>
                   </div>
                 )}
@@ -655,21 +655,21 @@ export default function StockReportView() {
       </div>
 
       {/* ACTION BUTTONS RIBBON */}
-      <div className="bg-[#181818] border border-[#2c2c2c] px-3 py-1.5 flex items-center justify-end gap-1.5 shrink-0 select-none mt-2 no-print">
+      <div className="bg-card border border-border px-3 py-1.5 flex items-center justify-end gap-1.5 shrink-0 select-none mt-2 no-print">
         
         {/* Print (Window) */}
         <button
           onClick={handlePrint}
-          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-white/5 text-[#969696] hover:text-white border border-white/20 uppercase transition-all text-xs cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-secondary text-muted-foreground hover:text-foreground border border-border uppercase transition-all text-xs cursor-pointer active:scale-95"
         >
-          <Printer className="h-3.5 w-3.5 text-[#969696]" />
+          <Printer className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Print</span>
         </button>
 
         {/* PDF Export */}
         <button
           onClick={handleExportPDF}
-          className="flex items-center gap-1.5 px-4 h-8 bg-[#FFC000] hover:bg-[#917300] text-black border border-[#FFC000] uppercase transition-all text-xs font-bold cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-4 h-8 bg-[#FFC000] hover:bg-[#917300] text-black border border-[#FFC000] uppercase transition-all text-xs font-extrabold cursor-pointer active:scale-95"
         >
           <FileText className="h-3.5 w-3.5 text-black" />
           <span>PDF Export</span>
@@ -678,29 +678,29 @@ export default function StockReportView() {
         {/* Excel Export */}
         <button
           onClick={handleExcelExport}
-          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-white/5 text-[#969696] hover:text-white border border-white/20 uppercase transition-all text-xs cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-secondary text-muted-foreground hover:text-foreground border border-border uppercase transition-all text-xs cursor-pointer active:scale-95"
         >
-          <FileSpreadsheet className="h-3.5 w-3.5 text-[#969696]" />
+          <FileSpreadsheet className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Excel</span>
         </button>
 
         {/* Cancel (Reset) */}
         <button
           onClick={handleCancel}
-          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-white/5 text-[#7D7D7D] hover:text-white border border-white/20 uppercase transition-all text-xs cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-secondary text-muted-foreground hover:text-foreground border border-border uppercase transition-all text-xs cursor-pointer active:scale-95"
         >
-          <Undo2 className="h-3.5 w-3.5 text-[#7D7D7D]" />
+          <Undo2 className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Cancel</span>
         </button>
 
-        <div className="h-5 w-px bg-[#2c2c2c] mx-1" />
+        <div className="h-5 w-px bg-border mx-1" />
 
         {/* Exit */}
         <button
           onClick={handleExit}
-          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-rose-500/10 text-[#7D7D7D] hover:text-rose-400 border border-white/20 uppercase transition-all text-xs cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-rose-500/10 text-muted-foreground hover:text-rose-500 border border-border uppercase transition-all text-xs cursor-pointer active:scale-95"
         >
-          <LogOut className="h-3.5 w-3.5 text-[#7D7D7D]" />
+          <LogOut className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Exit</span>
         </button>
 

@@ -112,8 +112,8 @@ const CellInput = ({
       mono ? 'font-mono' : '',
       bold ? 'font-bold' : '',
       color,
-      disabled ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : '',
-      readOnly ? 'bg-gray-50 text-gray-600 cursor-default select-none' : '',
+      disabled ? 'bg-secondary text-muted-foreground cursor-not-allowed' : '',
+      readOnly ? 'bg-secondary/40 text-muted-foreground cursor-default select-none' : '',
       className
     ].join(' ')}
   />
@@ -126,14 +126,14 @@ const SectionHeader = ({
 }: {
   title: string; onAdd?: () => void; addLabel?: string; addDisabled?: boolean;
 }) => (
-  <div className="flex items-center justify-between px-3 py-1 bg-gray-200 border-b border-gray-300 shrink-0">
-    <span className="text-[10.5px] font-bold font-mono uppercase text-gray-600 tracking-wide">{title}</span>
+  <div className="flex items-center justify-between px-3 py-1 bg-secondary border-b border-border shrink-0">
+    <span className="text-[10.5px] font-bold font-mono uppercase text-muted-foreground tracking-wide">{title}</span>
     {onAdd && (
       <button
         type="button"
         onClick={onAdd}
         disabled={addDisabled}
-        className="flex items-center gap-1 px-2.5 py-0.5 bg-white hover:bg-orange-50 border border-gray-300 text-[10px] font-semibold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="flex items-center gap-1 px-2.5 py-0.5 bg-card hover:bg-secondary/50 border border-border text-[10px] font-semibold text-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
         <Plus className="h-3 w-3" />
         {addLabel}
@@ -148,9 +148,9 @@ const FooterCell = ({ label, value, highlight = false, wide = false }: {
   label?: string; value: string; highlight?: boolean; wide?: boolean;
 }) => (
   <td className={`px-2 py-0.5 text-right font-mono text-[10px] font-bold whitespace-nowrap
-    ${highlight ? 'bg-amber-100 text-orange-700' : 'text-gray-700'}
+    ${highlight ? 'bg-amber-100 text-orange-700' : 'text-foreground'}
     ${wide ? 'min-w-[80px]' : 'min-w-[60px]'}`}>
-    {label && <span className="text-gray-500 font-normal mr-1">{label}</span>}
+    {label && <span className="text-muted-foreground font-normal mr-1">{label}</span>}
     {value}
   </td>
 );
@@ -759,25 +759,25 @@ export default function PurchaseView() {
   });
 
   // Common th class
-  const thClass = "px-2 py-1 text-left text-[9.5px] font-bold uppercase text-gray-600 tracking-wide whitespace-nowrap border-r border-gray-300 last:border-r-0 bg-gray-100";
+  const thClass = "px-2 py-1 text-left text-[9.5px] font-bold uppercase text-muted-foreground tracking-wide whitespace-nowrap border-r border-border last:border-r-0 bg-secondary";
   const thClassR = thClass + " text-right";
   const thClassC = thClass + " text-center";
 
   // ─── RENDER ──────────────────────────────────────────────────────────────────
 
   return (
-    <div className="flex h-full bg-gray-100 text-gray-900 font-sans text-[11px] select-none leading-tight overflow-hidden">
+    <div className="flex h-full bg-background text-foreground font-sans text-[11px] select-none leading-tight overflow-hidden">
 
       {/* ── LEFT SIDEBAR ────────────────────────────────────────────────────── */}
       {showLeftSidebar && (
-        <aside className="w-52 bg-white border-r border-gray-300 flex flex-col shrink-0 shadow-md">
-          <div className="px-2 py-1.5 border-b border-gray-300 bg-gray-50">
+        <aside className="w-52 bg-card border-r border-border flex flex-col shrink-0 shadow-sm">
+          <div className="px-2 py-1.5 border-b border-border bg-secondary">
             <div className="relative">
-              <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-gray-400" />
+              <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search vouchers…"
-                className="w-full pl-6 pr-2 py-1 border border-gray-300 bg-white text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="w-full pl-6 pr-2 py-1 border border-border bg-card text-foreground text-[11px] focus:outline-none focus:border-[#FFC000]"
                 value={leftSearch}
                 onChange={(e) => setLeftSearch(e.target.value)}
               />
@@ -792,24 +792,24 @@ export default function PurchaseView() {
                 <div
                   key={v.id}
                   onClick={() => setSelectedVoucherId(v.id)}
-                  className={`px-2.5 py-2 border-b border-gray-100 cursor-pointer transition-colors ${isSelected ? 'bg-orange-50 border-l-4 border-l-orange-500' : 'hover:bg-gray-50 border-l-4 border-l-transparent'
+                  className={`px-2.5 py-2 border-b border-border cursor-pointer transition-colors ${isSelected ? 'bg-secondary/50 border-l-4 border-l-orange-500' : 'hover:bg-secondary/40 border-l-4 border-l-transparent'
                     }`}
                 >
                   <div className="flex justify-between items-center">
-                    <span className="font-mono font-bold text-gray-800 text-[11px]">{v.vch_no}</span>
-                    <span className="text-[9.5px] text-gray-400">{v.vch_date}</span>
+                    <span className="font-mono font-bold text-foreground text-[11px]">{v.vch_no}</span>
+                    <span className="text-[9.5px] text-muted-foreground">{v.vch_date}</span>
                   </div>
-                  <div className="truncate text-gray-600 text-[10.5px] mt-0.5">{party?.name || 'Unknown'}</div>
+                  <div className="truncate text-muted-foreground text-[10.5px] mt-0.5">{party?.name || 'Unknown'}</div>
                   <div className="text-right text-orange-700 font-bold font-mono text-[11px] mt-0.5">₹{(v.total_amount || 0).toLocaleString()}</div>
                 </div>
               );
             })}
           </div>
 
-          <div className="p-2 border-t border-gray-300 bg-gray-50">
+          <div className="p-2 border-t border-border bg-secondary/40">
             <button
               onClick={handleNew}
-              className="w-full flex items-center justify-center gap-1.5 py-1.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-[11px] transition-colors"
+              className="w-full flex items-center justify-center gap-1.5 py-1.5 bg-secondary/500 hover:bg-orange-600 text-white font-bold text-[11px] transition-colors"
             >
               <Plus className="h-3.5 w-3.5" />
               NEW INVOICE
@@ -822,14 +822,14 @@ export default function PurchaseView() {
       <section className="flex-1 flex flex-col min-w-0 overflow-scroll">
 
         {/* ── HEADER ──────────────────────────────────────────────────────── */}
-        <div className="bg-[#FFF4E6] border-b border-orange-200 px-3 py-2 shrink-0">
+        <div className="bg-secondary border-b border-border px-3 py-2 shrink-0">
           {/* Title bar */}
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => setShowLeftSidebar((p) => !p)}
-                className="px-2.5 py-1 bg-white border border-orange-300 text-orange-700 text-[10px] font-bold hover:bg-orange-50 transition-colors"
+                className="px-2.5 py-1 bg-card border border-orange-300 text-orange-700 text-[10px] font-bold hover:bg-secondary/50 transition-colors"
               >
                 {showLeftSidebar ? '◀ HIDE' : '▶ LIST'}
               </button>
@@ -837,10 +837,10 @@ export default function PurchaseView() {
             </div>
             <div className="flex items-center gap-3">
               {/* Quick summary box */}
-              <div className="flex items-center gap-4 border border-orange-200 bg-white px-3 py-1 text-[10.5px] font-mono">
-                <span className="text-gray-500">Net Wt: <strong className="text-orange-700">{totalGoldWeight.toFixed(3)}g</strong></span>
-                <span className="text-gray-500">Fine Au: <strong className="text-red-700">{totalFineGold.toFixed(3)}g</strong></span>
-                <span className="text-gray-500">Fine Ag: <strong className="text-blue-700">{totalFineSilver.toFixed(3)}g</strong></span>
+              <div className="flex items-center gap-4 border border-border bg-card px-3 py-1 text-[10.5px] font-mono">
+                <span className="text-muted-foreground">Net Wt: <strong className="text-orange-700">{totalGoldWeight.toFixed(3)}g</strong></span>
+                <span className="text-muted-foreground">Fine Au: <strong className="text-red-700">{totalFineGold.toFixed(3)}g</strong></span>
+                <span className="text-muted-foreground">Fine Ag: <strong className="text-blue-700">{totalFineSilver.toFixed(3)}g</strong></span>
               </div>
               <span className={`text-[10px] font-bold px-2 py-0.5 border ${selectedVoucherId ? 'border-blue-300 bg-blue-50 text-blue-700' : 'border-green-300 bg-green-50 text-green-700'
                 }`}>
@@ -854,18 +854,18 @@ export default function PurchaseView() {
 
             {/* Vch No */}
             <div className="flex flex-col min-w-[90px]">
-              <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">Vch No</label>
+              <label className="text-[9.5px] text-muted-foreground uppercase font-semibold mb-0.5">Vch No</label>
               <div className="flex gap-1">
                 <input
                   type="text"
-                  className="w-20 h-[26px] px-1.5 border border-gray-300 bg-gray-100 font-mono font-bold text-red-700 text-[11px] focus:outline-none"
+                  className="w-20 h-[26px] px-1.5 border border-border bg-secondary font-mono font-bold text-red-700 text-[11px] focus:outline-none"
                   value={vchNo}
                   readOnly
                 />
                 <button
                   type="button"
                   onClick={() => setShowLeftSidebar((p) => !p)}
-                  className="px-2 h-[26px] bg-gray-200 hover:bg-gray-300 border border-gray-300 text-[10px] font-bold"
+                  className="px-2 h-[26px] bg-secondary hover:bg-secondary border border-border text-[10px] font-bold"
                   title="F1 – Toggle List"
                 >
                   F1
@@ -875,10 +875,10 @@ export default function PurchaseView() {
 
             {/* Vch Date */}
             <div className="flex flex-col min-w-[110px]">
-              <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">Date</label>
+              <label className="text-[9.5px] text-muted-foreground uppercase font-semibold mb-0.5">Date</label>
               <input
                 type="date"
-                className="h-[26px] px-1.5 border border-gray-300 bg-white text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="h-[26px] px-1.5 border border-border bg-card text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={vchDate}
                 onChange={(e) => setVchDate(e.target.value)}
               />
@@ -886,10 +886,10 @@ export default function PurchaseView() {
 
             {/* Day */}
             <div className="flex flex-col min-w-[72px]">
-              <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">Day</label>
+              <label className="text-[9.5px] text-muted-foreground uppercase font-semibold mb-0.5">Day</label>
               <input
                 type="text"
-                className="h-[26px] px-1.5 border border-gray-300 bg-gray-100 text-gray-500 text-[11px] font-semibold focus:outline-none cursor-default"
+                className="h-[26px] px-1.5 border border-border bg-secondary text-muted-foreground text-[11px] font-semibold focus:outline-none cursor-default"
                 value={vchDate ? new Date(vchDate).toLocaleDateString('en-US', { weekday: 'short' }) : ''}
                 readOnly
               />
@@ -897,10 +897,10 @@ export default function PurchaseView() {
 
             {/* Time */}
             <div className="flex flex-col min-w-[80px]">
-              <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">Time</label>
+              <label className="text-[9.5px] text-muted-foreground uppercase font-semibold mb-0.5">Time</label>
               <input
                 type="text"
-                className="h-[26px] px-1.5 border border-gray-300 bg-white font-mono text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="h-[26px] px-1.5 border border-border bg-card font-mono text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={vchTime}
                 onChange={(e) => setVchTime(e.target.value)}
               />
@@ -908,10 +908,10 @@ export default function PurchaseView() {
 
             {/* Ref No */}
             <div className="flex flex-col min-w-[90px]">
-              <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">Ref No</label>
+              <label className="text-[9.5px] text-muted-foreground uppercase font-semibold mb-0.5">Ref No</label>
               <input
                 type="text"
-                className="h-[26px] px-1.5 border border-gray-300 bg-white text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="h-[26px] px-1.5 border border-border bg-card text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={refNo}
                 onChange={(e) => setRefNo(e.target.value)}
               />
@@ -919,9 +919,9 @@ export default function PurchaseView() {
 
             {/* Party */}
             <div className="flex flex-col flex-1 min-w-[200px] max-w-[320px]">
-              <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">Party / Supplier</label>
+              <label className="text-[9.5px] text-muted-foreground uppercase font-semibold mb-0.5">Party / Supplier</label>
               <select
-                className="h-[26px] px-1.5 border border-gray-300 bg-white font-semibold text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="h-[26px] px-1.5 border border-border bg-card font-semibold text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={partyId}
                 onChange={(e) => setPartyId(e.target.value)}
               >
@@ -934,10 +934,10 @@ export default function PurchaseView() {
 
             {/* SI Bill No */}
             <div className="flex flex-col min-w-[100px]">
-              <label className="text-[9.5px] text-gray-500 uppercase font-semibold mb-0.5">SI Bill No</label>
+              <label className="text-[9.5px] text-muted-foreground uppercase font-semibold mb-0.5">SI Bill No</label>
               <input
                 type="text"
-                className="h-[26px] px-1.5 border border-gray-300 bg-white text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="h-[26px] px-1.5 border border-border bg-card text-[11px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                 value={stlBillNo}
                 onChange={(e) => setStlBillNo(e.target.value)}
               />
@@ -947,7 +947,7 @@ export default function PurchaseView() {
         </div>
 
         {/* ── LEVEL 1: PURCHASE SUMMARY ───────────────────────────────────── */}
-        <div className="h-[21%] border-b border-gray-300 bg-white flex flex-col overflow-hidden">
+        <div className="h-[21%] border-b border-border bg-card flex flex-col overflow-hidden">
           <SectionHeader
             title={`Level 1 — Purchase Summaries (${activeSummaries.length} items)`}
             onAdd={handleAddSummaryRow}
@@ -957,7 +957,7 @@ export default function PurchaseView() {
           <div className="flex-1 overflow-auto">
             <table className="border-collapse text-[11px]" style={{ minWidth: '1100px', width: '100%' }}>
               <thead className="sticky top-0 z-10">
-                <tr className="border-b-2 border-gray-300">
+                <tr className="border-b-2 border-border">
                   <th className={thClassC} style={{ width: 28 }}>#</th>
                   <th className={thClass} style={{ width: 72 }}>ItCode</th>
                   <th className={thClass} style={{ width: 150 }}>Item Name</th>
@@ -967,7 +967,7 @@ export default function PurchaseView() {
                   <th className={thClassR} style={{ width: 72 }}>Net Wt</th>
                   <th className={thClassR} style={{ width: 54 }}>Touch</th>
                   <th className={thClassR} style={{ width: 50 }}>Wst%</th>
-                  <th className={thClassR + " bg-amber-50 text-orange-700"} style={{ width: 80 }}>Fine ✦</th>
+                  <th className={thClassR + " bg-secondary/50 text-orange-700"} style={{ width: 80 }}>Fine ✦</th>
                   <th className={thClassR} style={{ width: 62 }}>ConRate</th>
                   <th className={thClassR} style={{ width: 48 }}>Con%</th>
                   <th className={thClassR} style={{ width: 80 }}>Rate</th>
@@ -982,7 +982,7 @@ export default function PurchaseView() {
                 {summaries.map((s, idx) => {
                   const isActive = activeSummaryIndex === idx;
                   const isLinkedToTags = tags.some((t) => t.item_sr === s.sr);
-                  const trClass = `border-b border-gray-200 cursor-pointer transition-colors ${isActive ? 'bg-orange-50 outline outline-1 outline-orange-300' : 'hover:bg-gray-50'
+                  const trClass = `border-b border-border cursor-pointer transition-colors ${isActive ? 'bg-secondary/50 outline outline-1 outline-orange-300' : 'hover:bg-secondary/40'
                     }`;
                   const kd = (c: number) => (e: React.KeyboardEvent) => handleKeyDown(e, 'L1', idx, c);
                   const fc = () => setActiveSummaryIndex(idx);
@@ -990,21 +990,21 @@ export default function PurchaseView() {
 
                   return (
                     <tr key={s.sr} onClick={() => setActiveSummaryIndex(idx)} className={trClass}>
-                      <td className="text-center text-[10px] text-gray-500 font-mono bg-gray-50 px-1">{s.sr}</td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-0`} value={s.it_code} onChange={ch('it_code')} onKeyDown={kd(0)} onFocus={fc} bold mono /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-1`} value={s.it_name} onChange={ch('it_name')} onKeyDown={kd(1)} onFocus={fc} /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-2`} type="number" value={s.pcs || ''} onChange={ch('pcs')} onKeyDown={kd(2)} onFocus={fc} align="right" mono disabled={isLinkedToTags} /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-3`} type="number" step="0.001" value={s.gr_wt || ''} onChange={ch('gr_wt')} onKeyDown={kd(3)} onFocus={fc} align="right" mono disabled={isLinkedToTags} /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-4`} type="number" step="0.001" value={s.oth_wt || ''} onChange={ch('oth_wt')} onKeyDown={kd(4)} onFocus={fc} align="right" mono disabled={isLinkedToTags} /></td>
-                      <td className="text-right px-2 font-mono text-gray-600 bg-gray-50 border-r border-gray-200 whitespace-nowrap">{s.net_wt.toFixed(3)}</td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-5`} type="number" step="0.01" value={s.touch || ''} onChange={ch('touch')} onKeyDown={kd(5)} onFocus={fc} align="right" mono /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-6`} type="number" step="0.01" value={s.wastage_percent || ''} onChange={ch('wastage_percent')} onKeyDown={kd(6)} onFocus={fc} align="right" mono /></td>
-                      <td className="text-right px-2 font-mono font-bold text-orange-600 bg-amber-50 border-r-2 border-amber-300 whitespace-nowrap">{s.fine.toFixed(3)}</td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-7`} type="number" value={s.con_rate || ''} onChange={ch('con_rate')} onKeyDown={kd(7)} onFocus={fc} align="right" mono /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-8`} type="number" value={s.con_percent || ''} onChange={ch('con_percent')} onKeyDown={kd(8)} onFocus={fc} align="right" mono /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-9`} type="number" value={s.rate || ''} onChange={ch('rate')} onKeyDown={kd(9)} onFocus={fc} align="right" mono bold color="text-blue-700" /></td>
-                      <td className="text-right px-2 font-mono font-bold text-red-800 bg-gray-50 border-r border-gray-200 whitespace-nowrap">₹{s.it_amt.toLocaleString()}</td>
-                      <td className="border-r border-gray-200">
+                      <td className="text-center text-[10px] text-muted-foreground font-mono bg-secondary/40 px-1">{s.sr}</td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-0`} value={s.it_code} onChange={ch('it_code')} onKeyDown={kd(0)} onFocus={fc} bold mono /></td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-1`} value={s.it_name} onChange={ch('it_name')} onKeyDown={kd(1)} onFocus={fc} /></td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-2`} type="number" value={s.pcs || ''} onChange={ch('pcs')} onKeyDown={kd(2)} onFocus={fc} align="right" mono disabled={isLinkedToTags} /></td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-3`} type="number" step="0.001" value={s.gr_wt || ''} onChange={ch('gr_wt')} onKeyDown={kd(3)} onFocus={fc} align="right" mono disabled={isLinkedToTags} /></td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-4`} type="number" step="0.001" value={s.oth_wt || ''} onChange={ch('oth_wt')} onKeyDown={kd(4)} onFocus={fc} align="right" mono disabled={isLinkedToTags} /></td>
+                      <td className="text-right px-2 font-mono text-muted-foreground bg-secondary/40 border-r border-border whitespace-nowrap">{s.net_wt.toFixed(3)}</td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-5`} type="number" step="0.01" value={s.touch || ''} onChange={ch('touch')} onKeyDown={kd(5)} onFocus={fc} align="right" mono /></td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-6`} type="number" step="0.01" value={s.wastage_percent || ''} onChange={ch('wastage_percent')} onKeyDown={kd(6)} onFocus={fc} align="right" mono /></td>
+                      <td className="text-right px-2 font-mono font-bold text-orange-600 bg-secondary/50 border-r-2 border-amber-300 whitespace-nowrap">{s.fine.toFixed(3)}</td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-7`} type="number" value={s.con_rate || ''} onChange={ch('con_rate')} onKeyDown={kd(7)} onFocus={fc} align="right" mono /></td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-8`} type="number" value={s.con_percent || ''} onChange={ch('con_percent')} onKeyDown={kd(8)} onFocus={fc} align="right" mono /></td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-9`} type="number" value={s.rate || ''} onChange={ch('rate')} onKeyDown={kd(9)} onFocus={fc} align="right" mono bold color="text-blue-700" /></td>
+                      <td className="text-right px-2 font-mono font-bold text-red-800 bg-secondary/40 border-r border-border whitespace-nowrap">₹{s.it_amt.toLocaleString()}</td>
+                      <td className="border-r border-border">
                         <select id={`L1-${idx}-10`} className="w-full h-[22px] bg-transparent text-center text-[11px] font-bold border-0 focus:outline-none focus:ring-1 focus:ring-orange-400 focus:bg-yellow-50"
                           value={s.ltype} onChange={(e) => handleSummaryCellChange(idx, 'ltype', e.target.value)}
                           onKeyDown={kd(10)} onFocus={fc}>
@@ -1013,10 +1013,10 @@ export default function PurchaseView() {
                           <option value="P">P</option>
                         </select>
                       </td>
-                      <td className="border-r border-gray-200"><CellInput id={`L1-${idx}-11`} type="number" value={s.lrate || ''} onChange={ch('lrate')} onKeyDown={kd(11)} onFocus={fc} align="right" mono /></td>
-                      <td className="text-right px-2 font-mono text-gray-600 bg-gray-50 border-r border-gray-200 whitespace-nowrap">{s.lamt.toLocaleString()}</td>
+                      <td className="border-r border-border"><CellInput id={`L1-${idx}-11`} type="number" value={s.lrate || ''} onChange={ch('lrate')} onKeyDown={kd(11)} onFocus={fc} align="right" mono /></td>
+                      <td className="text-right px-2 font-mono text-muted-foreground bg-secondary/40 border-r border-border whitespace-nowrap">{s.lamt.toLocaleString()}</td>
                       <td className="text-center">
-                        <button type="button" onClick={(e) => { e.stopPropagation(); handleRemoveSummaryRow(idx); }} className="p-0.5 text-gray-300 hover:text-red-500 transition-colors">
+                        <button type="button" onClick={(e) => { e.stopPropagation(); handleRemoveSummaryRow(idx); }} className="p-0.5 text-muted-foreground hover:text-red-500 transition-colors">
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </td>
@@ -1028,21 +1028,21 @@ export default function PurchaseView() {
           </div>
 
           {/* L1 Totals */}
-          <div className="shrink-0 bg-gray-100 border-t border-gray-300">
+          <div className="shrink-0 bg-secondary border-t border-border">
             <table className="border-collapse text-[10px] font-mono" style={{ minWidth: '1100px', width: '100%' }}>
               <tbody>
-                <tr className="font-bold text-gray-700">
-                  <td className="px-2 py-0.5 text-gray-500 uppercase tracking-wide" style={{ width: 28 + 72 + 150 }}>Totals</td>
+                <tr className="font-bold text-foreground">
+                  <td className="px-2 py-0.5 text-muted-foreground uppercase tracking-wide" style={{ width: 28 + 72 + 150 }}>Totals</td>
                   <td className="px-2 text-right" style={{ width: 44 }}>{activeSummaries.reduce((a, s) => a + s.pcs, 0)}</td>
-                  <td className="px-2 text-right text-gray-500" style={{ width: 72 }}>{activeSummaries.reduce((a, s) => a + s.gr_wt, 0).toFixed(3)}g</td>
-                  <td className="px-2 text-right text-gray-500" style={{ width: 62 }}>{activeSummaries.reduce((a, s) => a + s.oth_wt, 0).toFixed(3)}g</td>
-                  <td className="px-2 text-right text-gray-500" style={{ width: 72 }}>{activeSummaries.reduce((a, s) => a + s.net_wt, 0).toFixed(3)}g</td>
+                  <td className="px-2 text-right text-muted-foreground" style={{ width: 72 }}>{activeSummaries.reduce((a, s) => a + s.gr_wt, 0).toFixed(3)}g</td>
+                  <td className="px-2 text-right text-muted-foreground" style={{ width: 62 }}>{activeSummaries.reduce((a, s) => a + s.oth_wt, 0).toFixed(3)}g</td>
+                  <td className="px-2 text-right text-muted-foreground" style={{ width: 72 }}>{activeSummaries.reduce((a, s) => a + s.net_wt, 0).toFixed(3)}g</td>
                   <td style={{ width: 54 + 50 }}></td>
-                  <td className="px-2 text-right font-bold text-orange-600 bg-amber-50" style={{ width: 80 }}>{totalFineWeight.toFixed(3)}g</td>
+                  <td className="px-2 text-right font-bold text-orange-600 bg-secondary/50" style={{ width: 80 }}>{totalFineWeight.toFixed(3)}g</td>
                   <td style={{ width: 62 + 48 + 80 }}></td>
                   <td className="px-2 text-right text-red-800 font-bold" style={{ width: 88 }}>₹{totalItemAmt.toLocaleString()}</td>
                   <td style={{ width: 46 + 66 }}></td>
-                  <td className="px-2 text-right text-gray-600" style={{ width: 78 }}>₹{totalLbrAmt.toLocaleString()}</td>
+                  <td className="px-2 text-right text-muted-foreground" style={{ width: 78 }}>₹{totalLbrAmt.toLocaleString()}</td>
                   <td style={{ width: 30 }}></td>
                 </tr>
               </tbody>
@@ -1051,7 +1051,7 @@ export default function PurchaseView() {
         </div>
 
         {/* ── LEVEL 2: TAG DETAILS ────────────────────────────────────────── */}
-        <div className="h-[21%] border-b border-gray-300 bg-white flex flex-col overflow-hidden">
+        <div className="h-[21%] border-b border-border bg-card flex flex-col overflow-hidden">
           <SectionHeader
             title={`Level 2 — Tag Details${parentSummary ? ` › Sr ${parentSummary.sr}: ${parentSummary.it_code || '—'}` : ' (Select Summary Row)'}`}
             onAdd={handleAddTagRow}
@@ -1062,7 +1062,7 @@ export default function PurchaseView() {
           <div className="flex-1 overflow-auto">
             <table className="border-collapse text-[11px]" style={{ minWidth: '1200px', width: '100%' }}>
               <thead className="sticky top-0 z-10">
-                <tr className="border-b-2 border-gray-300">
+                <tr className="border-b-2 border-border">
                   <th className={thClassC} style={{ width: 28 }}>#</th>
                   <th className={thClass} style={{ width: 64 }}>ItCode</th>
                   <th className={thClass} style={{ width: 100 }}>Tag No</th>
@@ -1089,7 +1089,7 @@ export default function PurchaseView() {
                 {activeTagsList.map((t, idx) => {
                   const isActive = activeTagIndex === idx;
                   const hasDiamonds = diamonds.some((d) => d.tag_no === t.tag_no);
-                  const trClass = `border-b border-gray-200 cursor-pointer transition-colors ${isActive ? 'bg-orange-50 outline outline-1 outline-orange-300' : 'hover:bg-gray-50'
+                  const trClass = `border-b border-border cursor-pointer transition-colors ${isActive ? 'bg-secondary/50 outline outline-1 outline-orange-300' : 'hover:bg-secondary/40'
                     }`;
                   const kd = (c: number) => (e: React.KeyboardEvent) => handleKeyDown(e, 'L2', idx, c);
                   const fc = () => setActiveTagIndex(idx);
@@ -1097,33 +1097,33 @@ export default function PurchaseView() {
 
                   return (
                     <tr key={t.tag_no} onClick={() => setActiveTagIndex(idx)} className={trClass}>
-                      <td className="text-center text-[10px] text-gray-500 font-mono bg-gray-50 px-1">{idx + 1}</td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-0`} value={t.it_code} onChange={ch('it_code')} onKeyDown={kd(0)} onFocus={fc} bold mono /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-1`} value={t.tag_no} onChange={ch('tag_no')} onKeyDown={kd(1)} onFocus={fc} mono bold /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-2`} value={t.counter} onChange={ch('counter')} onKeyDown={kd(2)} onFocus={fc} align="center" mono /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-3`} value={t.design} onChange={ch('design')} onKeyDown={kd(3)} onFocus={fc} /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-4`} value={t.size} onChange={ch('size')} onKeyDown={kd(4)} onFocus={fc} align="center" mono /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-5`} value={t.huld} onChange={ch('huld')} onKeyDown={kd(5)} onFocus={fc} mono /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-6`} type="number" value={t.pcs} onChange={ch('pcs')} onKeyDown={kd(6)} onFocus={fc} align="right" mono /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-7`} type="number" step="0.001" value={t.gr_wt || ''} onChange={ch('gr_wt')} onKeyDown={kd(7)} onFocus={fc} align="right" mono /></td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-8`} type="number" step="0.001" value={t.ls_wt || ''} onChange={ch('ls_wt')} onKeyDown={kd(8)} onFocus={fc} align="right" mono disabled={hasDiamonds} /></td>
-                      <td className="text-right px-2 font-mono text-gray-600 bg-gray-50 border-r border-gray-200 whitespace-nowrap">{t.net_wt.toFixed(3)}</td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-9`} type="number" step="0.01" value={t.lbr_percent || ''} onChange={ch('lbr_percent')} onKeyDown={kd(9)} onFocus={fc} align="right" mono /></td>
-                      <td className="border-r border-gray-200">
+                      <td className="text-center text-[10px] text-muted-foreground font-mono bg-secondary/40 px-1">{idx + 1}</td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-0`} value={t.it_code} onChange={ch('it_code')} onKeyDown={kd(0)} onFocus={fc} bold mono /></td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-1`} value={t.tag_no} onChange={ch('tag_no')} onKeyDown={kd(1)} onFocus={fc} mono bold /></td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-2`} value={t.counter} onChange={ch('counter')} onKeyDown={kd(2)} onFocus={fc} align="center" mono /></td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-3`} value={t.design} onChange={ch('design')} onKeyDown={kd(3)} onFocus={fc} /></td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-4`} value={t.size} onChange={ch('size')} onKeyDown={kd(4)} onFocus={fc} align="center" mono /></td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-5`} value={t.huld} onChange={ch('huld')} onKeyDown={kd(5)} onFocus={fc} mono /></td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-6`} type="number" value={t.pcs} onChange={ch('pcs')} onKeyDown={kd(6)} onFocus={fc} align="right" mono /></td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-7`} type="number" step="0.001" value={t.gr_wt || ''} onChange={ch('gr_wt')} onKeyDown={kd(7)} onFocus={fc} align="right" mono /></td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-8`} type="number" step="0.001" value={t.ls_wt || ''} onChange={ch('ls_wt')} onKeyDown={kd(8)} onFocus={fc} align="right" mono disabled={hasDiamonds} /></td>
+                      <td className="text-right px-2 font-mono text-muted-foreground bg-secondary/40 border-r border-border whitespace-nowrap">{t.net_wt.toFixed(3)}</td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-9`} type="number" step="0.01" value={t.lbr_percent || ''} onChange={ch('lbr_percent')} onKeyDown={kd(9)} onFocus={fc} align="right" mono /></td>
+                      <td className="border-r border-border">
                         <select id={`L2-${idx}-10`} className="w-full h-[22px] bg-transparent text-center text-[11px] font-bold border-0 focus:outline-none focus:ring-1 focus:ring-orange-400 focus:bg-yellow-50"
                           value={t.ltype} onChange={(e) => handleTagCellChange(idx, 'ltype', e.target.value)}
                           onKeyDown={kd(10)} onFocus={fc}>
                           <option value="G">G</option><option value="F">F</option><option value="P">P</option>
                         </select>
                       </td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-11`} type="number" value={t.lbr_rate || ''} onChange={ch('lbr_rate')} onKeyDown={kd(11)} onFocus={fc} align="right" mono /></td>
-                      <td className="text-right px-2 font-mono text-gray-600 bg-gray-50 border-r border-gray-200 whitespace-nowrap">{t.lbr_amt.toLocaleString()}</td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-12`} type="number" value={t.oth_amt || ''} onChange={ch('oth_amt')} onKeyDown={kd(12)} onFocus={fc} align="right" mono /></td>
-                      <td className="text-right px-2 font-mono font-bold text-emerald-700 bg-emerald-50 border-r border-gray-200 whitespace-nowrap">{t.pr_cost.toLocaleString()}</td>
-                      <td className="text-right px-2 font-mono font-bold text-purple-700 bg-purple-50 border-r border-gray-200 whitespace-nowrap">{t.mrp.toLocaleString()}</td>
-                      <td className="border-r border-gray-200"><CellInput id={`L2-${idx}-13`} value={t.remark} onChange={ch('remark')} onKeyDown={kd(13)} onFocus={fc} /></td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-11`} type="number" value={t.lbr_rate || ''} onChange={ch('lbr_rate')} onKeyDown={kd(11)} onFocus={fc} align="right" mono /></td>
+                      <td className="text-right px-2 font-mono text-muted-foreground bg-secondary/40 border-r border-border whitespace-nowrap">{t.lbr_amt.toLocaleString()}</td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-12`} type="number" value={t.oth_amt || ''} onChange={ch('oth_amt')} onKeyDown={kd(12)} onFocus={fc} align="right" mono /></td>
+                      <td className="text-right px-2 font-mono font-bold text-emerald-700 bg-emerald-50 border-r border-border whitespace-nowrap">{t.pr_cost.toLocaleString()}</td>
+                      <td className="text-right px-2 font-mono font-bold text-purple-700 bg-purple-50 border-r border-border whitespace-nowrap">{t.mrp.toLocaleString()}</td>
+                      <td className="border-r border-border"><CellInput id={`L2-${idx}-13`} value={t.remark} onChange={ch('remark')} onKeyDown={kd(13)} onFocus={fc} /></td>
                       <td className="text-center">
-                        <button type="button" onClick={(e) => { e.stopPropagation(); handleRemoveTagRow(idx); }} className="p-0.5 text-gray-300 hover:text-red-500 transition-colors">
+                        <button type="button" onClick={(e) => { e.stopPropagation(); handleRemoveTagRow(idx); }} className="p-0.5 text-muted-foreground hover:text-red-500 transition-colors">
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </td>
@@ -1135,18 +1135,18 @@ export default function PurchaseView() {
           </div>
 
           {/* L2 Totals */}
-          <div className="shrink-0 bg-gray-100 border-t border-gray-300">
+          <div className="shrink-0 bg-secondary border-t border-border">
             <table className="border-collapse text-[10px] font-mono" style={{ minWidth: '1200px', width: '100%' }}>
               <tbody>
-                <tr className="font-bold text-gray-700">
-                  <td className="px-2 py-0.5 text-gray-500 text-[9.5px] uppercase" style={{ width: 28 + 64 + 100 + 56 + 120 + 46 + 88 }}>Totals Level 2</td>
+                <tr className="font-bold text-foreground">
+                  <td className="px-2 py-0.5 text-muted-foreground text-[9.5px] uppercase" style={{ width: 28 + 64 + 100 + 56 + 120 + 46 + 88 }}>Totals Level 2</td>
                   <td className="px-2 text-right" style={{ width: 40 }}>{activeTagsList.reduce((a, t) => a + t.pcs, 0)}</td>
-                  <td className="px-2 text-right text-gray-500" style={{ width: 66 }}>{activeTagsList.reduce((a, t) => a + t.gr_wt, 0).toFixed(3)}g</td>
-                  <td className="px-2 text-right text-gray-500" style={{ width: 62 }}>{activeTagsList.reduce((a, t) => a + t.ls_wt, 0).toFixed(3)}g</td>
-                  <td className="px-2 text-right text-gray-500" style={{ width: 66 }}>{activeTagsList.reduce((a, t) => a + t.net_wt, 0).toFixed(3)}g</td>
+                  <td className="px-2 text-right text-muted-foreground" style={{ width: 66 }}>{activeTagsList.reduce((a, t) => a + t.gr_wt, 0).toFixed(3)}g</td>
+                  <td className="px-2 text-right text-muted-foreground" style={{ width: 62 }}>{activeTagsList.reduce((a, t) => a + t.ls_wt, 0).toFixed(3)}g</td>
+                  <td className="px-2 text-right text-muted-foreground" style={{ width: 66 }}>{activeTagsList.reduce((a, t) => a + t.net_wt, 0).toFixed(3)}g</td>
                   <td style={{ width: 50 + 46 + 66 }}></td>
-                  <td className="px-2 text-right text-gray-600" style={{ width: 72 }}>₹{activeTagsList.reduce((a, t) => a + t.lbr_amt, 0).toLocaleString()}</td>
-                  <td className="px-2 text-right text-gray-600" style={{ width: 72 }}>₹{activeTagsList.reduce((a, t) => a + t.oth_amt, 0).toLocaleString()}</td>
+                  <td className="px-2 text-right text-muted-foreground" style={{ width: 72 }}>₹{activeTagsList.reduce((a, t) => a + t.lbr_amt, 0).toLocaleString()}</td>
+                  <td className="px-2 text-right text-muted-foreground" style={{ width: 72 }}>₹{activeTagsList.reduce((a, t) => a + t.oth_amt, 0).toLocaleString()}</td>
                   <td className="px-2 text-right text-emerald-700 bg-emerald-50" style={{ width: 84 }}>₹{activeTagsList.reduce((a, t) => a + t.pr_cost, 0).toLocaleString()}</td>
                   <td className="px-2 text-right text-purple-700 bg-purple-50" style={{ width: 76 }}>₹{activeTagsList.reduce((a, t) => a + t.mrp, 0).toLocaleString()}</td>
                   <td style={{ width: 100 + 30 }}></td>
@@ -1160,7 +1160,7 @@ export default function PurchaseView() {
         <div className="flex-1 flex overflow-hidden min-h-0">
 
           {/* ── LEVEL 3: DIAMONDS ──────────────────────────────────────── */}
-          <div className="w-[36%] min-w-[300px] border-r border-gray-300 flex flex-col bg-white overflow-hidden">
+          <div className="w-[36%] min-w-[300px] border-r border-border flex flex-col bg-card overflow-hidden">
             <SectionHeader
               title={`Level 3 — Diamonds${parentTag ? ` › ${parentTag.tag_no}` : ' (Select Tag)'}`}
               onAdd={handleAddDiamondRow}
@@ -1171,7 +1171,7 @@ export default function PurchaseView() {
             <div className="flex-1 overflow-auto">
               <table className="border-collapse text-[11px] w-full">
                 <thead className="sticky top-0 z-10">
-                  <tr className="border-b-2 border-gray-300">
+                  <tr className="border-b-2 border-border">
                     <th className={thClassC} style={{ width: 28 }}>#</th>
                     <th className={thClass} style={{ width: 52 }}>Code</th>
                     <th className={thClass} style={{ minWidth: 90 }}>Name</th>
@@ -1189,17 +1189,17 @@ export default function PurchaseView() {
                     const fc = () => { };
                     const ch = (f: keyof LocalDiamond) => (v: string) => handleDiamondCellChange(idx, f, v);
                     return (
-                      <tr key={idx} className="border-b border-gray-200 hover:bg-gray-50">
-                        <td className="text-center text-[10px] text-gray-500 font-mono bg-gray-50 px-1">{d.sr}</td>
-                        <td className="border-r border-gray-200"><CellInput id={`L3-${idx}-0`} value={d.it_code} onChange={ch('it_code')} onKeyDown={kd(0)} onFocus={fc} bold mono /></td>
-                        <td className="border-r border-gray-200"><CellInput id={`L3-${idx}-1`} value={d.it_name} onChange={ch('it_name')} onKeyDown={kd(1)} onFocus={fc} /></td>
-                        <td className="border-r border-gray-200"><CellInput id={`L3-${idx}-2`} value={d.dm_color} onChange={ch('dm_color')} onKeyDown={kd(2)} onFocus={fc} align="center" /></td>
-                        <td className="border-r border-gray-200"><CellInput id={`L3-${idx}-3`} value={d.dm_origin} onChange={ch('dm_origin')} onKeyDown={kd(3)} onFocus={fc} align="center" /></td>
-                        <td className="border-r border-gray-200"><CellInput id={`L3-${idx}-4`} value={d.dm_sf_no} onChange={ch('dm_sf_no')} onKeyDown={kd(4)} onFocus={fc} align="center" mono /></td>
-                        <td className="border-r border-gray-200"><CellInput id={`L3-${idx}-5`} type="number" value={d.pcs || ''} onChange={ch('pcs')} onKeyDown={kd(5)} onFocus={fc} align="right" mono /></td>
-                        <td className="border-r border-gray-200"><CellInput id={`L3-${idx}-6`} type="number" step="0.001" value={d.kr_wt || ''} onChange={ch('kr_wt')} onKeyDown={kd(6)} onFocus={fc} align="right" mono /></td>
+                      <tr key={idx} className="border-b border-border hover:bg-secondary/40">
+                        <td className="text-center text-[10px] text-muted-foreground font-mono bg-secondary/40 px-1">{d.sr}</td>
+                        <td className="border-r border-border"><CellInput id={`L3-${idx}-0`} value={d.it_code} onChange={ch('it_code')} onKeyDown={kd(0)} onFocus={fc} bold mono /></td>
+                        <td className="border-r border-border"><CellInput id={`L3-${idx}-1`} value={d.it_name} onChange={ch('it_name')} onKeyDown={kd(1)} onFocus={fc} /></td>
+                        <td className="border-r border-border"><CellInput id={`L3-${idx}-2`} value={d.dm_color} onChange={ch('dm_color')} onKeyDown={kd(2)} onFocus={fc} align="center" /></td>
+                        <td className="border-r border-border"><CellInput id={`L3-${idx}-3`} value={d.dm_origin} onChange={ch('dm_origin')} onKeyDown={kd(3)} onFocus={fc} align="center" /></td>
+                        <td className="border-r border-border"><CellInput id={`L3-${idx}-4`} value={d.dm_sf_no} onChange={ch('dm_sf_no')} onKeyDown={kd(4)} onFocus={fc} align="center" mono /></td>
+                        <td className="border-r border-border"><CellInput id={`L3-${idx}-5`} type="number" value={d.pcs || ''} onChange={ch('pcs')} onKeyDown={kd(5)} onFocus={fc} align="right" mono /></td>
+                        <td className="border-r border-border"><CellInput id={`L3-${idx}-6`} type="number" step="0.001" value={d.kr_wt || ''} onChange={ch('kr_wt')} onKeyDown={kd(6)} onFocus={fc} align="right" mono /></td>
                         <td className="text-center">
-                          <button type="button" onClick={() => handleRemoveDiamondRow(idx)} className="p-0.5 text-gray-300 hover:text-red-500 transition-colors">
+                          <button type="button" onClick={() => handleRemoveDiamondRow(idx)} className="p-0.5 text-muted-foreground hover:text-red-500 transition-colors">
                             <Trash2 className="h-3 w-3" />
                           </button>
                         </td>
@@ -1210,28 +1210,28 @@ export default function PurchaseView() {
               </table>
             </div>
 
-            <div className="shrink-0 bg-gray-100 border-t border-gray-300 px-2 py-0.5 flex justify-between text-[10px] font-mono font-bold text-gray-600">
-              <span className="text-gray-500 uppercase text-[9px]">Totals Level 3</span>
+            <div className="shrink-0 bg-secondary border-t border-border px-2 py-0.5 flex justify-between text-[10px] font-mono font-bold text-muted-foreground">
+              <span className="text-muted-foreground uppercase text-[9px]">Totals Level 3</span>
               <span>{activeDiamondsList.reduce((a, d) => a + d.pcs, 0)} pcs</span>
               <span className="text-blue-700">{activeDiamondsList.reduce((a, d) => a + d.kr_wt, 0).toFixed(3)} ct</span>
             </div>
           </div>
 
           {/* ── ADDITIONAL INFO ─────────────────────────────────────────── */}
-          <div className="w-[34%] min-w-[250px] border-r border-gray-300 bg-gray-50 flex flex-col overflow-hidden">
-            <div className="px-3 py-1 bg-gray-200 border-b border-gray-300 shrink-0">
-              <span className="text-[10.5px] font-bold uppercase text-gray-600 font-mono tracking-wide">Additional Info</span>
+          <div className="w-[34%] min-w-[250px] border-r border-border bg-secondary/40 flex flex-col overflow-hidden">
+            <div className="px-3 py-1 bg-secondary border-b border-border shrink-0">
+              <span className="text-[10.5px] font-bold uppercase text-muted-foreground font-mono tracking-wide">Additional Info</span>
             </div>
 
             <div className="flex-1 p-2 overflow-y-auto flex flex-col gap-2">
               {/* Huld fields */}
               <div>
-                <div className="text-[9px] text-gray-500 uppercase font-semibold mb-0.5">Huld Weights</div>
+                <div className="text-[9px] text-muted-foreground uppercase font-semibold mb-0.5">Huld Weights</div>
                 <div className="grid grid-cols-4 gap-1">
                   {['HuWt', 'Huld2', 'Huld3', 'Huld4'].map((label) => (
                     <div key={label}>
-                      <div className="text-[8px] text-gray-400 mb-0.5">{label}</div>
-                      <input type="text" className="w-full h-[20px] px-1 border border-gray-300 bg-gray-100 font-mono text-[9.5px] text-right text-gray-400 cursor-default" value="0.000" readOnly />
+                      <div className="text-[8px] text-muted-foreground mb-0.5">{label}</div>
+                      <input type="text" className="w-full h-[20px] px-1 border border-border bg-secondary font-mono text-[9.5px] text-right text-muted-foreground cursor-default" value="0.000" readOnly />
                     </div>
                   ))}
                 </div>
@@ -1240,44 +1240,44 @@ export default function PurchaseView() {
               {/* Employee & Bank */}
               <div className="grid grid-cols-2 gap-1.5">
                 <div>
-                  <div className="text-[9px] text-gray-500 uppercase font-semibold mb-0.5">Employee</div>
+                  <div className="text-[9px] text-muted-foreground uppercase font-semibold mb-0.5">Employee</div>
                   <div className="flex gap-1">
-                    <input type="text" className="w-10 h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <input type="text" className="w-10 h-[22px] px-1 border border-border bg-card font-mono text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={employee} onChange={(e) => setEmployee(e.target.value)} />
-                    <input type="text" className="flex-1 h-[22px] px-1 border border-gray-300 bg-gray-100 font-semibold text-gray-500 text-[10px] cursor-default" value="SELF" readOnly />
+                    <input type="text" className="flex-1 h-[22px] px-1 border border-border bg-secondary font-semibold text-muted-foreground text-[10px] cursor-default" value="SELF" readOnly />
                   </div>
                 </div>
                 <div>
-                  <div className="text-[9px] text-gray-500 uppercase font-semibold mb-0.5">Bank Name</div>
-                  <input type="text" placeholder="Bank name…" className="w-full h-[22px] px-1 border border-gray-300 bg-white text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400"
+                  <div className="text-[9px] text-muted-foreground uppercase font-semibold mb-0.5">Bank Name</div>
+                  <input type="text" placeholder="Bank name…" className="w-full h-[22px] px-1 border border-border bg-card text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400"
                     value={bankName} onChange={(e) => setBankName(e.target.value)} />
                 </div>
               </div>
 
               {/* Narration */}
               <div>
-                <div className="text-[9px] text-gray-500 uppercase font-semibold mb-0.5">Voucher Narration</div>
+                <div className="text-[9px] text-muted-foreground uppercase font-semibold mb-0.5">Voucher Narration</div>
                 <textarea rows={2} placeholder="Purchase remarks or transaction memo…"
-                  className="w-full px-2 py-1 border border-gray-300 bg-white text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400 resize-none"
+                  className="w-full px-2 py-1 border border-border bg-card text-[10px] focus:outline-none focus:ring-1 focus:ring-orange-400 resize-none"
                   value={vchDesc} onChange={(e) => setVchDesc(e.target.value)} />
               </div>
 
               {/* Summary info card */}
-              <div className="border border-orange-200 bg-white rounded-sm p-2 text-[10px] font-mono shadow-sm">
+              <div className="border border-border bg-card rounded-none p-2 text-[10px] font-mono shadow-sm">
                 <div className="font-bold text-orange-800 border-b border-orange-100 pb-0.5 mb-1 truncate text-[9.5px]">
                   {parentTag ? `${parentTag.it_code} — ${parentTag.design || 'Tag Info'}` : 'Select a Tag'}
                 </div>
-                <div className="flex justify-between py-0.5"><span className="text-gray-500">Grand Total</span><span className="font-bold text-orange-700">₹{calculatedGrandTotal.toLocaleString()}</span></div>
-                <div className="flex justify-between py-0.5"><span className="text-gray-500">Fine Gold</span><span className="font-bold">{totalFineGold.toFixed(3)}g</span></div>
-                <div className="flex justify-between py-0.5"><span className="text-gray-500">Fine Silver</span><span className="font-bold">{totalFineSilver.toFixed(3)}g</span></div>
+                <div className="flex justify-between py-0.5"><span className="text-muted-foreground">Grand Total</span><span className="font-bold text-orange-700">₹{calculatedGrandTotal.toLocaleString()}</span></div>
+                <div className="flex justify-between py-0.5"><span className="text-muted-foreground">Fine Gold</span><span className="font-bold">{totalFineGold.toFixed(3)}g</span></div>
+                <div className="flex justify-between py-0.5"><span className="text-muted-foreground">Fine Silver</span><span className="font-bold">{totalFineSilver.toFixed(3)}g</span></div>
               </div>
             </div>
           </div>
 
           {/* ── ACCOUNTING PANEL ────────────────────────────────────────── */}
-          <div className="flex-1 min-w-[320px] bg-gray-50 flex flex-col overflow-hidden">
-            <div className="px-3 py-1 bg-gray-200 border-b border-gray-300 shrink-0">
-              <span className="text-[10.5px] font-bold uppercase text-gray-600 font-mono tracking-wide">Accounting Summary</span>
+          <div className="flex-1 min-w-[320px] bg-secondary/40 flex flex-col overflow-hidden">
+            <div className="px-3 py-1 bg-secondary border-b border-border shrink-0">
+              <span className="text-[10.5px] font-bold uppercase text-muted-foreground font-mono tracking-wide">Accounting Summary</span>
             </div>
 
             <div className="flex-1 overflow-y-auto p-2">
@@ -1287,45 +1287,45 @@ export default function PurchaseView() {
                 <div className="flex flex-col gap-1">
                   {/* Net Amt */}
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Net Amt</span>
-                    <input type="text" className="w-[88px] h-[22px] px-1 border border-gray-200 bg-gray-100 font-mono text-[10px] font-bold text-right text-gray-700 cursor-default" value={`₹${calculatedNetAmt.toLocaleString()}`} readOnly />
+                    <span className="text-[9.5px] text-muted-foreground whitespace-nowrap">Net Amt</span>
+                    <input type="text" className="w-[88px] h-[22px] px-1 border border-border bg-secondary font-mono text-[10px] font-bold text-right text-foreground cursor-default" value={`₹${calculatedNetAmt.toLocaleString()}`} readOnly />
                   </div>
 
                   {/* Discount */}
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Discount</span>
-                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <span className="text-[9.5px] text-muted-foreground whitespace-nowrap">Discount</span>
+                    <input type="number" className="w-[88px] h-[22px] px-1 border border-border bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={discountAmount || ''} onChange={(e) => setDiscountAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Tax Rate & Amt */}
                   <div className="flex items-center justify-between gap-1">
-                    <select className="flex-1 h-[22px] px-1 border border-gray-300 bg-white font-bold text-gray-700 text-[9.5px] focus:outline-none focus:ring-1 focus:ring-orange-400 truncate"
+                    <select className="flex-1 h-[22px] px-1 border border-border bg-card font-bold text-foreground text-[9.5px] focus:outline-none focus:ring-1 focus:ring-orange-400 truncate"
                       value={taxRateId} onChange={(e) => setTaxRateId(e.target.value)}>
                       <option value="">— Tax —</option>
                       {taxes.map((t) => <option key={t.id} value={t.id}>{t.name} ({t.tax_percent}%)</option>)}
                     </select>
-                    <input type="text" className="w-[70px] h-[22px] px-1 border border-gray-200 bg-gray-100 font-mono text-[10px] font-bold text-right text-gray-600 cursor-default" value={`₹${calculatedTaxAmt.toLocaleString()}`} readOnly />
+                    <input type="text" className="w-[70px] h-[22px] px-1 border border-border bg-secondary font-mono text-[10px] font-bold text-right text-muted-foreground cursor-default" value={`₹${calculatedTaxAmt.toLocaleString()}`} readOnly />
                   </div>
 
                   {/* TCS Amount */}
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-[9.5px] text-gray-500 whitespace-nowrap">TCS Amt</span>
-                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <span className="text-[9.5px] text-muted-foreground whitespace-nowrap">TCS Amt</span>
+                    <input type="number" className="w-[88px] h-[22px] px-1 border border-border bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={tcsAmount || ''} onChange={(e) => setTcsAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Round Off */}
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Round Off</span>
-                    <input type="number" step="0.01" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <span className="text-[9.5px] text-muted-foreground whitespace-nowrap">Round Off</span>
+                    <input type="number" step="0.01" className="w-[88px] h-[22px] px-1 border border-border bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={roundOff || ''} onChange={(e) => setRoundOff(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Grand Total */}
                   <div className="flex items-center justify-between gap-1 pt-1 mt-0.5 border-t border-orange-300">
                     <span className="text-[10px] font-extrabold text-orange-800 uppercase tracking-wide">Total</span>
-                    <input type="text" className="w-[88px] h-[24px] px-1 border border-orange-400 bg-orange-50 font-mono text-[11px] font-extrabold text-right text-red-700 cursor-default"
+                    <input type="text" className="w-[88px] h-[24px] px-1 border border-orange-400 bg-secondary/50 font-mono text-[11px] font-extrabold text-right text-red-700 cursor-default"
                       value={`₹${calculatedGrandTotal.toLocaleString()}`} readOnly />
                   </div>
                 </div>
@@ -1334,33 +1334,33 @@ export default function PurchaseView() {
                 <div className="flex flex-col gap-1">
                   {/* Cheque */}
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Cheque</span>
-                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <span className="text-[9.5px] text-muted-foreground whitespace-nowrap">Cheque</span>
+                    <input type="number" className="w-[88px] h-[22px] px-1 border border-border bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={chequeAmount || ''} onChange={(e) => setChequeAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Card / Bank A/c */}
                   <div className="flex items-center justify-between gap-1">
-                    <select className="flex-1 h-[22px] px-1 border border-gray-300 bg-white font-bold text-gray-600 text-[9.5px] focus:outline-none focus:ring-1 focus:ring-orange-400 truncate"
+                    <select className="flex-1 h-[22px] px-1 border border-border bg-card font-bold text-muted-foreground text-[9.5px] focus:outline-none focus:ring-1 focus:ring-orange-400 truncate"
                       value={bankAccountId} onChange={(e) => setBankAccountId(e.target.value)}>
                       <option value="">— Bank —</option>
                       {accounts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
                     </select>
-                    <input type="number" className="w-[70px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <input type="number" className="w-[70px] h-[22px] px-1 border border-border bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={cardAmount || ''} onChange={(e) => setCardAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Cash */}
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Cash</span>
-                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <span className="text-[9.5px] text-muted-foreground whitespace-nowrap">Cash</span>
+                    <input type="number" className="w-[88px] h-[22px] px-1 border border-border bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={cashAmount || ''} onChange={(e) => setCashAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
                   {/* Kasar */}
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-[9.5px] text-gray-500 whitespace-nowrap">Kasar</span>
-                    <input type="number" className="w-[88px] h-[22px] px-1 border border-gray-300 bg-white font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+                    <span className="text-[9.5px] text-muted-foreground whitespace-nowrap">Kasar</span>
+                    <input type="number" className="w-[88px] h-[22px] px-1 border border-border bg-card font-mono text-[10px] font-bold text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
                       value={kasarAmount || ''} onChange={(e) => setKasarAmount(parseFloat(e.target.value) || 0)} />
                   </div>
 
@@ -1368,7 +1368,7 @@ export default function PurchaseView() {
                   <div className="h-[22px]" />
 
                   {/* Outstanding */}
-                  <div className="flex items-center justify-between gap-1 pt-1 mt-0.5 border-t border-gray-300">
+                  <div className="flex items-center justify-between gap-1 pt-1 mt-0.5 border-t border-border">
                     <span className="text-[10px] font-extrabold uppercase text-red-700">Outstnd</span>
                     <input type="text" className={`w-[88px] h-[24px] px-1 border font-mono text-[10.5px] font-extrabold text-right cursor-default ${calculatedOutstanding > 0 ? 'border-red-400 bg-red-50 text-red-700' : 'border-green-400 bg-green-50 text-green-700'
                       }`} value={`₹${calculatedOutstanding.toLocaleString()}`} readOnly />
@@ -1381,13 +1381,13 @@ export default function PurchaseView() {
         </div>
 
         {/* ── ACTION TOOLBAR ───────────────────────────────────────────────── */}
-        <footer className="bg-orange-500 border-t border-orange-600 px-3 py-1.5 flex items-center justify-between shrink-0 gap-2">
+        <footer className="bg-secondary/500 border-t border-orange-600 px-3 py-1.5 flex items-center justify-between shrink-0 gap-2">
           {/* Nav buttons */}
           <div className="flex items-center gap-1.5">
-            <button onClick={handlePrevVch} className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-100 border border-gray-300 text-[11px] font-bold text-gray-700 transition-colors">
+            <button onClick={handlePrevVch} className="flex items-center gap-1 px-2.5 py-1 bg-card hover:bg-secondary border border-border text-[11px] font-bold text-foreground transition-colors">
               <ChevronLeft className="h-3.5 w-3.5" /> Prev
             </button>
-            <button onClick={handleNextVch} className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-100 border border-gray-300 text-[11px] font-bold text-gray-700 transition-colors">
+            <button onClick={handleNextVch} className="flex items-center gap-1 px-2.5 py-1 bg-card hover:bg-secondary border border-border text-[11px] font-bold text-foreground transition-colors">
               Next <ChevronRight className="h-3.5 w-3.5" />
             </button>
           </div>
@@ -1408,8 +1408,8 @@ export default function PurchaseView() {
               { label: 'Exit', icon: <LogOut className="h-4 w-4" />, onClick: () => closeTab(useTabStore.getState().activeTabId), disabled: false },
             ].map(({ label, icon, onClick, disabled, title }) => (
               <button key={label} type="button" onClick={onClick} disabled={disabled} title={title}
-                className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-orange-50 border border-gray-200 text-[11px] font-bold text-gray-700 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm">
-                <span className="text-gray-500">{icon}</span>
+                className="flex items-center gap-1.5 px-3 py-1 bg-card hover:bg-secondary/50 border border-border text-[11px] font-bold text-foreground active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm">
+                <span className="text-muted-foreground">{icon}</span>
                 {label}
               </button>
             ))}
@@ -1419,7 +1419,7 @@ export default function PurchaseView() {
         {/* ── STATUS BAR ───────────────────────────────────────────────────── */}
         <div className="bg-orange-700 text-white py-0.5 px-3 flex items-center justify-between text-[10px] font-mono shrink-0 gap-4">
           <div className="flex items-center gap-4">
-            <span className="bg-white text-orange-700 font-black px-1.5 py-px text-[9px] uppercase tracking-wide">Orange</span>
+            <span className="bg-card text-orange-700 font-black px-1.5 py-px text-[9px] uppercase tracking-wide">Orange</span>
             <label className="flex items-center gap-1 cursor-pointer font-sans">
               <input type="checkbox" checked={liveRateChecked} onChange={(e) => setLiveRateChecked(e.target.checked)} className="accent-orange-300" />
               Live Rate

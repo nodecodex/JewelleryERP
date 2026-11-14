@@ -635,7 +635,7 @@ export default function TagOpeningView() {
           <div className="flex-1 overflow-auto bg-card">
             <table className="w-full border-collapse text-left text-xs ag-grid-dense-table select-text">
               <thead>
-                <tr className="sticky top-0 z-20 bg-muted/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-border">
+                <tr className="sticky top-0 z-20 bg-secondary border-b border-border">
                   <th className="w-10 text-center px-1.5 py-2 text-[10px] font-extrabold text-foreground/80 uppercase tracking-wider border-r border-border/40">Sr</th>
                   <th className="w-20 text-left px-1.5 py-2 text-[10px] font-extrabold text-foreground/80 uppercase tracking-wider border-r border-border/40">ItCode</th>
                   <th className="w-24 text-left px-1.5 py-2 text-[10px] font-extrabold text-foreground/80 uppercase tracking-wider border-r border-border/40">TagNo</th>
@@ -671,7 +671,7 @@ export default function TagOpeningView() {
                       }`}
                     >
                       {/* Sr */}
-                      <td className="text-center font-data text-muted-foreground/60 bg-muted/25 dark:bg-slate-900/35 px-1.5 py-1 border-r border-border/40 h-7 select-none text-[11px]">{row.sr}</td>
+                      <td className="text-center font-data text-muted-foreground/60 bg-muted/40 px-1.5 py-1 border-r border-border/40 h-7 select-none text-[11px]">{row.sr}</td>
                       
                       {/* ItCode */}
                       <td className="p-0 border-r border-border/40 h-7">
@@ -759,12 +759,12 @@ export default function TagOpeningView() {
                       </td>
 
                       {/* LsWt (Read-Only) */}
-                      <td className="px-1.5 py-1 border-r border-border/40 text-right font-data text-muted-foreground bg-muted/10 dark:bg-slate-900/10 text-[11px] h-7">
+                      <td className="px-1.5 py-1 border-r border-border/40 text-right font-data text-muted-foreground bg-muted/20 text-[11px] h-7">
                         {row.ls_wt > 0 ? row.ls_wt.toFixed(3) : '-'}
                       </td>
 
                       {/* NetWt (Read-Only) */}
-                      <td className="px-1.5 py-1 border-r border-border/40 text-right font-data text-foreground font-bold bg-muted/20 dark:bg-slate-900/20 text-[11px] h-7">
+                      <td className="px-1.5 py-1 border-r border-border/40 text-right font-data text-foreground font-bold bg-muted/30 text-[11px] h-7">
                         {row.net_wt > 0 ? row.net_wt.toFixed(3) : '-'}
                       </td>
 
@@ -804,12 +804,12 @@ export default function TagOpeningView() {
                       </td>
 
                       {/* LbrAmt (Read-Only) */}
-                      <td className="px-1.5 py-1 border-r border-border/40 text-right font-data text-muted-foreground bg-muted/10 dark:bg-slate-900/10 text-[11px] h-7">
+                      <td className="px-1.5 py-1 border-r border-border/40 text-right font-data text-muted-foreground bg-muted/20 text-[11px] h-7">
                         {row.lbr_amt > 0 ? `₹${row.lbr_amt.toLocaleString()}` : '-'}
                       </td>
 
                       {/* OthAmt (Read-Only) */}
-                      <td className="px-1.5 py-1 border-r border-border/40 text-right font-data text-muted-foreground bg-muted/10 dark:bg-slate-900/10 text-[11px] h-7">
+                      <td className="px-1.5 py-1 border-r border-border/40 text-right font-data text-muted-foreground bg-muted/20 text-[11px] h-7">
                         {row.oth_amt > 0 ? `₹${row.oth_amt.toLocaleString()}` : '-'}
                       </td>
 
@@ -915,7 +915,7 @@ export default function TagOpeningView() {
             {selectedItem ? (
               <table className="w-full border-collapse text-left text-xs ag-grid-dense-table select-text">
                 <thead>
-                  <tr className="bg-muted/80 dark:bg-slate-900/80 border-b border-border">
+                  <tr className="bg-secondary border-b border-border">
                     <th className="w-8 text-center p-1.5 text-[9.5px] font-extrabold text-foreground/80 uppercase font-sans border-r border-border/40">Sr</th>
                     <th className="w-16 p-1.5 text-[9.5px] font-extrabold text-foreground/80 uppercase font-sans border-r border-border/40">Code</th>
                     <th className="p-1.5 text-[9.5px] font-extrabold text-foreground/80 uppercase font-sans border-r border-border/40">ItName</th>
@@ -928,7 +928,7 @@ export default function TagOpeningView() {
                 <tbody className="font-semibold text-foreground font-data">
                   {selectedItem.accessories.map((acc, accIdx) => (
                     <tr key={accIdx} className="hover:bg-muted/40 border-b border-border/40 h-7">
-                      <td className="text-center text-muted-foreground/60 bg-muted/25 dark:bg-slate-900/35 px-1 py-1 border-r border-border/40 h-7 select-none text-[10.5px]">{acc.sr}</td>
+                      <td className="text-center text-muted-foreground/60 bg-muted/30 px-1 py-1 border-r border-border/40 h-7 select-none text-[10.5px]">{acc.sr}</td>
                       <td className="p-0 border-r border-border/40 h-7">
                         <input
                           type="text"
@@ -976,7 +976,7 @@ export default function TagOpeningView() {
                           onChange={(e) => handleAccessoryCellChange(accIdx, 'rate', e.target.value)}
                         />
                       </td>
-                      <td className="px-1.5 py-1 text-right font-data text-foreground bg-muted/10 dark:bg-slate-900/10 text-[10.5px] h-7">
+                      <td className="px-1.5 py-1 text-right font-data text-foreground bg-muted/20 text-[10.5px] h-7">
                         {(acc.net_amt || 0) > 0 ? `₹${(acc.net_amt || 0).toLocaleString()}` : '-'}
                       </td>
                     </tr>

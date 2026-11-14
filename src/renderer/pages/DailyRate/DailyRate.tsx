@@ -332,26 +332,26 @@ export default function DailyRateView() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-black text-white p-3 font-sans select-none no-print overflow-y-auto text-xs">
+    <div className="flex flex-col h-full bg-background text-foreground p-3 font-sans select-none no-print overflow-y-auto text-xs">
       
       {/* Header Banner */}
-      <div className="bg-[#121212] border border-[#262626] py-2 px-4 rounded-none flex justify-between items-center mb-2.5">
-        <span className="text-[10px] font-mono font-bold text-[#7D7D7D] uppercase">Rate Master</span>
+      <div className="bg-secondary border border-border py-2 px-4 rounded-none flex justify-between items-center mb-2.5">
+        <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">Rate Master</span>
         <span className="font-extrabold tracking-widest text-xs uppercase text-[#FFC000]">BULLION & DAILY METAL BOARD</span>
-        <span className="text-[10px] font-mono text-[#7D7D7D] uppercase">Live Ticker</span>
+        <span className="text-[10px] font-mono text-muted-foreground uppercase">Live Ticker</span>
       </div>
 
-      <div className="bg-[#181818] text-white border border-[#262626] rounded-none p-3 shrink-0 flex flex-col gap-3 mb-2.5">
+      <div className="bg-card text-foreground border border-border rounded-none p-3 shrink-0 flex flex-col gap-3 mb-2.5">
         {/* Baseline rates inputs */}
         <div className="grid grid-cols-12 gap-3 items-center">
           
           {/* Voucher Date */}
           <div className="col-span-12 sm:col-span-4 flex items-center gap-2">
-            <span className="text-[10.5px] font-bold text-[#7D7D7D] uppercase w-20">Rate Date</span>
+            <span className="text-[10.5px] font-bold text-muted-foreground uppercase w-20">Rate Date</span>
             <div className="relative flex-1 flex items-center gap-1">
               <input
                 type="date"
-                className="w-full h-8 border border-[#2c2c2c] rounded-none text-xs font-mono font-bold text-white px-2 bg-black focus:border-[#FFC000] focus:outline-none"
+                className="w-full h-8 border border-border rounded-none text-xs font-mono font-bold text-foreground px-2 bg-secondary focus:border-[#FFC000] focus:outline-none"
                 value={vchDate}
                 onChange={(e) => setVchDate(e.target.value)}
               />
@@ -367,10 +367,10 @@ export default function DailyRateView() {
 
           {/* Gold Rate 10gm */}
           <div className="col-span-12 sm:col-span-4 flex items-center gap-2">
-            <span className="text-[10.5px] font-bold text-[#7D7D7D] uppercase w-24">Gold 24K (10g)</span>
+            <span className="text-[10.5px] font-bold text-muted-foreground uppercase w-24">Gold 24K (10g)</span>
             <input
               type="number"
-              className="flex-1 h-8 border border-[#2c2c2c] rounded-none font-mono text-right font-extrabold text-[#FFC000] bg-black focus:border-[#FFC000] focus:outline-none px-2.5 text-xs tabular-nums"
+              className="flex-1 h-8 border border-border rounded-none font-mono text-right font-extrabold text-[#FFC000] bg-secondary focus:border-[#FFC000] focus:outline-none px-2.5 text-xs tabular-nums"
               value={goldRate}
               onChange={(e) => setGoldRate(parseFloat(e.target.value) || 0)}
             />
@@ -378,10 +378,10 @@ export default function DailyRateView() {
 
           {/* Silver Rate 1Kg */}
           <div className="col-span-12 sm:col-span-4 flex items-center gap-2">
-            <span className="text-[10.5px] font-bold text-[#7D7D7D] uppercase w-24">Silver 999 (1Kg)</span>
+            <span className="text-[10.5px] font-bold text-muted-foreground uppercase w-24">Silver 999 (1Kg)</span>
             <input
               type="number"
-              className="flex-1 h-8 border border-[#2c2c2c] rounded-none font-mono text-right font-extrabold text-white bg-black focus:border-[#FFC000] focus:outline-none px-2.5 text-xs tabular-nums"
+              className="flex-1 h-8 border border-border rounded-none font-mono text-right font-extrabold text-foreground bg-secondary focus:border-[#FFC000] focus:outline-none px-2.5 text-xs tabular-nums"
               value={silverRate}
               onChange={(e) => setSilverRate(parseFloat(e.target.value) || 0)}
             />
@@ -391,103 +391,103 @@ export default function DailyRateView() {
       </div>
 
       {/* Main categories rates Grid */}
-      <div className="bg-[#202020] border border-[#262626] rounded-none shadow-none flex-1 overflow-auto mb-2 flex flex-col min-h-[300px]">
+      <div className="bg-card border border-border rounded-none shadow-none flex-1 overflow-auto mb-2 flex flex-col min-h-[300px]">
         <div className="flex-1 overflow-y-auto">
           <table className="w-full border-collapse text-left text-xs table-fixed min-w-[850px]">
             <thead>
-              <tr className="sticky top-0 z-20 bg-[#181818] border-b border-[#262626] text-[10px] font-bold text-[#7D7D7D] uppercase select-none">
-                <th className="w-[40px] border-r border-[#262626] px-2 py-2.5 text-center">Sr</th>
-                <th className="w-[90px] border-r border-[#262626] px-2 py-2.5">GrCode</th>
-                <th className="border-r border-[#262626] px-3 py-2.5 text-left">GrName</th>
-                <th className="w-[80px] border-r border-[#262626] px-2 py-2.5 text-center">Metal</th>
-                <th className="w-[85px] border-r border-[#262626] px-2 py-2.5 text-right">Touch</th>
-                <th className="w-[75px] border-r border-[#262626] px-2 py-2.5 text-right">Tax%</th>
-                <th className="w-[110px] border-r border-[#262626] px-2 py-2.5 text-right bg-[#181818]">Rate10gm</th>
-                <th className="w-[110px] border-r border-[#262626] px-2 py-2.5 text-right bg-[#181818] text-[#FFC000]">TaxRate</th>
-                <th className="w-[85px] border-r border-[#262626] px-2 py-2.5 text-right text-[#7D7D7D]">PrTouch</th>
-                <th className="w-[100px] border-r border-[#262626] px-2 py-2.5 text-right text-[#7D7D7D]">PrRate</th>
+              <tr className="sticky top-0 z-20 bg-secondary border-b border-border text-[10px] font-bold text-muted-foreground uppercase select-none">
+                <th className="w-[40px] border-r border-border px-2 py-2.5 text-center">Sr</th>
+                <th className="w-[90px] border-r border-border px-2 py-2.5">GrCode</th>
+                <th className="border-r border-border px-3 py-2.5 text-left">GrName</th>
+                <th className="w-[80px] border-r border-border px-2 py-2.5 text-center">Metal</th>
+                <th className="w-[85px] border-r border-border px-2 py-2.5 text-right">Touch</th>
+                <th className="w-[75px] border-r border-border px-2 py-2.5 text-right">Tax%</th>
+                <th className="w-[110px] border-r border-border px-2 py-2.5 text-right bg-secondary">Rate10gm</th>
+                <th className="w-[110px] border-r border-border px-2 py-2.5 text-right bg-secondary text-[#FFC000]">TaxRate</th>
+                <th className="w-[85px] border-r border-border px-2 py-2.5 text-right text-muted-foreground">PrTouch</th>
+                <th className="w-[100px] border-r border-border px-2 py-2.5 text-right text-muted-foreground">PrRate</th>
                 <th className="w-[50px] px-2 py-2.5 text-center">Action</th>
               </tr>
             </thead>
-            <tbody className="font-semibold text-white font-mono select-text">
+            <tbody className="font-semibold text-foreground font-mono select-text">
               {groupRows.map((row, index) => (
                 <tr 
                   key={index}
-                  className="border-b border-[#262626] hover:bg-[#282828] transition-colors h-[32px] items-center"
+                  className="border-b border-border hover:bg-secondary/40 transition-colors h-[32px] items-center"
                 >
-                  <td className="text-center font-bold text-[#7D7D7D] border-r border-[#262626]">{row.sr}</td>
+                  <td className="text-center font-bold text-muted-foreground border-r border-border">{row.sr}</td>
                   
                   {/* GrCode */}
-                  <td className="p-0.5 border-r border-[#262626]">
+                  <td className="p-0.5 border-r border-border">
                     <input
                       type="text"
-                      className="w-full h-full border border-transparent rounded-none hover:border-[#333333] focus:border-[#FFC000] focus:bg-black focus:outline-none px-1.5 font-bold uppercase text-[11px] text-white bg-transparent"
+                      className="w-full h-full border border-transparent rounded-none hover:border-border focus:border-[#FFC000] focus:bg-secondary focus:outline-none px-1.5 font-bold uppercase text-[11px] text-foreground bg-transparent"
                       value={row.grCode}
                       onChange={(e) => handleCellChange(index, 'grCode', e.target.value)}
                     />
                   </td>
 
                   {/* GrName */}
-                  <td className="p-0.5 border-r border-[#262626]">
+                  <td className="p-0.5 border-r border-border">
                     <input
                       type="text"
-                      className="w-full h-full border border-transparent rounded-none hover:border-[#333333] focus:border-[#FFC000] focus:bg-black focus:outline-none px-2 text-[11px] text-white bg-transparent uppercase font-sans font-bold"
+                      className="w-full h-full border border-transparent rounded-none hover:border-border focus:border-[#FFC000] focus:bg-secondary focus:outline-none px-2 text-[11px] text-foreground bg-transparent uppercase font-sans font-bold"
                       value={row.grName}
                       onChange={(e) => handleCellChange(index, 'grName', e.target.value)}
                     />
                   </td>
 
                   {/* Metal Selector (Gold/Silver) */}
-                  <td className="p-0.5 border-r border-[#262626] text-center">
+                  <td className="p-0.5 border-r border-border text-center">
                     <select
-                      className="w-full h-full border border-transparent rounded-none hover:border-[#333333] focus:border-[#FFC000] focus:bg-black focus:outline-none text-center font-bold text-white bg-transparent cursor-pointer uppercase text-[11px]"
+                      className="w-full h-full border border-transparent rounded-none hover:border-border focus:border-[#FFC000] focus:bg-secondary focus:outline-none text-center font-bold text-foreground bg-transparent cursor-pointer uppercase text-[11px]"
                       value={row.isSilver ? 'true' : 'false'}
                       onChange={(e) => handleCellChange(index, 'isSilver', e.target.value)}
                     >
-                      <option value="false" className="bg-[#181818]">Gold</option>
-                      <option value="true" className="bg-[#181818]">Silver</option>
+                      <option value="false" className="bg-card">Gold</option>
+                      <option value="true" className="bg-card">Silver</option>
                     </select>
                   </td>
 
                   {/* Touch */}
-                  <td className="p-0.5 border-r border-[#262626]">
+                  <td className="p-0.5 border-r border-border">
                     <input
                       type="number"
                       step="0.01"
-                      className="w-full h-full border border-transparent rounded-none hover:border-[#333333] focus:border-[#FFC000] focus:bg-black focus:outline-none text-right font-mono px-1.5 text-white bg-transparent"
+                      className="w-full h-full border border-transparent rounded-none hover:border-border focus:border-[#FFC000] focus:bg-secondary focus:outline-none text-right font-mono px-1.5 text-foreground bg-transparent"
                       value={row.touch}
                       onChange={(e) => handleCellChange(index, 'touch', e.target.value)}
                     />
                   </td>
 
                   {/* Tax% */}
-                  <td className="p-0.5 border-r border-[#262626]">
+                  <td className="p-0.5 border-r border-border">
                     <input
                       type="number"
                       step="0.01"
-                      className="w-full h-full border border-transparent rounded-none hover:border-[#333333] focus:border-[#FFC000] focus:bg-black focus:outline-none text-right font-mono px-1.5 text-white bg-transparent"
+                      className="w-full h-full border border-transparent rounded-none hover:border-border focus:border-[#FFC000] focus:bg-secondary focus:outline-none text-right font-mono px-1.5 text-foreground bg-transparent"
                       value={row.taxPercent}
                       onChange={(e) => handleCellChange(index, 'taxPercent', e.target.value)}
                     />
                   </td>
 
                   {/* Rate10gm */}
-                  <td className="px-3 text-right font-bold border-r border-[#262626] text-white text-[11.5px] font-mono">
+                  <td className="px-3 text-right font-bold border-r border-border text-foreground text-[11.5px] font-mono">
                     ₹{row.rate10gm.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </td>
 
                   {/* TaxRate */}
-                  <td className="px-3 text-right font-bold border-r border-[#262626] text-[#FFC000] text-[11.5px] font-mono">
+                  <td className="px-3 text-right font-bold border-r border-border text-[#FFC000] text-[11.5px] font-mono">
                     ₹{row.taxRate.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </td>
 
                   {/* PrTouch */}
-                  <td className="px-2 text-right border-r border-[#262626] text-[#7D7D7D] font-mono">
+                  <td className="px-2 text-right border-r border-border text-muted-foreground font-mono">
                     {row.prTouch > 0 ? `${row.prTouch.toFixed(2)}` : '0.00'}
                   </td>
 
                   {/* PrRate */}
-                  <td className="px-2 text-right border-r border-[#262626] text-[#7D7D7D] font-mono">
+                  <td className="px-2 text-right border-r border-border text-muted-foreground font-mono">
                     {row.prRate > 0 ? `₹${row.prRate.toLocaleString(undefined, { minimumFractionDigits: 2 })}` : '₹0.00'}
                   </td>
 
@@ -495,7 +495,7 @@ export default function DailyRateView() {
                   <td className="text-center p-0.5">
                     <button 
                       onClick={() => deleteRow(index)}
-                      className="p-1 hover:bg-rose-500/10 text-[#7D7D7D] hover:text-rose-400 rounded-none transition-colors cursor-pointer"
+                      className="p-1 hover:bg-rose-500/10 text-muted-foreground hover:text-rose-500 rounded-none transition-colors cursor-pointer"
                       title="Delete category"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
@@ -508,33 +508,33 @@ export default function DailyRateView() {
         </div>
 
         {/* Add Category row button at bottom of grid */}
-        <div className="bg-[#181818] border-t border-[#262626] px-4 py-2 flex justify-start items-center">
+        <div className="bg-secondary px-4 py-2 flex justify-start items-center border-t border-border">
           <button 
             onClick={addNewRow}
-            className="flex items-center gap-1.5 px-3 py-1 bg-transparent border border-white/50 hover:bg-white/10 text-white font-bold text-[10px] uppercase rounded-none transition-colors tracking-wider cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1 bg-card border border-border hover:border-[#FFC000] text-foreground font-bold text-[10px] uppercase rounded-none transition-colors tracking-wider cursor-pointer"
           >
-            <Plus className="h-3.5 w-3.5" /> Add New Group Category
+            <Plus className="h-3.5 w-3.5 text-[#FFC000]" /> Add New Group Category
           </button>
         </div>
       </div>
 
       {/* Bottom Employee Information */}
-      <div className="bg-[#181818] border border-[#262626] rounded-none p-3 shrink-0 flex items-center gap-2 mb-2">
-        <span className="text-[11px] font-bold text-[#7D7D7D] uppercase w-20">Employee</span>
+      <div className="bg-card border border-border rounded-none p-3 shrink-0 flex items-center gap-2 mb-2">
+        <span className="text-[11px] font-bold text-muted-foreground uppercase w-20">Employee</span>
         <div className="relative flex-1 max-w-sm flex items-center">
           <input
             type="text"
             placeholder="Name or ID"
-            className="w-full h-8 border border-[#2c2c2c] rounded-none px-2.5 font-bold text-white bg-black focus:border-[#FFC000] focus:outline-none text-xs uppercase"
+            className="w-full h-8 border border-border rounded-none px-2.5 font-bold text-foreground bg-secondary focus:border-[#FFC000] focus:outline-none text-xs uppercase"
             value={employee}
             onChange={(e) => setEmployee(e.target.value)}
           />
-          <User className="absolute right-2.5 h-3.5 w-3.5 text-[#7D7D7D]" />
+          <User className="absolute right-2.5 h-3.5 w-3.5 text-muted-foreground" />
         </div>
       </div>
 
       {/* Button Ribbon Actions */}
-      <div className="bg-[#181818] border border-[#262626] rounded-none px-3 py-2 flex justify-end items-center gap-2 shrink-0 select-none">
+      <div className="bg-card border border-border rounded-none px-3 py-2 flex justify-end items-center gap-2 shrink-0 select-none">
         
         {/* Save button */}
         <button 
@@ -549,35 +549,35 @@ export default function DailyRateView() {
         {/* Print button */}
         <button 
           onClick={handlePrint}
-          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-white/10 text-white border border-white/50 text-xs font-bold rounded-none transition-colors uppercase tracking-wider cursor-pointer"
+          className="flex items-center gap-1.5 px-3 h-8 bg-card hover:bg-secondary text-foreground border border-border text-xs font-bold rounded-none transition-colors uppercase tracking-wider cursor-pointer"
         >
-          <Printer className="h-3.5 w-3.5 text-[#7D7D7D]" /> Print
+          <Printer className="h-3.5 w-3.5 text-muted-foreground" /> Print
         </button>
 
         {/* Cancel button */}
         <button 
           onClick={handleCancel}
-          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-white/10 text-white border border-white/50 text-xs font-bold rounded-none transition-colors uppercase tracking-wider cursor-pointer"
+          className="flex items-center gap-1.5 px-3 h-8 bg-card hover:bg-secondary text-foreground border border-border text-xs font-bold rounded-none transition-colors uppercase tracking-wider cursor-pointer"
         >
-          <Undo2 className="h-3.5 w-3.5 text-[#7D7D7D]" /> Cancel
+          <Undo2 className="h-3.5 w-3.5 text-muted-foreground" /> Cancel
         </button>
 
         {/* Delete button */}
         <button 
           onClick={handleDelete}
-          className="flex items-center gap-1.5 px-3 h-8 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-bold rounded-none transition-colors uppercase tracking-wider cursor-pointer"
+          className="flex items-center gap-1.5 px-3 h-8 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/30 text-xs font-bold rounded-none transition-colors uppercase tracking-wider cursor-pointer"
         >
-          <Trash2 className="h-3.5 w-3.5 text-rose-400" /> Delete
+          <Trash2 className="h-3.5 w-3.5 text-rose-500" /> Delete
         </button>
 
-        <div className="h-5 w-px bg-[#262626] mx-1" />
+        <div className="h-5 w-px bg-border mx-1" />
 
         {/* Exit button */}
         <button 
           onClick={handleExit}
-          className="flex items-center gap-1.5 px-3 h-8 bg-transparent hover:bg-white/10 text-white border border-white/50 text-xs font-bold rounded-none transition-colors uppercase tracking-wider cursor-pointer"
+          className="flex items-center gap-1.5 px-3 h-8 bg-card hover:bg-secondary text-foreground border border-border text-xs font-bold rounded-none transition-colors uppercase tracking-wider cursor-pointer"
         >
-          <LogOut className="h-3.5 w-3.5 text-[#7D7D7D]" /> Exit
+          <LogOut className="h-3.5 w-3.5 text-muted-foreground" /> Exit
         </button>
 
       </div>

@@ -150,11 +150,11 @@ export function DialogProvider({ children }: { children: ReactNode }) {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`pointer-events-auto flex items-center gap-2 px-6 py-2.5 rounded-md shadow-lg text-white text-xs font-bold uppercase tracking-wider animate-in fade-in slide-in-from-top-4
-              ${toast.type === 'error' ? 'bg-rose-500' : toast.type === 'warning' ? 'bg-amber-500' : toast.type === 'success' ? 'bg-emerald-500' : 'bg-blue-500'}
+            className={`pointer-events-auto flex items-center gap-2 px-6 py-2.5 rounded-none shadow-xl text-white text-xs font-bold uppercase tracking-wider animate-in fade-in slide-in-from-top-4 border border-black/20
+              ${toast.type === 'error' ? 'bg-rose-600' : toast.type === 'warning' ? 'bg-amber-500' : toast.type === 'success' ? 'bg-emerald-600' : 'bg-primary text-black'}
             `}
           >
-            {getIcon(toast.type, 'w-4 h-4 text-white')}
+            {getIcon(toast.type, `w-4 h-4 ${toast.type === 'info' ? 'text-black' : 'text-white'}`)}
             <span>{toast.message}</span>
           </div>
         ))}
@@ -162,10 +162,10 @@ export function DialogProvider({ children }: { children: ReactNode }) {
 
       {/* Alert Modal */}
       {alertState && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-background/80 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-xs animate-in fade-in">
           <div 
             ref={modalRef}
-            className="bg-card border border-border shadow-xl rounded-lg w-full max-w-sm overflow-hidden animate-in zoom-in-95"
+            className="bg-card border border-border shadow-2xl rounded-none w-full max-w-sm overflow-hidden animate-in zoom-in-95"
             role="dialog"
             aria-modal="true"
           >
@@ -185,7 +185,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             <div className="p-3 bg-secondary/50 border-t border-border flex justify-end">
               <button
                 onClick={handleAlertClose}
-                className="px-4 py-1.5 bg-primary text-primary-foreground text-xs font-bold rounded-md hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="px-4 py-1.5 bg-[#FFC000] hover:bg-[#917300] text-black text-xs font-extrabold uppercase tracking-wider rounded-none transition-colors cursor-pointer"
               >
                 OK
               </button>
@@ -196,10 +196,10 @@ export function DialogProvider({ children }: { children: ReactNode }) {
 
       {/* Confirm Modal */}
       {confirmState && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-background/80 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-xs animate-in fade-in">
           <div 
             ref={modalRef}
-            className="bg-card border border-border shadow-xl rounded-lg w-full max-w-sm overflow-hidden animate-in zoom-in-95"
+            className="bg-card border border-border shadow-2xl rounded-none w-full max-w-sm overflow-hidden animate-in zoom-in-95"
             role="dialog"
             aria-modal="true"
           >
@@ -208,7 +208,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                 {confirmState.options.variant === 'danger' ? (
                   <AlertTriangle className="w-6 h-6 text-rose-500" />
                 ) : (
-                  <AlertCircle className="w-6 h-6 text-primary" />
+                  <AlertCircle className="w-6 h-6 text-[#FFC000]" />
                 )}
               </div>
               <div>
@@ -223,16 +223,16 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             <div className="p-3 bg-secondary/50 border-t border-border flex justify-end gap-2">
               <button
                 onClick={() => handleConfirmClose(false)}
-                className="px-4 py-1.5 bg-secondary text-secondary-foreground border border-border text-xs font-bold rounded-md hover:bg-secondary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-border"
+                className="px-4 py-1.5 bg-secondary text-secondary-foreground border border-border text-xs font-bold uppercase tracking-wider rounded-none hover:bg-secondary/80 transition-colors cursor-pointer"
               >
                 {confirmState.options.cancelText || 'Cancel'}
               </button>
               <button
                 onClick={() => handleConfirmClose(true)}
-                className={`px-4 py-1.5 text-xs font-bold rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 ${
+                className={`px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider rounded-none transition-colors cursor-pointer ${
                   confirmState.options.variant === 'danger' 
-                    ? 'bg-rose-500 text-white hover:bg-rose-600 focus:ring-rose-500' 
-                    : 'bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50'
+                    ? 'bg-rose-600 text-white hover:bg-rose-700' 
+                    : 'bg-[#FFC000] text-black hover:bg-[#917300]'
                 }`}
               >
                 {confirmState.options.confirmText || 'Confirm'}
