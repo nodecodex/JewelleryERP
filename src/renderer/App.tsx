@@ -3,6 +3,7 @@ import Layout from './components/layout/Layout';
 import LicensingView from './pages/Licensing/Licensing';
 import { useCompanyStore } from './store/useCompanyStore';
 import { useThemeStore } from './store/useThemeStore';
+import { APP_VERSION } from './version';
 
 export default function App() {
   const [license, setLicense] = useState<any>(null);
@@ -96,7 +97,7 @@ export default function App() {
               <div className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.8)] animate-pulse"></div>
               <span className="text-xs font-bold uppercase tracking-widest text-slate-300 font-luxury">SYSTEM SECURE LOCK</span>
             </div>
-            <span className="text-[10px] text-amber-500/90 font-data tracking-wider font-semibold bg-amber-500/10 px-2.5 py-1 rounded-md border border-amber-500/20">v1.0.0-PRO</span>
+            <span className="text-[10px] text-amber-500/90 font-data tracking-wider font-semibold bg-amber-500/10 px-2.5 py-1 rounded-md border border-amber-500/20">v{APP_VERSION}-PRO</span>
           </div>
           <div className="p-6 sm:p-8 text-slate-200">
             <LicensingView />

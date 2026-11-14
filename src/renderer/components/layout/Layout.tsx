@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
+import { APP_VERSION } from '../../version';
 import { useTabStore } from '../../store/useTabStore';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useCompanyStore } from '../../store/useCompanyStore';
@@ -266,7 +267,7 @@ export default function Layout() {
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-[13px] font-bold tracking-tight font-luxury text-primary">SWARNPRO ERP</span>
-              <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">Professional Edition</span>
+              <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">v{APP_VERSION} · Professional Edition</span>
             </div>
           </div>
 
