@@ -2,50 +2,23 @@
   "name": "swarnpro-erp",
   "private": true,
   "version": "1.0.4",
-  "description": "SwarnPro ERP System",
+  "description": "SwarnPro Jewellery ERP System (Tauri v2)",
   "author": "AsyncroZ Technologies",
   "type": "module",
-  "main": "dist/main/index.js",
   "scripts": {
     "dev": "tauri dev",
     "dev:vite": "vite",
+    "build": "vite build",
     "build:vite": "vite build",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
-    "dev:electron": "node scripts/start.js",
-    "build:electron": "vite build && tsc -p tsconfig.electron.json",
-    "dist:electron": "npm run build:electron && electron-builder",
+    "test": "playwright test",
     "test:e2e": "playwright test",
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "build": {
-    "appId": "com.SwarnProERP.app",
-    "productName": "SwarnPro ERP",
-    "directories": {
-      "output": "D:/recording/SwarnProERP_Build"
-    },
-    "files": [
-      "dist/**/*",
-      "package.json"
-    ],
-    "extraMetadata": {
-      "type": "commonjs"
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "build/icon.png"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
-    }
-  },
   "dependencies": {
-    "argon2": "^0.44.0",
-    "better-sqlite3": "^12.10.0",
-    "better-sqlite3-multiple-ciphers": "^12.11.1",
     "lucide-react": "^1.17.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
@@ -59,14 +32,11 @@
     "@tailwindcss/postcss": "^4.3.0",
     "@tauri-apps/api": "^2.12.4",
     "@tauri-apps/cli": "^2.12.4",
-    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.5.0",
-    "electron": "^31.0.0",
-    "electron-builder": "^26.15.3",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
