@@ -6,6 +6,16 @@
       "sourceType": "github",
       "skillPath": "skills/frontend-design/SKILL.md",
       "computedHash": "516bd2154eb843a8240e43d5b285229129853114ad7075a5e141e1c08e408c84"
+    },
+    "playwright": {
+      "source": "local",
+      "sourceType": "file",
+      "skillPath": ".agents/skills/playwright/SKILL.md"
+    },
+    "ui-ux-pro-max": {
+      "source": "local",
+      "sourceType": "file",
+      "skillPath": ".agents/skills/ui-ux-pro-max/SKILL.md"
     }
   }
 }
