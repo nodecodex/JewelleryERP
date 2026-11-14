@@ -704,16 +704,18 @@ app.get('/admin/logout', (_req: Request, res: Response): void => {
   res.json({ success: true, message: 'Logged out. Please clear your session token.' });
 });
 
-// GET /admin/dashboard-stats
+// GET /admin/dashboard-stats (Optimized: eliminates query waterfall with Promise.all)
 app.get('/api/v1/admin/dashboard-stats', adminAuth, async (req: Request, res: Response) => {
   try {
-    const totalCommercial = await License.countDocuments({ license_type: { $ne: 'trial' } });
-    const activeCommercial = await License.countDocuments({ status: 'active' });
-    const trialUsers = await TrialUser.countDocuments({ is_expired: false });
-    const expiredTrials = await TrialUser.countDocuments({
-      $or: [{ is_expired: true }, { expiry_date: { $lt: new Date() } }]
-    });
-    const pendingTransfers = await LicenseTransferRequest.countDocuments({ status: 'pending' });
+    const [totalCommercial, activeCommercial, trialUsers, expiredTrials, pendingTransfers] = await Promise.all([
+      License.countDocuments({ license_type: { $ne: 'trial' } }),
+      License.countDocuments({ status: 'active' }),
+      TrialUser.countDocuments({ is_expired: false }),
+      TrialUser.countDocuments({
+        $or: [{ is_expired: true }, { expiry_date: { $lt: new Date() } }]
+      }),
+      LicenseTransferRequest.countDocuments({ status: 'pending' })
+    ]);
 
     res.json({
       totalCommercial,
@@ -730,7 +732,7 @@ app.get('/api/v1/admin/dashboard-stats', adminAuth, async (req: Request, res: Re
 // GET /admin/customers
 app.get('/api/v1/admin/customers', adminAuth, async (req: Request, res: Response) => {
   try {
-    const result = await Customer.find().sort({ createdAt: -1 });
+    const result = await Customer.find().sort({ createdAt: -1 }).lean();
     res.json(result);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -964,7 +966,7 @@ app.post('/api/v1/admin/trials/:id/extend', adminAuth, async (req: Request, res:
 // GET /admin/audit-logs
 app.get('/api/v1/admin/audit-logs', adminAuth, async (req: Request, res: Response) => {
   try {
-    const result = await AuditLog.find().sort({ createdAt: -1 }).limit(100);
+    const result = await AuditLog.find().sort({ createdAt: -1 }).limit(100).lean();
     res.json(result);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
