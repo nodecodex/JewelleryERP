@@ -32,3 +32,20 @@ dist-ssr
 release/
 *.sqlite*
 database.sqlite*
+
+# Tauri & Rust build artifacts
+src-tauri/target/
+src-tauri/gen/schemas/
+target/
+
+# Playwright & Testing outputs
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+tests/screenshots/
+
+# OS specific files
+Thumbs.db
+.DS_Store
+

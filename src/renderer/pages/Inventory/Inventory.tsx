@@ -78,69 +78,69 @@ export default function InventoryView() {
   return (
     <div className="flex flex-col h-full bg-background text-foreground overflow-hidden transition-colors duration-200">
       {/* HEADER SECTION */}
-      <div className="px-8 py-6 border-b border-border flex items-center justify-between shrink-0 bg-card shadow-sm text-card-foreground">
+      <div className="px-3.5 lg:px-4 py-2 border-b border-border flex items-center justify-between shrink-0 bg-card shadow-2xs text-card-foreground">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <Layers className="h-6 w-6 text-primary" />
+          <h2 className="text-base lg:text-lg font-bold tracking-tight text-foreground flex items-center gap-2">
+            <Layers className="h-4.5 w-4.5 text-primary" />
             Inventory Stock Master
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">Manage jewelry tags, purity settings, and stock valuation.</p>
+          <p className="text-[11px] text-muted-foreground">Manage jewelry tags, purity, tounch ratio & live physical stock.</p>
         </div>
         {!isFormOpen && (
-          <div className="flex items-center gap-3">
-            <button className="p-2 hover:bg-muted rounded-lg border border-border text-muted-foreground transition-all cursor-pointer">
-              <Download className="h-4 w-4" />
+          <div className="flex items-center gap-2">
+            <button className="p-1.5 hover:bg-secondary rounded-md border border-border text-muted-foreground transition-all cursor-pointer">
+              <Download className="h-3.5 w-3.5" />
             </button>
-            <button onClick={handleOpenCreate} className="flex items-center gap-2 px-6 py-2 bg-primary text-primary-foreground rounded-lg shadow-premium hover:shadow-elevated transition-all active:scale-95 font-semibold text-sm cursor-pointer">
-              <Plus className="h-4 w-4" /> Add Item Tag
+            <button onClick={handleOpenCreate} className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground rounded-md shadow-xs hover:bg-primary/90 transition-all font-bold text-xs cursor-pointer">
+              <Plus className="h-3.5 w-3.5" /> Add Tag (Ins)
             </button>
           </div>
         )}
       </div>
 
-      <div className="flex-1 flex flex-col overflow-hidden p-8">
+      <div className="flex-1 flex flex-col overflow-hidden p-3 lg:p-3.5">
         {isFormOpen ? (
-          <div className="max-w-4xl mx-auto w-full h-full min-h-0 overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <form onSubmit={handleSubmit} className="surface-premium overflow-hidden flex flex-col h-full min-h-0 bg-card text-card-foreground">
+          <div className="max-w-3xl mx-auto w-full h-full min-h-0 overflow-hidden flex flex-col animate-in fade-in duration-200">
+            <form onSubmit={handleSubmit} className="overflow-hidden flex flex-col h-full min-h-0 bg-card text-card-foreground border border-border rounded-lg shadow-2xs">
               {/* STICKY FORM HEADER */}
-              <div className="bg-secondary/40 px-6 py-4 border-b border-border flex justify-between items-center shrink-0 select-none">
-                <h3 className="text-sm font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
-                  <Tag className="h-4 w-4 text-primary" />
-                  {editingProduct ? 'Edit Inventory Tag' : 'New Inventory Tag'}
+              <div className="bg-secondary/40 px-4 py-2.5 border-b border-border flex justify-between items-center shrink-0 select-none">
+                <h3 className="text-xs font-bold text-foreground uppercase tracking-wider flex items-center gap-1.5">
+                  <Tag className="h-3.5 w-3.5 text-primary" />
+                  {editingProduct ? 'Edit Inventory Item' : 'Register New Item Tag'}
                 </h3>
-                <span className="text-[10px] font-bold text-primary font-data uppercase tracking-widest">
-                  {editingProduct ? 'SKU: ' + formData.sku : 'New Item Registration'}
+                <span className="text-[10px] font-mono font-bold text-primary uppercase">
+                  {editingProduct ? 'SKU: ' + formData.sku : 'New Registration'}
                 </span>
               </div>
 
               {/* SCROLLABLE FORM BODY */}
-              <div className="p-8 space-y-8 overflow-y-auto flex-1">
+              <div className="p-4 space-y-3.5 overflow-y-auto flex-1 text-xs">
                 {/* PRIMARY DETAILS */}
-                <div className="grid grid-cols-12 gap-6">
+                <div className="grid grid-cols-12 gap-2.5">
                   <div className="col-span-3">
-                    <label className="erp-label">Short Code (GR/FR)</label>
+                    <label className="erp-label text-[10px]">Short Code</label>
                     <input
                       type="text"
                       placeholder="e.g. GR"
-                      className="w-full font-bold text-base px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 uppercase"
+                      className="w-full h-8 px-2 font-mono font-bold border border-border rounded text-foreground bg-background focus:outline-none focus:border-primary uppercase"
                       value={formData.sku}
                       onChange={(e) => setFormData({ ...formData, sku: e.target.value.toUpperCase() })}
                     />
                   </div>
                   <div className="col-span-5">
-                    <label className="erp-label">Description / Item Name *</label>
+                    <label className="erp-label text-[10px]">Description / Name *</label>
                     <input
                       type="text"
                       required
-                      className="w-full font-bold text-base px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                      className="w-full h-8 px-2 font-semibold border border-border rounded text-foreground bg-background focus:outline-none focus:border-primary"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     />
                   </div>
                   <div className="col-span-4">
-                    <label className="erp-label">Category Group</label>
+                    <label className="erp-label text-[10px]">Category Group</label>
                     <select
-                      className="w-full font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 cursor-pointer"
+                      className="w-full h-8 px-2 font-semibold border border-border rounded text-foreground bg-background focus:outline-none focus:border-primary cursor-pointer"
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
                     >
@@ -149,59 +149,56 @@ export default function InventoryView() {
                   </div>
                 </div>
 
-                {/* WEIGHT PARAMETERS CARD */}
-                <div className="bg-secondary/20 rounded-xl border border-border p-6 shadow-sm">
-                  <span className="text-[10px] font-extrabold text-primary uppercase tracking-[0.2em] block mb-6 select-none">Weight Parameters (Grams)</span>
-                  <div className="grid grid-cols-4 gap-6">
-                    <div>
-                      <label className="erp-label">Gross Weight</label>
-                      <input
-                        type="number"
-                        step="0.001"
-                        className="w-full text-right font-data text-lg font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
-                        value={formData.gross_weight || ''}
-                        onChange={(e) => setFormData({ ...formData, gross_weight: parseFloat(e.target.value) || 0 })}
-                      />
-                    </div>
-                    <div>
-                      <label className="erp-label">Stone Weight</label>
-                      <input
-                        type="number"
-                        step="0.001"
-                        className="w-full text-right font-data text-lg font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
-                        value={formData.stone_weight || ''}
-                        onChange={(e) => setFormData({ ...formData, stone_weight: parseFloat(e.target.value) || 0 })}
-                      />
-                    </div>
-                    <div>
-                      <label className="erp-label">Tounch (%)</label>
-                      <input
-                        type="number"
-                        step="0.01"
-                        className="w-full text-right font-data text-lg font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
-                        value={formData.tounch || ''}
-                        onChange={(e) => setFormData({ ...formData, tounch: parseFloat(e.target.value) || 0 })}
-                      />
-                    </div>
-                    <div>
-                      <label className="erp-label">Fine Wt (Calc)</label>
-                      <input
-                        type="number"
-                        step="0.001"
-                        readOnly
-                        className="w-full text-right font-data text-lg font-bold text-primary px-3 py-1.5 border border-border rounded-md bg-secondary/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 cursor-not-allowed opacity-80"
-                        value={((formData.gross_weight - formData.stone_weight) * (formData.tounch / 100)).toFixed(3)}
-                      />
-                    </div>
+                {/* WEIGHT & PURITY */}
+                <div className="grid grid-cols-12 gap-2.5 bg-secondary/20 p-2.5 rounded border border-border/60">
+                  <div className="col-span-3">
+                    <label className="erp-label text-[10px]">Gross Wt (g)</label>
+                    <input
+                      type="number"
+                      step="0.001"
+                      className="w-full h-8 px-2 text-right font-mono border border-border rounded text-foreground bg-background"
+                      value={formData.gross_weight || ''}
+                      onChange={(e) => setFormData({ ...formData, gross_weight: parseFloat(e.target.value) || 0 })}
+                    />
+                  </div>
+                  <div className="col-span-3">
+                    <label className="erp-label text-[10px]">Stone Wt (g)</label>
+                    <input
+                      type="number"
+                      step="0.001"
+                      className="w-full h-8 px-2 text-right font-mono border border-border rounded text-foreground bg-background"
+                      value={formData.stone_weight || ''}
+                      onChange={(e) => setFormData({ ...formData, stone_weight: parseFloat(e.target.value) || 0 })}
+                    />
+                  </div>
+                  <div className="col-span-3">
+                    <label className="erp-label text-[10px]">Tounch %</label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      className="w-full h-8 px-2 text-right font-mono border border-border rounded text-foreground bg-background"
+                      value={formData.tounch || ''}
+                      onChange={(e) => setFormData({ ...formData, tounch: parseFloat(e.target.value) || 0 })}
+                    />
+                  </div>
+                  <div className="col-span-3">
+                    <label className="erp-label text-[10px]">Fine Wt (Calc)</label>
+                    <input
+                      type="number"
+                      step="0.001"
+                      readOnly
+                      className="w-full h-8 px-2 text-right font-mono font-bold text-primary border border-border rounded bg-secondary/40 cursor-not-allowed"
+                      value={((formData.gross_weight - formData.stone_weight) * (formData.tounch / 100)).toFixed(3)}
+                    />
                   </div>
                 </div>
 
                 {/* PRICING & STOCK */}
-                <div className="grid grid-cols-12 gap-6">
+                <div className="grid grid-cols-12 gap-2.5">
                   <div className="col-span-4">
-                    <label className="erp-label">Purity (Karat)</label>
+                    <label className="erp-label text-[10px]">Purity Standard</label>
                     <select
-                      className="w-full font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary cursor-pointer"
+                      className="w-full h-8 px-2 font-semibold border border-border rounded text-foreground bg-background focus:outline-none focus:border-primary cursor-pointer"
                       value={formData.purity}
                       onChange={(e) => setFormData({ ...formData, purity: e.target.value })}
                     >
@@ -211,22 +208,19 @@ export default function InventoryView() {
                     </select>
                   </div>
                   <div className="col-span-4">
-                    <label className="erp-label">Stone Charges</label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold font-data">₹</span>
-                      <input
-                        type="number"
-                        className="w-full text-right font-data font-bold pl-8 pr-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary"
-                        value={formData.making_charges || ''}
-                        onChange={(e) => setFormData({ ...formData, making_charges: parseFloat(e.target.value) || 0 })}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-span-4">
-                    <label className="erp-label">Initial Stock</label>
+                    <label className="erp-label text-[10px]">Stone Charges (₹)</label>
                     <input
                       type="number"
-                      className="w-full text-right font-data font-bold px-3 py-1.5 border border-border rounded-md text-foreground bg-card focus:outline-none focus:border-primary"
+                      className="w-full h-8 px-2 text-right font-mono border border-border rounded text-foreground bg-background"
+                      value={formData.making_charges || ''}
+                      onChange={(e) => setFormData({ ...formData, making_charges: parseFloat(e.target.value) || 0 })}
+                    />
+                  </div>
+                  <div className="col-span-4">
+                    <label className="erp-label text-[10px]">Stock Qty</label>
+                    <input
+                      type="number"
+                      className="w-full h-8 px-2 text-right font-mono border border-border rounded text-foreground bg-background"
                       value={formData.current_stock}
                       onChange={(e) => setFormData({ ...formData, current_stock: parseInt(e.target.value) || 0 })}
                     />
@@ -235,111 +229,113 @@ export default function InventoryView() {
               </div>
 
               {/* STICKY ACTION FOOTER */}
-              <div className="bg-secondary/15 px-6 py-4 border-t border-border flex justify-end gap-3 shrink-0 select-none">
+              <div className="bg-secondary/20 px-4 py-2 border-t border-border flex justify-end gap-2 shrink-0 select-none">
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-6 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 font-bold rounded-lg text-xs uppercase cursor-pointer transition-all"
+                  className="px-4 py-1.5 bg-secondary text-secondary-foreground hover:bg-secondary/80 font-bold rounded text-xs uppercase cursor-pointer transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-8 py-2 bg-primary text-primary-foreground font-extrabold rounded-lg text-xs uppercase shadow-premium hover:shadow-elevated hover:bg-primary/90 cursor-pointer transition-all active:scale-[0.98]"
+                  className="px-5 py-1.5 bg-primary text-primary-foreground font-bold rounded text-xs uppercase shadow-xs hover:bg-primary/90 cursor-pointer transition-all"
                 >
-                  Save Inventory Item
+                  Save Item
                 </button>
               </div>
             </form>
           </div>
         ) : (
-          <div className="flex flex-col h-full gap-6">
+          <div className="flex flex-col h-full gap-2.5">
             {/* TOOLBAR */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
                 <div className="relative group">
-                  <Search className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <Search className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                   <input
                     type="text"
-                    placeholder="Filter by SKU, Tag, or Description..."
-                    className="w-80 !pl-10 h-11 bg-secondary/30 border border-border rounded-lg text-sm text-foreground focus:bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all font-medium"
+                    placeholder="Search SKU, Barcode, or Item..."
+                    className="w-64 lg:w-80 pl-8 h-8 bg-secondary/30 border border-border rounded-md text-xs text-foreground focus:bg-card focus:outline-none focus:border-primary transition-all font-medium"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <button className="flex items-center gap-2 px-4 h-11 bg-secondary/50 border border-border rounded-lg text-sm font-bold text-muted-foreground hover:text-foreground transition-all cursor-pointer">
-                  <Filter className="h-4 w-4" /> Filters
+                <button className="flex items-center gap-1.5 px-2.5 h-8 bg-secondary/50 border border-border rounded-md text-xs font-semibold text-muted-foreground hover:text-foreground transition-all cursor-pointer">
+                  <Filter className="h-3.5 w-3.5" /> Filter
                 </button>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xxs font-bold text-muted-foreground uppercase tracking-widest bg-secondary px-3 py-1 rounded-full border border-border select-none">
-                  Active SKU Count: {processedProducts.length}
+                <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase bg-secondary/60 px-2.5 py-1 rounded border border-border select-none">
+                  Total Items: {processedProducts.length}
                 </span>
               </div>
             </div>
 
             {/* PRODUCT TABLE */}
-            <div className="flex-1 erp-table-container shadow-sm">
-              <table className="ag-grid-dense-table">
-                <thead>
-                  <tr className="bg-secondary/40 border-b border-border">
-                    <th className="w-[15%] cursor-pointer text-foreground/80 font-bold" onClick={() => { setSortField('sku'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>SKU Code</th>
-                    <th className="w-[30%] cursor-pointer text-foreground/80 font-bold" onClick={() => { setSortField('name'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Description</th>
-                    <th className="text-right text-foreground/80 font-bold">Weight (F/G)</th>
-                    <th className="text-center text-foreground/80 font-bold">Purity</th>
-                    <th className="text-right text-foreground/80 font-bold">Stone Charges</th>
-                    <th className="text-center text-foreground/80 font-bold">Stock</th>
-                    <th className="w-16"></th>
-                  </tr>
-                </thead>
-                <tbody className="bg-card text-foreground font-medium">
-                  {processedProducts.length === 0 ? (
-                    <tr>
-                      <td colSpan={7} className="py-20 text-center opacity-25 bg-card">
-                        <Box className="h-12 w-12 mx-auto mb-3" />
-                        <p className="text-sm font-bold uppercase tracking-widest select-none">No Inventory Tags Found</p>
-                      </td>
+            <div className="flex-1 erp-table-container rounded-lg border border-border overflow-hidden bg-card shadow-2xs flex flex-col">
+              <div className="flex-1 overflow-y-auto">
+                <table className="ag-grid-dense-table w-full text-xs">
+                  <thead className="sticky top-0 bg-secondary/80 backdrop-blur-xs z-10">
+                    <tr className="border-b border-border text-[10.5px] uppercase tracking-wider text-muted-foreground">
+                      <th className="py-2 px-3 text-left w-[16%] cursor-pointer hover:text-foreground" onClick={() => { setSortField('sku'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>SKU Code</th>
+                      <th className="py-2 px-3 text-left w-[32%] cursor-pointer hover:text-foreground" onClick={() => { setSortField('name'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Description</th>
+                      <th className="py-2 px-3 text-right">Net Wt / Gross</th>
+                      <th className="py-2 px-3 text-center">Purity</th>
+                      <th className="py-2 px-3 text-right">Labour (₹)</th>
+                      <th className="py-2 px-3 text-center">Stock</th>
+                      <th className="py-2 px-2 text-center w-14"></th>
                     </tr>
-                  ) : (
-                    processedProducts.map((p) => (
-                      <tr key={p.id} className="group hover:bg-muted/40 border-b border-border/40 bg-card">
-                        <td>
-                          <div className="flex flex-col">
-                            <span className="font-data font-bold text-primary">{p.sku}</span>
-                            <span className="text-[10px] text-muted-foreground font-data flex items-center gap-1"><Barcode className="h-3 w-3" /> {p.barcode}</span>
-                          </div>
-                        </td>
-                        <td>
-                          <div className="flex flex-col">
-                            <span className="font-bold text-foreground">{p.name}</span>
-                            <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">{p.category}</span>
-                          </div>
-                        </td>
-                        <td className="text-right font-data">
-                          <span className="text-foreground">{p.fine.toFixed(3)}g</span>
-                          <span className="text-muted-foreground/40 mx-1">/</span>
-                          <span className="text-muted-foreground text-xs">{p.gross_weight.toFixed(3)}g</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="px-2 py-0.5 bg-primary/10 text-primary border border-primary/20 rounded-md text-[10px] font-bold">{p.purity}</span>
-                        </td>
-                        <td className="text-right font-data font-bold">₹{p.making_charges.toLocaleString()}</td>
-                        <td className="text-center">
-                          <span className={`px-2 py-1 rounded-lg text-xs font-bold ${p.current_stock <= 2 ? 'bg-rose-500/10 text-rose-600' : 'bg-emerald-500/10 text-emerald-600'}`}>
-                            {p.current_stock}
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <div className="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onClick={() => handleOpenEdit(p)} className="p-1.5 hover:bg-secondary rounded-lg text-muted-foreground hover:text-primary transition-all cursor-pointer"><Edit2 className="h-4 w-4" /></button>
-                            <button onClick={() => deleteProduct(p.id)} className="p-1.5 hover:bg-destructive/10 rounded-lg text-muted-foreground hover:text-destructive transition-all cursor-pointer"><Trash2 className="h-4 w-4" /></button>
-                          </div>
+                  </thead>
+                  <tbody className="divide-y divide-border/40 font-medium">
+                    {processedProducts.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="py-14 text-center opacity-30 bg-card">
+                          <Box className="h-8 w-8 mx-auto mb-2" />
+                          <p className="text-[11px] font-bold uppercase tracking-widest select-none">No Inventory Tags Found</p>
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      processedProducts.map((p) => (
+                        <tr key={p.id} className="hover:bg-muted/40 transition-colors">
+                          <td className="py-1.5 px-3">
+                            <div className="flex flex-col">
+                              <span className="font-mono font-bold text-primary">{p.sku}</span>
+                              <span className="text-[9.5px] text-muted-foreground font-mono flex items-center gap-0.5"><Barcode className="h-2.5 w-2.5" /> {p.barcode}</span>
+                            </div>
+                          </td>
+                          <td className="py-1.5 px-3">
+                            <div className="flex flex-col">
+                              <span className="font-semibold text-foreground">{p.name}</span>
+                              <span className="text-[9.5px] text-muted-foreground uppercase">{p.category}</span>
+                            </div>
+                          </td>
+                          <td className="py-1.5 px-3 text-right font-mono tabular-nums">
+                            <span className="text-foreground font-bold">{p.fine.toFixed(3)}g</span>
+                            <span className="text-muted-foreground/50 mx-1">/</span>
+                            <span className="text-muted-foreground text-[11px]">{p.gross_weight.toFixed(3)}g</span>
+                          </td>
+                          <td className="py-1.5 px-3 text-center">
+                            <span className="px-1.5 py-0.5 bg-primary/10 text-primary border border-primary/20 rounded text-[9.5px] font-bold">{p.purity}</span>
+                          </td>
+                          <td className="py-1.5 px-3 text-right font-mono font-bold tabular-nums">₹{p.making_charges.toLocaleString()}</td>
+                          <td className="py-1.5 px-3 text-center">
+                            <span className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold tabular-nums ${p.current_stock <= 2 ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'}`}>
+                              {p.current_stock}
+                            </span>
+                          </td>
+                          <td className="py-1.5 px-2 text-center">
+                            <div className="flex items-center justify-center gap-1">
+                              <button onClick={() => handleOpenEdit(p)} title="Edit" className="p-1 hover:bg-secondary rounded text-muted-foreground hover:text-primary transition-all cursor-pointer"><Edit2 className="h-3.5 w-3.5" /></button>
+                              <button onClick={() => deleteProduct(p.id)} title="Delete" className="p-1 hover:bg-destructive/10 rounded text-muted-foreground hover:text-destructive transition-all cursor-pointer"><Trash2 className="h-3.5 w-3.5" /></button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}

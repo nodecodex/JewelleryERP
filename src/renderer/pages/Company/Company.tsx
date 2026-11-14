@@ -304,18 +304,18 @@ export default function CompanyView() {
   });
 
   return (
-    <div className="p-3 bg-[#eef1f6] h-full overflow-hidden flex flex-col font-sans select-none">
+    <div className="p-3 bg-background text-foreground h-full overflow-hidden flex flex-col font-sans select-none transition-colors duration-200">
       
       {/* 1. Split Panel Workspace */}
       <div className="flex-1 grid grid-cols-12 gap-3 overflow-hidden min-h-0 pb-2">
         
         {/* LEFT PANEL: Search and Table Records (40% width) */}
-        <div className="col-span-5 bg-white border border-slate-350 rounded-[2px] shadow-sm flex flex-col overflow-hidden">
-          <div className="bg-slate-800 text-slate-100 px-3 py-1.5 border-b border-slate-900 flex justify-between items-center shrink-0">
-            <span className="text-[10px] font-bold uppercase tracking-wider font-luxury">SEARCH RECORD</span>
+        <div className="col-span-5 bg-card text-card-foreground border border-border rounded-lg shadow-sm flex flex-col overflow-hidden">
+          <div className="bg-secondary/40 px-3 py-1.5 border-b border-border flex justify-between items-center shrink-0">
+            <span className="text-[10px] font-bold uppercase tracking-wider font-luxury text-foreground/80">Company Directory</span>
             <button
               onClick={handleNewRecord}
-              className="flex items-center gap-1 px-2 py-0.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[9px] uppercase tracking-wider rounded-[2px] border border-amber-600 transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-[9px] uppercase tracking-wider rounded-md shadow-xs transition-colors cursor-pointer"
             >
               <Plus className="h-3 w-3" />
               <span>New Company</span>
@@ -323,13 +323,13 @@ export default function CompanyView() {
           </div>
 
           {/* Search box input */}
-          <div className="p-2 border-b border-slate-200 bg-slate-50 shrink-0">
-            <div className="flex items-center gap-1.5 bg-white border border-slate-300 rounded-[2px] px-2 py-1 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/20">
-              <Search className="h-3.5 w-3.5 text-slate-400" />
+          <div className="p-2 border-b border-border bg-secondary/15 shrink-0">
+            <div className="flex items-center gap-1.5 bg-background border border-border rounded-md px-2 py-1 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
+              <Search className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search by code, name, GSTIN, or phone..."
-                className="bg-transparent border-none text-[11px] focus:outline-none w-full font-semibold select-text"
+                className="bg-transparent border-none text-[11px] focus:outline-none w-full font-semibold select-text text-foreground placeholder:text-muted-foreground/50"
                 value={globalFilter}
                 onChange={(e) => setGlobalFilter(e.target.value)}
               />
@@ -427,12 +427,12 @@ export default function CompanyView() {
         </div>
 
         {/* RIGHT PANEL: Form Details (60% width) */}
-        <div className="col-span-7 bg-white border border-slate-350 rounded-[2px] shadow-sm flex flex-col overflow-hidden">
+        <div className="col-span-7 bg-card text-card-foreground border border-border rounded-lg shadow-sm flex flex-col overflow-hidden">
           
-          {/* Header styled orange */}
-          <div className="bg-amber-500/15 border-b border-amber-500/30 py-2 text-center shrink-0">
-            <h1 className="text-sm font-extrabold uppercase text-amber-700 tracking-widest font-luxury">
-              Company Master
+          {/* Header */}
+          <div className="bg-secondary/40 border-b border-border py-2 text-center shrink-0">
+            <h1 className="text-xs font-extrabold uppercase text-primary tracking-widest font-luxury">
+              Company Master & Credentials
             </h1>
           </div>
 
@@ -823,51 +823,51 @@ export default function CompanyView() {
       </div>
 
       {/* 2. BOTTOM ACTION BUTTONS TOOLBAR */}
-      <footer className="bg-slate-100 border border-slate-350 rounded-[2px] p-1.5 flex justify-end gap-2.5 shrink-0 shadow-sm">
+      <footer className="bg-card border border-border rounded-lg p-1.5 flex justify-end gap-2 shrink-0 shadow-2xs">
         
         {/* Print Button */}
         <button
           onClick={handlePrint}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-secondary/60 hover:bg-secondary border border-border rounded text-xs font-bold text-foreground uppercase tracking-wide transition-all cursor-pointer"
         >
-          <Printer className="h-4 w-4 text-slate-500" />
+          <Printer className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Print</span>
         </button>
 
         {/* Save Button */}
         <button
           onClick={() => handleSave()}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3.5 py-1 bg-primary hover:bg-primary/90 text-primary-foreground border border-primary rounded text-xs font-bold uppercase tracking-wide transition-all shadow-xs cursor-pointer"
         >
-          <Save className="h-4 w-4 text-emerald-600" />
-          <span className="text-emerald-700">Save</span>
+          <Save className="h-3.5 w-3.5" />
+          <span>Save</span>
         </button>
 
         {/* Cancel Button */}
         <button
           onClick={handleCancel}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-secondary/60 hover:bg-secondary border border-border rounded text-xs font-bold text-foreground uppercase tracking-wide transition-all cursor-pointer"
         >
-          <Undo2 className="h-4 w-4 text-amber-600" />
-          <span className="text-amber-700">Cancel</span>
+          <Undo2 className="h-3.5 w-3.5 text-muted-foreground" />
+          <span>Cancel</span>
         </button>
 
         {/* Delete Button */}
         <button
           onClick={handleDeleteRecord}
           disabled={!selectedRecord}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-rose-50 border border-slate-300 disabled:opacity-40 disabled:hover:bg-white rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-secondary/60 hover:bg-destructive/10 border border-border disabled:opacity-30 rounded text-xs font-bold text-destructive uppercase tracking-wide transition-all cursor-pointer"
         >
-          <Trash2 className="h-4 w-4 text-rose-500" />
-          <span className="text-rose-600">Delete</span>
+          <Trash2 className="h-3.5 w-3.5 text-destructive" />
+          <span>Delete</span>
         </button>
 
         {/* Exit Button */}
         <button
           onClick={handleExit}
-          className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 uppercase tracking-wide transition-all shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1 bg-secondary/60 hover:bg-secondary border border-border rounded text-xs font-bold text-foreground uppercase tracking-wide transition-all cursor-pointer"
         >
-          <LogOut className="h-4 w-4 text-slate-600" />
+          <LogOut className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Exit</span>
         </button>
 

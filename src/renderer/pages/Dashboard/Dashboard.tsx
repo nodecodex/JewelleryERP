@@ -109,68 +109,70 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden transition-colors duration-200">
-      {/* HEADER SECTION */}
-      <div className="px-8 py-6 border-b border-border flex items-center justify-between shrink-0 bg-card text-card-foreground shadow-sm">
+      {/* HEADER SECTION - COMPACT DESKTOP/LAPTOP */}
+      <div className="px-3.5 lg:px-4 py-2 border-b border-border flex items-center justify-between shrink-0 bg-card text-card-foreground">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <TrendingUp className="h-6 w-6 text-primary" />
-            Business Overview
+          <h2 className="text-base lg:text-lg font-bold tracking-tight text-foreground flex items-center gap-2">
+            <TrendingUp className="h-4.5 w-4.5 text-primary" />
+            Executive Dashboard
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">Real-time performance metrics and metal market updates.</p>
+          <p className="text-[11px] text-muted-foreground">Real-time performance metrics, sales velocity & bullion ticker.</p>
         </div>
         
-        {/* Live Metal Rates Card */}
-        <div className="flex items-center gap-6 bg-secondary/35 border border-border px-6 py-2.5 rounded-xl">
-          <div className="flex items-center gap-3">
-            <Coins className="h-5 w-5 text-primary" />
-            <div className="h-8 w-px bg-border mx-1"></div>
+        {/* Live Metal Rates Compact Badge */}
+        <div className="flex items-center gap-3.5 bg-secondary/40 border border-border px-3 py-1.5 rounded-lg shadow-2xs">
+          <div className="flex items-center gap-2 text-primary font-semibold text-xs">
+            <Coins className="h-4 w-4" />
+            <span className="hidden sm:inline text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Bullion</span>
+            <div className="h-5 w-px bg-border/70 mx-0.5"></div>
           </div>
-          <div className="flex gap-8">
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Gold 22K/10g</span>
-              <span className="text-sm font-data font-extrabold text-foreground">₹{currentRates ? currentRates.gold_rate_22k.toLocaleString() : '--'}</span>
+          <div className="flex gap-4 sm:gap-6">
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase">Gold 22K:</span>
+              <span className="text-xs font-mono font-bold text-foreground tabular-nums">₹{currentRates ? currentRates.gold_rate_22k.toLocaleString() : '--'}</span>
             </div>
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Silver 999/1kg</span>
-              <span className="text-sm font-data font-extrabold text-foreground">₹{currentRates ? currentRates.silver_rate.toLocaleString() : '--'}</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase">Silver 999:</span>
+              <span className="text-xs font-mono font-bold text-foreground tabular-nums">₹{currentRates ? currentRates.silver_rate.toLocaleString() : '--'}</span>
             </div>
           </div>
           <button 
             onClick={() => addTab({ title: 'Rates', type: 'settings' })} 
-            className="ml-4 p-2 hover:bg-background rounded-lg border border-transparent hover:border-border transition-all group cursor-pointer"
+            title="Update Metal Rates"
+            className="p-1 hover:bg-background rounded border border-transparent hover:border-border transition-all text-primary hover:text-primary cursor-pointer"
           >
-            <PlusCircle className="h-4 w-4 text-primary group-hover:scale-110 transition-transform" />
+            <PlusCircle className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-8 space-y-8">
+      <div className="flex-1 overflow-y-auto p-3 lg:p-3.5 space-y-3.5">
         
-        {/* KPI CARDS */}
-        <div className="grid grid-cols-4 gap-6">
+        {/* KPI CARDS - COMPACT GRID FOR 768p & 1080p */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 lg:gap-3">
           {[
             { label: 'Today\'s Sales', value: stats.todaySales, icon: TrendingUp, color: 'emerald', trend: '+12.5%', isUp: true },
             { label: 'Purchases Today', value: stats.todayPurchases, icon: ShoppingBag, color: 'blue', trend: '0%', isUp: true },
-            { label: 'Low Stock Alerts', value: stats.lowStockCount, suffix: 'Items', icon: AlertTriangle, color: 'rose', trend: 'Critical', isUp: false },
+            { label: 'Low Stock Alerts', value: stats.lowStockCount, suffix: 'Items', icon: AlertTriangle, color: 'rose', trend: stats.lowStockCount > 0 ? 'Critical' : 'Normal', isUp: stats.lowStockCount === 0 },
             { label: 'Outstanding Due', value: stats.outstandingDue, icon: Coins, color: 'amber', trend: '-2.4%', isUp: false },
           ].map((card, i) => {
             const styles = colorStyles[card.color as keyof typeof colorStyles];
             return (
-              <div key={i} className="surface-premium p-6 bg-card border border-border shadow-premium rounded-lg group hover:border-primary/20 transition-all cursor-default relative overflow-hidden">
-                <div className={`absolute top-0 right-0 w-24 h-24 ${styles.circle} rounded-full -mr-8 -mt-8 group-hover:scale-110 transition-transform`}></div>
-                <div className="flex justify-between items-start relative z-10">
-                  <div className={`p-2 rounded-lg ${styles.bg}`}>
-                    <card.icon className="h-5 w-5" />
+              <div key={i} className="p-3 bg-card border border-border shadow-2xs rounded-lg group hover:border-primary/40 transition-all cursor-default relative overflow-hidden">
+                <div className={`absolute top-0 right-0 w-16 h-16 ${styles.circle} rounded-full -mr-5 -mt-5 group-hover:scale-110 transition-transform`}></div>
+                <div className="flex justify-between items-center relative z-10">
+                  <div className={`p-1.5 rounded-md ${styles.bg}`}>
+                    <card.icon className="h-4 w-4" />
                   </div>
-                  <div className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${card.isUp ? 'bg-emerald-500/10 text-emerald-600' : 'bg-rose-500/10 text-rose-600'}`}>
-                    {card.isUp ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                  <div className={`flex items-center gap-1 text-[9.5px] font-bold px-1.5 py-0.5 rounded ${card.isUp ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'}`}>
+                    {card.isUp ? <ArrowUpRight className="h-2.5 w-2.5" /> : <ArrowDownRight className="h-2.5 w-2.5" />}
                     {card.trend}
                   </div>
                 </div>
-                <div className="mt-4 relative z-10">
-                  <span className="text-xxs font-bold text-muted-foreground uppercase tracking-[0.1em]">{card.label}</span>
-                  <div className="flex items-baseline gap-1 mt-1">
-                    <h3 className={`text-xl font-data font-extrabold ${card.color === 'rose' && stats.lowStockCount > 0 ? 'text-rose-500' : 'text-foreground'}`}>
+                <div className="mt-2.5 relative z-10">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{card.label}</span>
+                  <div className="flex items-baseline gap-1 mt-0.5">
+                    <h3 className={`text-lg font-mono font-extrabold tracking-tight tabular-nums ${card.color === 'rose' && stats.lowStockCount > 0 ? 'text-rose-500' : 'text-foreground'}`}>
                       {card.suffix ? card.value : '₹' + card.value.toLocaleString()}
                     </h3>
                     {card.suffix && <span className="text-[10px] font-bold text-muted-foreground">{card.suffix}</span>}
@@ -181,52 +183,52 @@ export default function Dashboard() {
           })}
         </div>
 
-        {/* ANALYTICAL GRIDS */}
-        <div className="grid grid-cols-12 gap-8">
+        {/* ANALYTICAL GRIDS - 8:4 DESKTOP SPLIT */}
+        <div className="grid grid-cols-12 gap-3 lg:gap-3.5">
           
           {/* RECENT TRANSACTIONS */}
-          <div className="col-span-8 flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold tracking-tight flex items-center gap-2 text-foreground">
-                <Clock className="h-4 w-4 text-primary" />
+          <div className="col-span-12 lg:col-span-8 flex flex-col gap-2">
+            <div className="flex items-center justify-between px-0.5">
+              <h3 className="text-xs font-bold tracking-tight flex items-center gap-1.5 text-foreground uppercase">
+                <Clock className="h-3.5 w-3.5 text-primary" />
                 Recent Sales Vouchers
               </h3>
               <button 
                 onClick={() => addTab({ title: 'Ledger Reports', type: 'ledgers' })} 
-                className="text-[10px] font-extrabold text-primary uppercase tracking-widest hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-[10px] font-bold text-primary uppercase tracking-wider hover:underline flex items-center gap-1 cursor-pointer"
               >
-                View All Records <ArrowRight className="h-3 w-3" />
+                All Records <ArrowRight className="h-3 w-3" />
               </button>
             </div>
             
-            <div className="erp-table-container shadow-sm">
-              <table className="ag-grid-dense-table">
+            <div className="erp-table-container shadow-2xs border border-border rounded-lg overflow-hidden bg-card">
+              <table className="ag-grid-dense-table w-full text-xs">
                 <thead>
-                  <tr className="bg-secondary/40 border-b border-border">
-                    <th className="w-[20%] text-muted-foreground">Date</th>
-                    <th className="w-[25%] text-muted-foreground">Voucher #</th>
-                    <th className="text-muted-foreground">Ledger Type</th>
-                    <th className="text-right text-muted-foreground">Net Value</th>
+                  <tr className="bg-secondary/40 border-b border-border text-[10.5px] uppercase tracking-wider text-muted-foreground">
+                    <th className="py-2 px-3 text-left w-[20%]">Date</th>
+                    <th className="py-2 px-3 text-left w-[28%]">Voucher #</th>
+                    <th className="py-2 px-3 text-center">Type</th>
+                    <th className="py-2 px-3 text-right">Net Value</th>
                   </tr>
                 </thead>
-                <tbody className="bg-card text-foreground font-medium">
+                <tbody className="divide-y divide-border/40 text-foreground font-medium">
                   {recentInvoices.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="py-20 text-center text-muted-foreground/30 bg-card select-none">
+                      <td colSpan={4} className="py-12 text-center text-muted-foreground/40 bg-card select-none">
                         <p className="text-xs font-bold uppercase tracking-widest">No Recent Vouchers</p>
                       </td>
                     </tr>
                   ) : (
                     recentInvoices.map((inv) => (
-                      <tr key={inv.id} className="hover:bg-muted/40 border-b border-border/40 bg-card">
-                        <td className="font-data text-xs text-muted-foreground">{inv.invoice_date}</td>
-                        <td className="font-bold text-foreground tracking-tight">{inv.invoice_number}</td>
-                        <td>
-                          <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase border ${inv.invoice_type === 'Estimate' ? 'bg-secondary text-secondary-foreground border-border' : 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'}`}>
+                      <tr key={inv.id} className="hover:bg-muted/40 transition-colors">
+                        <td className="py-1.5 px-3 font-mono text-[11px] text-muted-foreground tabular-nums">{inv.invoice_date}</td>
+                        <td className="py-1.5 px-3 font-semibold text-foreground tracking-tight">{inv.invoice_number}</td>
+                        <td className="py-1.5 px-3 text-center">
+                          <span className={`px-2 py-0.5 rounded text-[9.5px] font-bold uppercase tracking-wider border ${inv.invoice_type === 'Estimate' ? 'bg-secondary text-secondary-foreground border-border' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'}`}>
                             {inv.invoice_type}
                           </span>
                         </td>
-                        <td className="text-right font-data font-extrabold text-foreground">₹{inv.net_amount.toLocaleString()}</td>
+                        <td className="py-1.5 px-3 text-right font-mono font-bold text-foreground tabular-nums">₹{inv.net_amount.toLocaleString()}</td>
                       </tr>
                     ))
                   )}
@@ -236,12 +238,12 @@ export default function Dashboard() {
           </div>
 
           {/* QUICK SHORTCUTS & ALERTS */}
-          <div className="col-span-4 flex flex-col gap-8">
+          <div className="col-span-12 lg:col-span-4 flex flex-col gap-3">
             
             {/* ACTION PANEL */}
-            <div className="surface-premium p-6 bg-card border border-border shadow-premium rounded-lg">
-              <h3 className="text-sm font-bold tracking-tight mb-6 text-foreground">Quick Actions</h3>
-              <div className="grid grid-cols-1 gap-3">
+            <div className="p-3 bg-card border border-border shadow-2xs rounded-lg">
+              <h3 className="text-xs font-bold tracking-tight mb-2 text-foreground uppercase">Fast Actions</h3>
+              <div className="grid grid-cols-1 gap-1.5">
                 {[
                   { label: 'New Sales Invoice', icon: PlusCircle, type: 'billing', key: 'F3', color: 'primary' },
                   { label: 'Inventory Catalog', icon: Layers, type: 'inventory', key: 'Alt+I', color: 'slate' },
@@ -250,45 +252,45 @@ export default function Dashboard() {
                   <button 
                     key={i} 
                     onClick={() => addTab({ title: btn.label, type: btn.type })} 
-                    className="flex items-center justify-between p-3 rounded-xl border border-border hover:border-primary hover:bg-primary/5 transition-all group cursor-pointer"
+                    className="flex items-center justify-between px-2.5 py-1.5 rounded-md border border-border hover:border-primary/50 hover:bg-primary/5 transition-all group cursor-pointer text-left"
                   >
-                    <div className="flex items-center gap-3">
-                      <btn.icon className={`h-4 w-4 ${btn.color === 'primary' ? 'text-primary' : 'text-muted-foreground/60'} group-hover:text-primary transition-colors`} />
-                      <span className="text-xs font-bold text-muted-foreground group-hover:text-foreground">{btn.label}</span>
+                    <div className="flex items-center gap-2">
+                      <btn.icon className={`h-3.5 w-3.5 ${btn.color === 'primary' ? 'text-primary' : 'text-muted-foreground'} group-hover:text-primary transition-colors`} />
+                      <span className="text-xs font-medium text-foreground">{btn.label}</span>
                     </div>
-                    <span className="keyboard-key group-hover:border-primary/30 transition-colors">{btn.key}</span>
+                    <span className="keyboard-key text-[10px] px-1.5 py-0.5 group-hover:border-primary/30">{btn.key}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* CRITICAL STOCK ALERTS */}
-            <div className="surface-premium p-6 bg-card border border-border shadow-premium rounded-lg">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-sm font-bold tracking-tight text-rose-600 dark:text-rose-400 flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4" />
+            <div className="p-3 bg-card border border-border shadow-2xs rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-xs font-bold tracking-tight text-rose-600 dark:text-rose-400 flex items-center gap-1.5 uppercase">
+                  <AlertTriangle className="h-3.5 w-3.5" />
                   Stock Alerts
                 </h3>
-                <span className="text-[10px] font-bold px-2 py-0.5 bg-rose-500/10 text-rose-600 rounded-full">{stats.lowStockCount}</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.2 bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-full">{stats.lowStockCount}</span>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-1.5">
                 {lowStockProducts.length === 0 ? (
-                  <p className="text-[11px] font-medium text-muted-foreground text-center py-4 select-none">No critical stock warnings.</p>
+                  <p className="text-[11px] font-medium text-muted-foreground text-center py-3 select-none">No critical stock warnings.</p>
                 ) : (
-                  lowStockProducts.map((p) => (
-                    <div key={p.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted transition-colors">
-                      <div className="flex flex-col">
-                        <span className="text-[11px] font-bold text-foreground">{p.name}</span>
-                        <span className="text-[10px] font-data text-muted-foreground">{p.sku}</span>
+                  lowStockProducts.slice(0, 4).map((p) => (
+                    <div key={p.id} className="flex items-center justify-between px-2 py-1.5 rounded bg-secondary/30 hover:bg-muted transition-colors">
+                      <div className="flex flex-col min-w-0 pr-2">
+                        <span className="text-[11px] font-semibold text-foreground truncate">{p.name}</span>
+                        <span className="text-[9.5px] font-mono text-muted-foreground">{p.sku}</span>
                       </div>
-                      <span className="text-xs font-data font-bold text-rose-600 bg-rose-500/5 px-2 py-1 rounded-md">{p.current_stock} qty</span>
+                      <span className="text-[11px] font-mono font-bold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded whitespace-nowrap tabular-nums">{p.current_stock} qty</span>
                     </div>
                   ))
                 )}
-                {stats.lowStockCount > 5 && (
+                {stats.lowStockCount > 4 && (
                   <button 
                     onClick={() => addTab({ title: 'Inventory', type: 'inventory' })} 
-                    className="w-full text-center text-[10px] font-bold text-primary uppercase tracking-widest pt-2 hover:underline cursor-pointer"
+                    className="w-full text-center text-[10px] font-bold text-primary uppercase tracking-widest pt-1 hover:underline cursor-pointer"
                   >
                     View All {stats.lowStockCount} Alerts
                   </button>

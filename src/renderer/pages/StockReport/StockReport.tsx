@@ -314,24 +314,24 @@ export default function StockReportView() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#eef1f6] text-slate-800 p-2 font-sans select-none no-print overflow-y-auto text-xs">
+    <div className="flex flex-col h-full bg-background text-foreground p-3 font-sans select-none no-print overflow-y-auto text-xs transition-colors duration-200">
       
       {/* HEADER SECTION WITH FILTERS */}
-      <div className="bg-white border border-slate-300 rounded-[2px] p-2 shadow-sm shrink-0 flex flex-col gap-2 mb-1.5 no-print">
+      <div className="bg-card text-card-foreground border border-border rounded-lg p-2.5 shadow-2xs shrink-0 flex flex-col gap-2 mb-2 no-print">
         
         {/* Banner Strip */}
-        <div className="bg-orange-500 text-white py-1 px-4 text-center font-bold text-sm tracking-wider uppercase rounded-[1px] flex justify-between items-center shadow-inner mb-1 bg-gradient-to-r from-orange-500 to-amber-500">
-          <label className="flex items-center gap-1.5 text-[10px] select-none cursor-pointer">
+        <div className="bg-secondary/50 border border-border py-1 px-3 rounded flex justify-between items-center text-xs mb-1">
+          <label className="flex items-center gap-1.5 text-[10.5px] select-none cursor-pointer">
             <input 
               type="checkbox" 
-              className="h-3 w-3 accent-amber-500 cursor-pointer"
+              className="h-3.5 w-3.5 accent-primary cursor-pointer"
               checked={grossWiseWeight}
               onChange={(e) => setGrossWiseWeight(e.target.checked)}
             />
-            <span>Gross Wise Weight</span>
+            <span className="font-semibold text-foreground">Gross Wise Weight</span>
           </label>
-          <span className="font-extrabold font-luxury tracking-widest text-[13px]">Stock Report</span>
-          <span className="text-[10px] opacity-75 font-data">Tag Valuation Ledger</span>
+          <span className="font-extrabold font-luxury tracking-widest text-xs uppercase text-primary">Inventory Stock Valuation & Movement</span>
+          <span className="text-[10px] font-mono text-muted-foreground uppercase">Tag Valuation Ledger</span>
         </div>
 
         {/* Filters Grid Row 1 */}
@@ -655,52 +655,52 @@ export default function StockReportView() {
       </div>
 
       {/* ACTION BUTTONS RIBBON */}
-      <div className="bg-slate-100 border border-slate-300 rounded-[2px] px-4 py-2 flex items-center justify-end gap-1.5 shrink-0 select-none mt-1.5 shadow-sm no-print">
+      <div className="bg-card border border-border rounded-lg px-3 py-1.5 flex items-center justify-end gap-1.5 shrink-0 select-none mt-2 shadow-2xs no-print">
         
         {/* Print (Window) */}
         <button
           onClick={handlePrint}
-          className="flex items-center gap-1.5 px-4 h-8 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-[2px] uppercase shadow-sm transition-all text-xs cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-secondary/60 hover:bg-secondary text-foreground border border-border rounded uppercase shadow-2xs transition-all text-xs cursor-pointer active:scale-95"
         >
-          <Printer className="h-4 w-4 text-slate-400" />
+          <Printer className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Print</span>
         </button>
 
         {/* PDF Export */}
         <button
           onClick={handleExportPDF}
-          className="flex items-center gap-1.5 px-4 h-8 bg-rose-600 hover:bg-rose-700 text-white border border-rose-700 rounded-[2px] uppercase shadow-sm transition-all text-xs font-bold cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-rose-600 hover:bg-rose-700 text-white border border-rose-700 rounded uppercase shadow-2xs transition-all text-xs font-bold cursor-pointer active:scale-95"
         >
-          <FileText className="h-4 w-4 text-white" />
+          <FileText className="h-3.5 w-3.5 text-white" />
           <span>PDF Export</span>
         </button>
 
         {/* Excel Export */}
         <button
           onClick={handleExcelExport}
-          className="flex items-center gap-1.5 px-4 h-8 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-[2px] uppercase shadow-sm transition-all text-xs cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-secondary/60 hover:bg-secondary text-foreground border border-border rounded uppercase shadow-2xs transition-all text-xs cursor-pointer active:scale-95"
         >
-          <FileSpreadsheet className="h-4 w-4 text-slate-400" />
+          <FileSpreadsheet className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Excel</span>
         </button>
 
         {/* Cancel (Reset) */}
         <button
           onClick={handleCancel}
-          className="flex items-center gap-1.5 px-4 h-8 bg-white hover:bg-slate-50 text-slate-600 border border-slate-300 rounded-[2px] uppercase shadow-sm transition-all text-xs cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-secondary/60 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border rounded uppercase shadow-2xs transition-all text-xs cursor-pointer active:scale-95"
         >
-          <Undo2 className="h-4 w-4 text-slate-400" />
+          <Undo2 className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Cancel</span>
         </button>
 
-        <div className="h-6 w-px bg-slate-300 mx-2" />
+        <div className="h-5 w-px bg-border mx-1" />
 
         {/* Exit */}
         <button
           onClick={handleExit}
-          className="flex items-center gap-1.5 px-4 h-8 bg-slate-800 hover:bg-slate-700 text-white border border-slate-900 rounded-[2px] uppercase shadow-sm transition-all text-xs cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-secondary/60 hover:bg-secondary text-foreground border border-border rounded uppercase shadow-2xs transition-all text-xs cursor-pointer active:scale-95"
         >
-          <LogOut className="h-4 w-4 text-amber-500" />
+          <LogOut className="h-3.5 w-3.5 text-muted-foreground" />
           <span>Exit</span>
         </button>
 
