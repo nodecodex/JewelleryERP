@@ -52,11 +52,23 @@ export default {
           200: '#ebdca0',
           300: '#dec26b',
           400: '#d1a43f',
-          500: '#b8862b', // Adjusted for premium rose/champagne gold feel
-          600: '#9b6a22',
-          700: '#7c501b',
-          800: '#64401a',
-          900: '#523419',
+          500: '#FFC000', // Lamborghini Gold
+          600: '#d9a300',
+          700: '#917300', // Dark Gold
+          800: '#665100',
+          900: '#3d3000',
+        },
+        lambo: {
+          black: '#000000',
+          iron: '#181818',
+          charcoal: '#202020',
+          elevated: '#282828',
+          gold: '#FFC000',
+          darkgold: '#917300',
+          cyan: '#29ABE2',
+          ash: '#7D7D7D',
+          steel: '#969696',
+          border: '#2c2c2c',
         }
       },
       borderRadius: {

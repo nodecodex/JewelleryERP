@@ -102,15 +102,15 @@ export default function AccountingView() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background text-foreground overflow-hidden">
+    <div className="flex flex-col h-full bg-black text-white overflow-hidden">
       {/* SCREEN HEADER */}
-      <div className="px-3.5 lg:px-4 py-2 border-b border-border flex items-center justify-between shrink-0 bg-card">
+      <div className="px-4 py-2.5 border-b border-[#262626] flex items-center justify-between shrink-0 bg-[#181818]">
         <div>
-          <h2 className="text-base lg:text-lg font-bold tracking-tight text-foreground flex items-center gap-2">
-            <FileSpreadsheet className="h-4.5 w-4.5 text-primary" />
-            Double-Entry Accounting & Vouchers
+          <h2 className="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+            <FileSpreadsheet className="h-4 w-4 text-[#FFC000]" />
+            DOUBLE-ENTRY ACCOUNTING & VOUCHERS
           </h2>
-          <p className="text-[11px] text-muted-foreground">General ledger journal entries, contra, cash & bank vouchers.</p>
+          <p className="text-[10px] text-[#7D7D7D] uppercase tracking-wider mt-0.5">General ledger journal entries, contra, cash & bank vouchers.</p>
         </div>
         {!isFormOpen && (
           <button
@@ -118,23 +118,23 @@ export default function AccountingView() {
               generateVoucherNumber();
               setIsFormOpen(true);
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground font-bold rounded-md text-xs uppercase shadow-xs hover:bg-primary/90 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-1.5 bg-[#FFC000] text-black font-extrabold rounded-none text-xs uppercase hover:bg-[#917300] transition-colors cursor-pointer"
           >
-            <Plus className="h-3.5 w-3.5" />
+            <Plus className="h-3.5 w-3.5 stroke-[3]" />
             <span>New Voucher (F7)</span>
           </button>
         )}
       </div>
 
-      <div className="flex-1 flex flex-col overflow-hidden p-3 lg:p-3.5">
+      <div className="flex-1 flex flex-col overflow-hidden p-3 lg:p-3.5 bg-black">
         {isFormOpen ? (
-          <div className="max-w-3xl mx-auto w-full h-full min-h-0 overflow-hidden flex flex-col animate-in fade-in duration-200">
-            <form onSubmit={handleSubmit} className="overflow-hidden flex flex-col h-full min-h-0 bg-card text-card-foreground border border-border rounded-lg shadow-2xs">
-              <div className="bg-secondary/40 px-4 py-2.5 border-b border-border flex justify-between items-center shrink-0 select-none">
-                <h3 className="font-bold text-xs uppercase tracking-wider text-foreground">
+          <div className="max-w-3xl mx-auto w-full h-full min-h-0 overflow-hidden flex flex-col">
+            <form onSubmit={handleSubmit} className="overflow-hidden flex flex-col h-full min-h-0 bg-[#181818] border border-[#2c2c2c] rounded-none">
+              <div className="bg-[#121212] px-4 py-3 border-b border-[#262626] flex justify-between items-center shrink-0 select-none">
+                <h3 className="font-bold text-xs uppercase tracking-wider text-white">
                   Post Double-Entry Voucher
                 </h3>
-                <span className="text-[10px] text-primary font-mono font-bold uppercase">UNPOSTED DRAFT</span>
+                <span className="text-[10px] text-[#FFC000] font-mono font-bold uppercase">UNPOSTED DRAFT</span>
               </div>
 
               <div className="p-4 space-y-3.5 overflow-y-auto flex-1 text-xs">
@@ -142,14 +142,14 @@ export default function AccountingView() {
                   <div>
                     <label className="erp-label text-[10px] block mb-1">Voucher Type *</label>
                     <select
-                      className="w-full h-8 px-2 font-bold border border-border rounded text-foreground bg-background focus:outline-none focus:border-primary cursor-pointer"
+                      className="w-full h-8 px-2 font-bold border border-[#2c2c2c] rounded-none text-white bg-black focus:outline-none focus:border-[#FFC000] cursor-pointer"
                       value={voucherType}
                       onChange={(e) => setVoucherType(e.target.value as any)}
                     >
-                      <option value="Journal">Journal Voucher (JV)</option>
-                      <option value="Payment">Payment Voucher (PV)</option>
-                      <option value="Receipt">Receipt Voucher (RV)</option>
-                      <option value="Contra">Contra (Cash-Bank)</option>
+                      <option value="Journal" className="bg-[#181818]">Journal Voucher (JV)</option>
+                      <option value="Payment" className="bg-[#181818]">Payment Voucher (PV)</option>
+                      <option value="Receipt" className="bg-[#181818]">Receipt Voucher (RV)</option>
+                      <option value="Contra" className="bg-[#181818]">Contra (Cash-Bank)</option>
                     </select>
                   </div>
 
@@ -158,7 +158,7 @@ export default function AccountingView() {
                     <input
                       type="text"
                       required
-                      className="w-full h-8 px-2 font-mono font-bold border border-border rounded text-foreground bg-background focus:outline-none focus:border-primary"
+                      className="w-full h-8 px-2 font-mono font-bold border border-[#2c2c2c] rounded-none text-[#FFC000] bg-black focus:outline-none focus:border-[#FFC000]"
                       value={voucherNumber}
                       onChange={(e) => setVoucherNumber(e.target.value)}
                     />
@@ -169,7 +169,7 @@ export default function AccountingView() {
                     <input
                       type="date"
                       required
-                      className="w-full h-8 px-2 font-mono border border-border rounded text-foreground bg-background focus:outline-none focus:border-primary"
+                      className="w-full h-8 px-2 font-mono border border-[#2c2c2c] rounded-none text-white bg-black focus:outline-none focus:border-[#FFC000]"
                       value={entryDate}
                       onChange={(e) => setEntryDate(e.target.value)}
                     />
@@ -177,8 +177,8 @@ export default function AccountingView() {
                 </div>
 
                 {/* Double-entry grid section */}
-                <div className="space-y-2 border-t border-border pt-3">
-                  <div className="grid grid-cols-12 gap-2 px-1 text-[9.5px] font-bold text-muted-foreground uppercase tracking-wider">
+                <div className="space-y-2 border-t border-[#262626] pt-3">
+                  <div className="grid grid-cols-12 gap-2 px-1 text-[9.5px] font-bold text-[#7D7D7D] uppercase tracking-wider">
                     <div className="col-span-6">Account Ledger Account Name</div>
                     <div className="col-span-2.5 text-right">Debit Amt (₹)</div>
                     <div className="col-span-2.5 text-right">Credit Amt (₹)</div>
@@ -191,13 +191,13 @@ export default function AccountingView() {
                         <div className="col-span-6">
                           <select
                             required
-                            className="w-full h-8 px-2 border border-border rounded text-foreground bg-background text-xs font-semibold focus:outline-none focus:border-primary cursor-pointer"
+                            className="w-full h-8 px-2 border border-[#2c2c2c] rounded-none text-white bg-black text-xs font-semibold focus:outline-none focus:border-[#FFC000] cursor-pointer"
                             value={item.account_id}
                             onChange={(e) => handleItemChange(index, 'account_id', e.target.value)}
                           >
-                            <option value="">-- Select Ledger Account --</option>
+                            <option value="" className="bg-[#181818]">-- Select Ledger Account --</option>
                             {accounts.map((acc) => (
-                              <option key={acc.id} value={acc.id}>
+                              <option key={acc.id} value={acc.id} className="bg-[#181818]">
                                 {acc.name} ({acc.parent_group})
                               </option>
                             ))}
@@ -208,7 +208,7 @@ export default function AccountingView() {
                             type="number"
                             step="0.01"
                             placeholder="0.00"
-                            className="w-full h-8 px-2 border border-border rounded text-foreground bg-background text-right font-mono"
+                            className="w-full h-8 px-2 border border-[#2c2c2c] rounded-none text-white bg-black text-right font-mono focus:border-[#FFC000]"
                             value={item.debit || ''}
                             onChange={(e) => handleItemChange(index, 'debit', e.target.value)}
                           />
@@ -218,7 +218,7 @@ export default function AccountingView() {
                             type="number"
                             step="0.01"
                             placeholder="0.00"
-                            className="w-full h-8 px-2 border border-border rounded text-foreground bg-background text-right font-mono"
+                            className="w-full h-8 px-2 border border-[#2c2c2c] rounded-none text-white bg-black text-right font-mono focus:border-[#FFC000]"
                             value={item.credit || ''}
                             onChange={(e) => handleItemChange(index, 'credit', e.target.value)}
                           />
@@ -228,12 +228,12 @@ export default function AccountingView() {
                             <button
                               type="button"
                               onClick={() => handleRemoveItemRow(index)}
-                              className="text-xs text-rose-500 hover:text-rose-600 font-bold uppercase cursor-pointer"
+                              className="text-xs text-rose-400 hover:text-rose-300 font-bold uppercase cursor-pointer"
                             >
                               Del
                             </button>
                           ) : (
-                            <span className="text-[10px] text-muted-foreground/40 font-bold">-</span>
+                            <span className="text-[10px] text-[#7D7D7D] font-bold">-</span>
                           )}
                         </div>
                       </div>
@@ -243,30 +243,30 @@ export default function AccountingView() {
                   <button
                     type="button"
                     onClick={handleAddItemRow}
-                    className="px-2 py-1 text-xs text-primary hover:underline font-bold uppercase flex items-center gap-1 cursor-pointer"
+                    className="px-2 py-1 text-xs text-[#FFC000] hover:underline font-bold uppercase flex items-center gap-1 cursor-pointer"
                   >
                     <span>+ Insert Ledger Row</span>
                   </button>
                 </div>
 
                 {/* Balanced state notifier */}
-                <div className="bg-secondary/30 border border-border p-2.5 rounded flex items-center justify-between font-mono text-xs">
-                  <div className="flex gap-4 sm:gap-6 font-bold text-muted-foreground">
+                <div className="bg-[#121212] border border-[#262626] p-3 rounded-none flex items-center justify-between font-mono text-xs">
+                  <div className="flex gap-4 sm:gap-6 font-bold text-[#7D7D7D]">
                     <div className="flex items-center gap-1.5">
                       <span className="text-[10px] uppercase">Debits:</span>
-                      <span className="text-foreground">₹{totalDebits.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                      <span className="text-white">₹{totalDebits.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <span className="text-[10px] uppercase">Credits:</span>
-                      <span className="text-foreground">₹{totalCredits.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                      <span className="text-white">₹{totalCredits.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                     </div>
                   </div>
                   {isBalanced ? (
-                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1 uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+                    <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1 uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-none">
                       <CheckCircle className="h-3 w-3" /> Balanced
                     </span>
                   ) : (
-                    <span className="text-[10px] text-rose-600 dark:text-rose-400 font-bold flex items-center gap-1 uppercase tracking-wider bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded">
+                    <span className="text-[10px] text-rose-400 font-bold flex items-center gap-1 uppercase tracking-wider bg-rose-500/10 border border-rose-500/30 px-2.5 py-1 rounded-none">
                       <AlertCircle className="h-3 w-3" /> Diff: ₹{Math.abs(totalDebits - totalCredits).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </span>
                   )}
@@ -277,25 +277,25 @@ export default function AccountingView() {
                   <textarea
                     rows={2}
                     placeholder="Enter accounting transaction details and reference tags..."
-                    className="w-full bg-background border border-border p-2 rounded text-xs focus:outline-none focus:border-primary font-medium"
+                    className="w-full bg-black border border-[#2c2c2c] p-2 rounded-none text-xs text-white focus:outline-none focus:border-[#FFC000] font-medium"
                     value={narration}
                     onChange={(e) => setNarration(e.target.value)}
                   />
                 </div>
               </div>
 
-              <div className="bg-secondary/20 px-4 py-2 border-t border-border flex justify-end gap-2 shrink-0 select-none">
+              <div className="bg-[#121212] px-4 py-2.5 border-t border-[#262626] flex justify-end gap-2 shrink-0 select-none">
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-1.5 bg-secondary text-secondary-foreground hover:bg-secondary/80 font-bold rounded text-xs uppercase cursor-pointer transition-all"
+                  className="px-4 py-1.5 bg-transparent border border-white/40 text-white hover:bg-white/10 font-bold rounded-none text-xs uppercase cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={!isBalanced}
-                  className="px-5 py-1.5 bg-primary text-primary-foreground font-bold rounded text-xs uppercase shadow-xs hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all"
+                  className="px-5 py-1.5 bg-[#FFC000] text-black font-extrabold rounded-none text-xs uppercase hover:bg-[#917300] disabled:bg-[#202020] disabled:text-[#7D7D7D] cursor-pointer transition-colors"
                 >
                   Post Voucher
                 </button>
@@ -303,27 +303,27 @@ export default function AccountingView() {
             </form>
           </div>
         ) : (
-          <div className="flex-1 erp-table-container rounded-lg border border-border overflow-hidden bg-card shadow-2xs flex flex-col">
-            <div className="bg-secondary/40 px-3.5 py-2 border-b border-border flex justify-between items-center shrink-0">
-              <h3 className="font-bold text-xs uppercase tracking-wider text-foreground">Day Book & Journal Ledger</h3>
-              <span className="text-[10px] font-mono text-muted-foreground uppercase font-bold">Vouchers Count: {vouchers.length}</span>
+          <div className="flex-1 erp-table-container rounded-none border border-[#262626] overflow-hidden bg-[#202020] flex flex-col">
+            <div className="bg-[#181818] px-4 py-2.5 border-b border-[#262626] flex justify-between items-center shrink-0">
+              <h3 className="font-bold text-xs uppercase tracking-wider text-white">Day Book & Journal Ledger</h3>
+              <span className="text-[10px] font-mono text-[#7D7D7D] uppercase font-bold">Vouchers Count: {vouchers.length}</span>
             </div>
             <div className="flex-1 overflow-y-auto">
               <table className="ag-grid-dense-table w-full text-xs">
-                <thead className="sticky top-0 bg-secondary/80 backdrop-blur-xs z-10">
-                  <tr className="border-b border-border text-[10.5px] uppercase tracking-wider text-muted-foreground">
-                    <th className="py-2 px-3 text-left w-24">Date</th>
-                    <th className="py-2 px-3 text-left w-32">Voucher No</th>
-                    <th className="py-2 px-3 text-center w-24">Type</th>
-                    <th className="py-2 px-3 text-left">Narration & Ledger Accounts</th>
-                    <th className="py-2 px-3 text-right w-28">Debit (₹)</th>
-                    <th className="py-2 px-3 text-right w-28">Credit (₹)</th>
+                <thead className="sticky top-0 bg-[#181818] z-10">
+                  <tr className="border-b border-[#262626] text-[10.5px] uppercase tracking-wider text-[#7D7D7D]">
+                    <th className="py-2.5 px-3 text-left w-24">Date</th>
+                    <th className="py-2.5 px-3 text-left w-32">Voucher No</th>
+                    <th className="py-2.5 px-3 text-center w-24">Type</th>
+                    <th className="py-2.5 px-3 text-left">Narration & Ledger Accounts</th>
+                    <th className="py-2.5 px-3 text-right w-28">Debit (₹)</th>
+                    <th className="py-2.5 px-3 text-right w-28">Credit (₹)</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/40 font-medium">
+                <tbody className="divide-y divide-[#262626] font-medium text-white">
                   {vouchers.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-14 text-center text-muted-foreground/40 italic">
+                      <td colSpan={6} className="py-14 text-center text-[#7D7D7D] uppercase text-xs">
                         No double-entry vouchers recorded. Click 'New Voucher' to create transactions.
                       </td>
                     </tr>
@@ -332,25 +332,25 @@ export default function AccountingView() {
                       const debitTotal = v.items?.reduce((s, i) => s + i.debit, 0) || 0;
                       const creditTotal = v.items?.reduce((s, i) => s + i.credit, 0) || 0;
                       return (
-                        <tr key={v.id} className="hover:bg-muted/40 transition-colors">
-                          <td className="py-1.5 px-3 font-mono text-muted-foreground tabular-nums">{v.entry_date}</td>
-                          <td className="py-1.5 px-3 font-mono font-bold text-primary">{v.voucher_number}</td>
-                          <td className="py-1.5 px-3 text-center">
-                            <span className={`px-2 py-0.5 rounded text-[9.5px] font-bold border uppercase tracking-wider ${
-                              v.voucher_type === 'Payment' ? 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400' :
-                              v.voucher_type === 'Receipt' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' :
-                              v.voucher_type === 'Contra' ? 'bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400' :
-                              'bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400'
+                        <tr key={v.id} className="hover:bg-[#282828] transition-colors">
+                          <td className="py-2 px-3 font-mono text-[#7D7D7D] tabular-nums">{v.entry_date}</td>
+                          <td className="py-2 px-3 font-mono font-bold text-[#FFC000]">{v.voucher_number}</td>
+                          <td className="py-2 px-3 text-center">
+                            <span className={`px-2 py-0.5 rounded-none text-[9px] font-bold border uppercase tracking-wider ${
+                              v.voucher_type === 'Payment' ? 'bg-rose-500/10 border-rose-500/30 text-rose-400' :
+                              v.voucher_type === 'Receipt' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
+                              v.voucher_type === 'Contra' ? 'bg-[#29ABE2]/10 border-[#29ABE2]/30 text-[#29ABE2]' :
+                              'bg-[#FFC000]/10 border-[#FFC000]/30 text-[#FFC000]'
                             }`}>
                               {v.voucher_type}
                             </span>
                           </td>
-                          <td className="py-1.5 px-3">
-                            <p className="font-semibold text-foreground">{v.narration || '-'}</p>
-                            <span className="text-[9.5px] text-muted-foreground font-mono">Ref: {v.reference_id || 'Manual Entry'}</span>
+                          <td className="py-2 px-3">
+                            <p className="font-semibold text-white uppercase">{v.narration || '-'}</p>
+                            <span className="text-[9.5px] text-[#7D7D7D] font-mono">Ref: {v.reference_id || 'Manual Entry'}</span>
                           </td>
-                          <td className="py-1.5 px-3 text-right font-mono font-bold text-foreground tabular-nums">₹{debitTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                          <td className="py-1.5 px-3 text-right font-mono font-bold text-foreground tabular-nums">₹{creditTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                          <td className="py-2 px-3 text-right font-mono font-bold text-white tabular-nums">₹{debitTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                          <td className="py-2 px-3 text-right font-mono font-bold text-white tabular-nums">₹{creditTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                         </tr>
                       );
                     })

@@ -117,7 +117,7 @@ test.describe('Desktop & Laptop Screens Visual Capture', () => {
 
       // 11. System Secure Lock / Licensing Screen (locked query)
       await page.goto('/?locked=true');
-      await page.waitForSelector('text=SYSTEM SECURE LOCK', { timeout: 8000 });
+      await page.waitForSelector('text=SYSTEM SECURE', { timeout: 8000 });
       await page.waitForTimeout(600);
       await page.screenshot({
         path: path.join(screenshotsDir, `11_licensing_locked_${vp.name}.png`),

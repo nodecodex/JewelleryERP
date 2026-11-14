@@ -304,32 +304,32 @@ export default function CompanyView() {
   });
 
   return (
-    <div className="p-3 bg-background text-foreground h-full overflow-hidden flex flex-col font-sans select-none transition-colors duration-200">
+    <div className="p-3 bg-black text-white h-full overflow-hidden flex flex-col font-sans select-none">
       
       {/* 1. Split Panel Workspace */}
       <div className="flex-1 grid grid-cols-12 gap-3 overflow-hidden min-h-0 pb-2">
         
         {/* LEFT PANEL: Search and Table Records (40% width) */}
-        <div className="col-span-5 bg-card text-card-foreground border border-border rounded-lg shadow-sm flex flex-col overflow-hidden">
-          <div className="bg-secondary/40 px-3 py-1.5 border-b border-border flex justify-between items-center shrink-0">
-            <span className="text-[10px] font-bold uppercase tracking-wider font-luxury text-foreground/80">Company Directory</span>
+        <div className="col-span-5 bg-[#181818] text-white border border-[#262626] rounded-none flex flex-col overflow-hidden">
+          <div className="bg-[#121212] px-3 py-2 border-b border-[#262626] flex justify-between items-center shrink-0">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-white">Company Directory</span>
             <button
               onClick={handleNewRecord}
-              className="flex items-center gap-1 px-2.5 py-1 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-[9px] uppercase tracking-wider rounded-md shadow-xs transition-colors cursor-pointer"
+              className="flex items-center gap-1 px-3 py-1 bg-[#FFC000] hover:bg-[#917300] text-black font-extrabold text-[9px] uppercase tracking-wider rounded-none transition-colors cursor-pointer"
             >
-              <Plus className="h-3 w-3" />
+              <Plus className="h-3 w-3 stroke-[3]" />
               <span>New Company</span>
             </button>
           </div>
 
           {/* Search box input */}
-          <div className="p-2 border-b border-border bg-secondary/15 shrink-0">
-            <div className="flex items-center gap-1.5 bg-background border border-border rounded-md px-2 py-1 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
-              <Search className="h-3.5 w-3.5 text-muted-foreground" />
+          <div className="p-2 border-b border-[#262626] bg-[#121212] shrink-0">
+            <div className="flex items-center gap-1.5 bg-black border border-[#2c2c2c] rounded-none px-2 py-1 focus-within:border-[#FFC000]">
+              <Search className="h-3.5 w-3.5 text-[#7D7D7D]" />
               <input
                 type="text"
                 placeholder="Search by code, name, GSTIN, or phone..."
-                className="bg-transparent border-none text-[11px] focus:outline-none w-full font-semibold select-text text-foreground placeholder:text-muted-foreground/50"
+                className="bg-transparent border-none text-[11px] focus:outline-none w-full font-semibold select-text text-white placeholder-[#7D7D7D] uppercase"
                 value={globalFilter}
                 onChange={(e) => setGlobalFilter(e.target.value)}
               />
@@ -337,19 +337,19 @@ export default function CompanyView() {
           </div>
 
           {/* Table list of companies */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto bg-[#202020]">
             <table className="w-full border-collapse text-left text-xs">
-              <thead className="bg-slate-100 border-b border-slate-200 sticky top-0 z-10 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+              <thead className="bg-[#181818] border-b border-[#262626] sticky top-0 z-10 text-[9px] font-bold text-[#7D7D7D] uppercase tracking-wider">
                 <tr>
-                  <th className="p-2 border border-slate-200 text-center w-12">Code</th>
-                  <th className="p-2 border border-slate-200">Name</th>
-                  <th className="p-2 border border-slate-200 text-center w-24">Workspace</th>
+                  <th className="p-2 border border-[#262626] text-center w-12">Code</th>
+                  <th className="p-2 border border-[#262626]">Name</th>
+                  <th className="p-2 border border-[#262626] text-center w-24">Workspace</th>
                 </tr>
               </thead>
-              <tbody className="font-semibold text-slate-700 font-data">
+              <tbody className="font-semibold text-white font-mono">
                 {filteredCompanies.length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="p-6 text-center text-slate-400 italic font-sans">
+                    <td colSpan={3} className="p-6 text-center text-[#7D7D7D] uppercase text-xs">
                       No matching company listings.
                     </td>
                   </tr>
@@ -362,19 +362,19 @@ export default function CompanyView() {
                       <tr 
                         key={comp.id}
                         onClick={() => handleSelectRecord(comp)}
-                        className={`cursor-pointer border-b border-slate-150 transition-colors ${
+                        className={`cursor-pointer border-b border-[#262626] transition-colors ${
                           isSelected 
-                            ? 'bg-rose-100/75 text-rose-900 border-l-[3px] border-l-amber-500' 
-                            : 'hover:bg-slate-50'
+                            ? 'bg-[#FFC000]/15 text-[#FFC000] border-l-2 border-l-[#FFC000]' 
+                            : 'hover:bg-[#282828]'
                         }`}
                       >
-                        <td className="p-1.5 border border-slate-200 text-center font-data">{codeLabel}</td>
-                        <td className="p-1.5 border border-slate-200 font-sans font-bold text-slate-800">{comp.name}</td>
-                        <td className="p-1 border border-slate-200 text-center font-sans">
+                        <td className="p-1.5 border border-[#262626] text-center font-mono">{codeLabel}</td>
+                        <td className="p-1.5 border border-[#262626] font-sans font-bold text-white uppercase">{comp.name}</td>
+                        <td className="p-1 border border-[#262626] text-center font-sans">
                           <div className="flex items-center justify-center gap-1.5">
                             {isActiveWorkspace ? (
-                              <span className="inline-flex items-center justify-center p-0.5 bg-emerald-500/10 text-emerald-600 rounded-full" title="Active workspace context">
-                                <Check className="h-3 w-3" />
+                              <span className="inline-flex items-center justify-center px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold uppercase rounded-none" title="Active workspace context">
+                                Active
                               </span>
                             ) : (
                               <>
@@ -384,7 +384,7 @@ export default function CompanyView() {
                                     e.stopPropagation();
                                     setSelectedCompany(comp);
                                   }}
-                                  className="px-1.5 py-0.5 bg-slate-100 hover:bg-amber-500 hover:text-white border border-slate-300 rounded-[2px] text-[8.5px] font-bold uppercase transition-colors"
+                                  className="px-2 py-0.5 bg-transparent hover:bg-white/10 text-white border border-white/40 rounded-none text-[8.5px] font-bold uppercase transition-colors"
                                 >
                                   Open
                                 </button>
@@ -408,7 +408,7 @@ export default function CompanyView() {
                                       }
                                     }
                                   }}
-                                  className="p-0.5 bg-white hover:bg-rose-50 text-rose-500 hover:text-rose-600 border border-slate-300 hover:border-rose-300 rounded-[2px] transition-colors"
+                                  className="p-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-none transition-colors"
                                   title="Delete Company"
                                 >
                                   <Trash2 className="h-3 w-3" />
@@ -427,12 +427,12 @@ export default function CompanyView() {
         </div>
 
         {/* RIGHT PANEL: Form Details (60% width) */}
-        <div className="col-span-7 bg-card text-card-foreground border border-border rounded-lg shadow-sm flex flex-col overflow-hidden">
+        <div className="col-span-7 bg-[#181818] text-white border border-[#262626] rounded-none flex flex-col overflow-hidden">
           
           {/* Header */}
-          <div className="bg-secondary/40 border-b border-border py-2 text-center shrink-0">
-            <h1 className="text-xs font-extrabold uppercase text-primary tracking-widest font-luxury">
-              Company Master & Credentials
+          <div className="bg-[#121212] border-b border-[#262626] py-2 text-center shrink-0">
+            <h1 className="text-xs font-black uppercase text-[#FFC000] tracking-widest font-mono">
+              COMPANY MASTER & CREDENTIALS
             </h1>
           </div>
 
@@ -797,10 +797,10 @@ export default function CompanyView() {
               <button
                 type="button"
                 onClick={() => setActiveFormTab('tax')}
-                className={`px-4 h-7 rounded-t border-t border-x cursor-pointer text-[10px] uppercase font-bold tracking-wider relative top-[1px] ${
+                className={`px-4 h-7 rounded-none border-t border-x cursor-pointer text-[10px] uppercase font-bold tracking-wider relative top-[1px] ${
                   activeFormTab === 'tax'
-                    ? 'bg-white border-slate-350 border-t-amber-500 border-t-2 border-b-white text-slate-800 font-extrabold z-10'
-                    : 'bg-slate-200 border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                    ? 'bg-[#202020] border-t-[#FFC000] border-t-2 border-b-[#202020] text-[#FFC000] font-extrabold z-10 border-x-[#262626]'
+                    : 'bg-[#121212] border-transparent text-[#7D7D7D] hover:text-white'
                 }`}
               >
                 Tax Detail
@@ -808,10 +808,10 @@ export default function CompanyView() {
               <button
                 type="button"
                 onClick={() => setActiveFormTab('bank')}
-                className={`px-4 h-7 rounded-t border-t border-x cursor-pointer text-[10px] uppercase font-bold tracking-wider relative top-[1px] ${
+                className={`px-4 h-7 rounded-none border-t border-x cursor-pointer text-[10px] uppercase font-bold tracking-wider relative top-[1px] ${
                   activeFormTab === 'bank'
-                    ? 'bg-white border-slate-350 border-t-amber-500 border-t-2 border-b-white text-slate-800 font-extrabold z-10'
-                    : 'bg-slate-200 border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                    ? 'bg-[#202020] border-t-[#FFC000] border-t-2 border-b-[#202020] text-[#FFC000] font-extrabold z-10 border-x-[#262626]'
+                    : 'bg-[#121212] border-transparent text-[#7D7D7D] hover:text-white'
                 }`}
               >
                 Bank Detail
@@ -823,32 +823,32 @@ export default function CompanyView() {
       </div>
 
       {/* 2. BOTTOM ACTION BUTTONS TOOLBAR */}
-      <footer className="bg-card border border-border rounded-lg p-1.5 flex justify-end gap-2 shrink-0 shadow-2xs">
+      <footer className="bg-[#181818] border border-[#262626] rounded-none p-2 flex justify-end gap-2 shrink-0">
         
         {/* Print Button */}
         <button
           onClick={handlePrint}
-          className="flex items-center gap-1.5 px-3 py-1 bg-secondary/60 hover:bg-secondary border border-border rounded text-xs font-bold text-foreground uppercase tracking-wide transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent hover:bg-white/10 border border-white/50 rounded-none text-xs font-bold text-white uppercase tracking-wider transition-colors cursor-pointer"
         >
-          <Printer className="h-3.5 w-3.5 text-muted-foreground" />
+          <Printer className="h-3.5 w-3.5 text-[#7D7D7D]" />
           <span>Print</span>
         </button>
 
         {/* Save Button */}
         <button
           onClick={() => handleSave()}
-          className="flex items-center gap-1.5 px-3.5 py-1 bg-primary hover:bg-primary/90 text-primary-foreground border border-primary rounded text-xs font-bold uppercase tracking-wide transition-all shadow-xs cursor-pointer"
+          className="flex items-center gap-1.5 px-4 py-1.5 bg-[#FFC000] hover:bg-[#917300] text-black border-none rounded-none text-xs font-black uppercase tracking-wider transition-colors cursor-pointer"
         >
-          <Save className="h-3.5 w-3.5" />
-          <span>Save</span>
+          <Save className="h-3.5 w-3.5 stroke-[3]" />
+          <span>Save (F2)</span>
         </button>
 
         {/* Cancel Button */}
         <button
           onClick={handleCancel}
-          className="flex items-center gap-1.5 px-3 py-1 bg-secondary/60 hover:bg-secondary border border-border rounded text-xs font-bold text-foreground uppercase tracking-wide transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent hover:bg-white/10 border border-white/50 rounded-none text-xs font-bold text-white uppercase tracking-wider transition-colors cursor-pointer"
         >
-          <Undo2 className="h-3.5 w-3.5 text-muted-foreground" />
+          <Undo2 className="h-3.5 w-3.5 text-[#7D7D7D]" />
           <span>Cancel</span>
         </button>
 
@@ -856,18 +856,18 @@ export default function CompanyView() {
         <button
           onClick={handleDeleteRecord}
           disabled={!selectedRecord}
-          className="flex items-center gap-1.5 px-3 py-1 bg-secondary/60 hover:bg-destructive/10 border border-border disabled:opacity-30 rounded text-xs font-bold text-destructive uppercase tracking-wide transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 disabled:opacity-30 rounded-none text-xs font-bold text-rose-400 uppercase tracking-wider transition-colors cursor-pointer"
         >
-          <Trash2 className="h-3.5 w-3.5 text-destructive" />
+          <Trash2 className="h-3.5 w-3.5 text-rose-400" />
           <span>Delete</span>
         </button>
 
         {/* Exit Button */}
         <button
           onClick={handleExit}
-          className="flex items-center gap-1.5 px-3 py-1 bg-secondary/60 hover:bg-secondary border border-border rounded text-xs font-bold text-foreground uppercase tracking-wide transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent hover:bg-white/10 border border-white/50 rounded-none text-xs font-bold text-white uppercase tracking-wider transition-colors cursor-pointer"
         >
-          <LogOut className="h-3.5 w-3.5 text-muted-foreground" />
+          <LogOut className="h-3.5 w-3.5 text-[#7D7D7D]" />
           <span>Exit</span>
         </button>
 

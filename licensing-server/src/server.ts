@@ -1015,9 +1015,16 @@ app.get('/api/v1/admin/audit-logs', adminAuth, async (req: Request, res: Respons
 
 // Serve Admin UI Dashboard single-page web app
 app.get('/admin', (req: Request, res: Response) => {
-  const htmlPath = path.join(__dirname, 'admin-dashboard.html');
-  if (fs.existsSync(htmlPath)) {
-    res.sendFile(htmlPath);
+  const possiblePaths = [
+    path.join(__dirname, 'admin-dashboard.html'),
+    path.join(__dirname, 'src', 'admin-dashboard.html'),
+    path.join(process.cwd(), 'src', 'admin-dashboard.html'),
+    path.join(process.cwd(), 'dist', 'admin-dashboard.html'),
+    path.join(process.cwd(), 'licensing-server', 'src', 'admin-dashboard.html')
+  ];
+  const foundPath = possiblePaths.find(p => fs.existsSync(p));
+  if (foundPath) {
+    res.sendFile(foundPath);
   } else {
     // Generate dashboard fallback dynamically
     res.send('Admin Dashboard file not compiled yet.');

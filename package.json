@@ -1,7 +1,7 @@
 {
   "name": "swarnpro-erp",
   "private": true,
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "SwarnPro Jewellery ERP System (Tauri v2)",
   "author": "AsyncroZ Technologies",
   "type": "module",
