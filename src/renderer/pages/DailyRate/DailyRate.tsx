@@ -332,33 +332,33 @@ export default function DailyRateView() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#f3f4f6] text-slate-800 p-2 font-sans select-none no-print overflow-y-auto text-xs">
+    <div className="flex flex-col h-full bg-background text-foreground p-3 font-sans select-none no-print overflow-y-auto text-xs transition-colors duration-200">
       
-      {/* Banner Strip */}
-      <div className="bg-orange-500 text-white py-1 px-4 text-center font-bold text-sm tracking-wider uppercase rounded-[1px] flex justify-between items-center shadow-inner mb-2 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500">
-        <span className="text-[10px] opacity-75 font-data">JEWEL ACC MASTER</span>
-        <span className="font-extrabold font-luxury tracking-widest text-[14px]">Rate Master</span>
-        <span className="text-[10px] opacity-75 font-data">Daily Metal Rate Setup</span>
+      {/* Header Banner */}
+      <div className="bg-secondary/40 border border-border py-1.5 px-4 rounded-lg flex justify-between items-center shadow-2xs mb-2.5">
+        <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">Rate Master</span>
+        <span className="font-extrabold font-luxury tracking-widest text-xs uppercase text-primary">Bullion & Daily Metal Board</span>
+        <span className="text-[10px] font-mono text-muted-foreground uppercase">Live Ticker</span>
       </div>
 
-      <div className="bg-white border border-slate-300 rounded-[2px] p-4 shadow-sm shrink-0 flex flex-col gap-4 mb-2">
+      <div className="bg-card text-card-foreground border border-border rounded-lg p-3 shadow-2xs shrink-0 flex flex-col gap-3 mb-2.5">
         {/* Baseline rates inputs */}
-        <div className="grid grid-cols-12 gap-4 items-center">
+        <div className="grid grid-cols-12 gap-3 items-center">
           
           {/* Voucher Date */}
-          <div className="col-span-4 flex items-center gap-2">
-            <span className="text-[11px] font-bold text-slate-600 uppercase w-20">Vch Date</span>
+          <div className="col-span-12 sm:col-span-4 flex items-center gap-2">
+            <span className="text-[10.5px] font-bold text-muted-foreground uppercase w-20">Rate Date</span>
             <div className="relative flex-1 flex items-center gap-1">
               <input
                 type="date"
-                className="w-full h-8 border border-slate-300 rounded-[2px] text-xs font-bold text-slate-700 px-2 bg-slate-50 focus:bg-white focus:ring-1 focus:ring-amber-500 focus:outline-none"
+                className="w-full h-8 border border-border rounded text-xs font-mono font-bold text-foreground px-2 bg-background focus:ring-1 focus:ring-primary focus:outline-none"
                 value={vchDate}
                 onChange={(e) => setVchDate(e.target.value)}
               />
               <button 
                 onClick={addNewRow}
                 title="Add category row (F1 shortcut)"
-                className="h-8 px-2 bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-[10px] uppercase rounded-[2px] transition-colors"
+                className="h-8 px-2 bg-primary hover:bg-primary/90 text-primary-foreground font-extrabold text-[10px] uppercase rounded transition-colors cursor-pointer"
               >
                 F1
               </button>
@@ -366,22 +366,22 @@ export default function DailyRateView() {
           </div>
 
           {/* Gold Rate 10gm */}
-          <div className="col-span-4 flex items-center gap-2">
-            <span className="text-[11px] font-bold text-slate-600 uppercase w-24">Gold Rate 10gm</span>
+          <div className="col-span-12 sm:col-span-4 flex items-center gap-2">
+            <span className="text-[10.5px] font-bold text-muted-foreground uppercase w-24">Gold 24K (10g)</span>
             <input
               type="number"
-              className="flex-1 h-8 border border-slate-300 rounded-[2px] font-data text-right font-bold text-slate-800 bg-slate-50 focus:bg-white focus:ring-1 focus:ring-amber-500 focus:outline-none px-2.5 text-sm"
+              className="flex-1 h-8 border border-border rounded font-mono text-right font-bold text-foreground bg-background focus:ring-1 focus:ring-primary focus:outline-none px-2.5 text-xs tabular-nums"
               value={goldRate}
               onChange={(e) => setGoldRate(parseFloat(e.target.value) || 0)}
             />
           </div>
 
           {/* Silver Rate 1Kg */}
-          <div className="col-span-4 flex items-center gap-2">
-            <span className="text-[11px] font-bold text-slate-600 uppercase w-24">Silver Rate 1Kg</span>
+          <div className="col-span-12 sm:col-span-4 flex items-center gap-2">
+            <span className="text-[10.5px] font-bold text-muted-foreground uppercase w-24">Silver 999 (1Kg)</span>
             <input
               type="number"
-              className="flex-1 h-8 border border-slate-300 rounded-[2px] font-data text-right font-bold text-slate-800 bg-slate-50 focus:bg-white focus:ring-1 focus:ring-amber-500 focus:outline-none px-2.5 text-sm"
+              className="flex-1 h-8 border border-border rounded font-mono text-right font-bold text-foreground bg-background focus:ring-1 focus:ring-primary focus:outline-none px-2.5 text-xs tabular-nums"
               value={silverRate}
               onChange={(e) => setSilverRate(parseFloat(e.target.value) || 0)}
             />
@@ -534,50 +534,50 @@ export default function DailyRateView() {
       </div>
 
       {/* Button Ribbon Actions */}
-      <div className="bg-white border border-slate-300 rounded-[2px] px-4 py-2.5 flex justify-end items-center gap-2 shrink-0 shadow-sm select-none">
+      <div className="bg-card border border-border rounded-lg px-3 py-2 flex justify-end items-center gap-2 shrink-0 shadow-2xs select-none">
         
         {/* Save button */}
         <button 
           onClick={handleSave}
           disabled={isSaving}
-          className="flex items-center gap-1.5 px-4 h-8 bg-amber-500 hover:bg-amber-600 text-white border border-amber-600 text-xs font-bold rounded-[2px] transition-all shadow-sm uppercase tracking-wider cursor-pointer active:scale-95 disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3.5 h-8 bg-primary hover:bg-primary/90 text-primary-foreground border border-primary text-xs font-bold rounded transition-all shadow-xs uppercase tracking-wider cursor-pointer active:scale-95 disabled:opacity-50"
         >
-          <Save className="h-4 w-4" /> 
+          <Save className="h-3.5 w-3.5" /> 
           <span>{isSaving ? 'Saving...' : 'Save (F2)'}</span>
         </button>
 
         {/* Print button */}
         <button 
           onClick={handlePrint}
-          className="flex items-center gap-1.5 px-4 h-8 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold rounded-[2px] transition-all shadow-sm uppercase tracking-wider cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-secondary/60 hover:bg-secondary text-foreground border border-border text-xs font-bold rounded transition-all shadow-2xs uppercase tracking-wider cursor-pointer active:scale-95"
         >
-          <Printer className="h-4 w-4 text-slate-500" /> Print
+          <Printer className="h-3.5 w-3.5 text-muted-foreground" /> Print
         </button>
 
         {/* Cancel button */}
         <button 
           onClick={handleCancel}
-          className="flex items-center gap-1.5 px-4 h-8 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold rounded-[2px] transition-all shadow-sm uppercase tracking-wider cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-secondary/60 hover:bg-secondary text-foreground border border-border text-xs font-bold rounded transition-all shadow-2xs uppercase tracking-wider cursor-pointer active:scale-95"
         >
-          <Undo2 className="h-4 w-4 text-slate-500" /> Cancel
+          <Undo2 className="h-3.5 w-3.5 text-muted-foreground" /> Cancel
         </button>
 
         {/* Delete button */}
         <button 
           onClick={handleDelete}
-          className="flex items-center gap-1.5 px-4 h-8 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 hover:border-rose-300 text-xs font-bold rounded-[2px] transition-all shadow-sm uppercase tracking-wider cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-secondary/60 hover:bg-destructive/10 text-destructive border border-border text-xs font-bold rounded transition-all shadow-2xs uppercase tracking-wider cursor-pointer active:scale-95"
         >
-          <Trash2 className="h-4 w-4 text-rose-500" /> Delete
+          <Trash2 className="h-3.5 w-3.5 text-destructive" /> Delete
         </button>
 
-        <div className="h-6 w-px bg-slate-300 mx-2" />
+        <div className="h-5 w-px bg-border mx-1" />
 
         {/* Exit button */}
         <button 
           onClick={handleExit}
-          className="flex items-center gap-1.5 px-4 h-8 bg-slate-800 hover:bg-slate-700 text-white border border-slate-900 text-xs font-bold rounded-[2px] transition-all shadow-sm uppercase tracking-wider cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 h-8 bg-secondary/60 hover:bg-secondary text-foreground border border-border text-xs font-bold rounded transition-all shadow-2xs uppercase tracking-wider cursor-pointer active:scale-95"
         >
-          <LogOut className="h-4 w-4 text-amber-500" /> Exit
+          <LogOut className="h-3.5 w-3.5 text-muted-foreground" /> Exit
         </button>
 
       </div>

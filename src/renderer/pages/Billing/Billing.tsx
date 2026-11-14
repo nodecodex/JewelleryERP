@@ -191,23 +191,23 @@ export default function BillingView() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-slate-900 overflow-hidden">
+    <div className="flex flex-col h-full bg-background text-foreground overflow-hidden">
       {/* SCREEN HEADER */}
-      <div className="px-8 py-6 border-b border-border flex items-center justify-between shrink-0">
+      <div className="px-3.5 lg:px-4 py-2 border-b border-border flex items-center justify-between shrink-0 bg-card">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <ShoppingCart className="h-6 w-6 text-primary" />
-            Sales Billing Desk
+          <h2 className="text-base lg:text-lg font-bold tracking-tight text-foreground flex items-center gap-2">
+            <ShoppingCart className="h-4.5 w-4.5 text-primary" />
+            POS & Sales Billing Desk
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">Create and manage jewelry sales invoices with real-time ledger posting.</p>
+          <p className="text-[11px] text-muted-foreground">High-velocity bullion & jewelry sales with instantaneous ledger posting.</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex bg-secondary p-1 rounded-xl border border-border">
+          <div className="flex bg-secondary/60 p-0.5 rounded-lg border border-border">
             {['GST', 'Retail', 'Estimate'].map((type) => (
               <button
                 key={type}
                 onClick={() => setInvoiceType(type as any)}
-                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${invoiceType === type ? 'bg-white dark:bg-slate-800 shadow-premium text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${invoiceType === type ? 'bg-card shadow-xs text-primary' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 {type}
               </button>
@@ -216,38 +216,38 @@ export default function BillingView() {
         </div>
       </div>
 
-      <div className="flex-1 flex overflow-hidden p-8 gap-8">
+      <div className="flex-1 flex overflow-hidden p-3 lg:p-3.5 gap-3 lg:gap-3.5">
         {/* LEFT COLUMN: ITEM ENTRY & LIST */}
-        <div className="flex-1 flex flex-col gap-6 overflow-hidden">
+        <div className="flex-1 flex flex-col gap-2.5 overflow-hidden min-w-0">
           
           {/* CONFIG & BARCODE */}
-          <div className="grid grid-cols-12 gap-6 items-end">
+          <div className="grid grid-cols-12 gap-2.5 items-end bg-card p-2.5 rounded-lg border border-border">
             <div className="col-span-3">
-              <label className="erp-label">Invoice #</label>
+              <label className="erp-label text-[10px]">Invoice #</label>
               <div className="relative">
-                <input type="text" disabled className="w-full !bg-secondary/50 !border-dashed font-data font-bold text-primary" value={invoiceNumber} />
-                <FileText className="absolute right-3 top-2 h-4 w-4 text-primary/30" />
+                <input type="text" disabled className="w-full h-8 text-xs !bg-secondary/40 !border-dashed font-mono font-bold text-primary pl-2.5 pr-8" value={invoiceNumber} />
+                <FileText className="absolute right-2 top-2 h-3.5 w-3.5 text-primary/40" />
               </div>
             </div>
             <div className="col-span-3">
-              <label className="erp-label">Bill Date</label>
-              <input type="date" className="w-full font-data" value={invoiceDate} onChange={(e) => setInvoiceDate(e.target.value)} />
+              <label className="erp-label text-[10px]">Bill Date</label>
+              <input type="date" className="w-full h-8 text-xs font-mono px-2.5" value={invoiceDate} onChange={(e) => setInvoiceDate(e.target.value)} />
             </div>
             <div className="col-span-6">
-              <label className="erp-label">Scan Jewelry Tag</label>
+              <label className="erp-label text-[10px]">Scan Jewelry Tag / Barcode</label>
               <form onSubmit={handleBarcodeScan} className="flex gap-2">
                 <div className="relative flex-1 group">
-                  <Barcode className="absolute left-3 top-2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <Barcode className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                   <input
                     ref={barcodeInputRef}
                     type="text"
                     placeholder="Scan tag or type barcode ID..."
-                    className="w-full pl-10 font-data font-bold"
+                    className="w-full h-8 pl-8 text-xs font-mono font-semibold"
                     value={barcodeQuery}
                     onChange={(e) => setBarcodeQuery(e.target.value)}
                   />
                 </div>
-                <button type="submit" className="px-6 bg-secondary hover:bg-primary hover:text-white border border-border font-bold text-xs uppercase rounded-lg transition-all">
+                <button type="submit" className="px-4 h-8 bg-secondary hover:bg-primary hover:text-primary-foreground border border-border font-bold text-[11px] uppercase rounded-md transition-all cursor-pointer">
                   Scan
                 </button>
               </form>
@@ -255,118 +255,126 @@ export default function BillingView() {
           </div>
 
           {/* MANUAL ENTRY */}
-          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-border p-5">
-            <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] block mb-4">Manual Line Input</span>
-            <div className="grid grid-cols-12 gap-4 items-end">
+          <div className="bg-secondary/30 rounded-lg border border-border p-2.5">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Fast Line Item Entry</span>
+              <span className="text-[10px] font-mono text-muted-foreground">GST: {manualItem.gst_rate}%</span>
+            </div>
+            <div className="grid grid-cols-12 gap-2 items-end">
               <div className="col-span-4">
-                <label className="erp-label">Product Name / Description</label>
-                <input type="text" placeholder="e.g. 22K Gold Bangles" className="w-full" value={manualItem.product_name} onChange={(e) => setManualItem({ ...manualItem, product_name: e.target.value })} />
+                <label className="erp-label text-[10px]">Product / Description</label>
+                <input type="text" placeholder="e.g. 22K Gold Chain" className="w-full h-8 text-xs px-2.5" value={manualItem.product_name} onChange={(e) => setManualItem({ ...manualItem, product_name: e.target.value })} />
               </div>
               <div className="col-span-2">
-                <label className="erp-label">Net Wt (g)</label>
-                <input type="number" step="0.001" placeholder="0.000" className="w-full text-right font-data" value={manualItem.net_weight || ''} onChange={(e) => setManualItem({ ...manualItem, net_weight: parseFloat(e.target.value) || 0 })} />
+                <label className="erp-label text-[10px]">Net Wt (g)</label>
+                <input type="number" step="0.001" placeholder="0.000" className="w-full h-8 text-xs text-right font-mono px-2" value={manualItem.net_weight || ''} onChange={(e) => setManualItem({ ...manualItem, net_weight: parseFloat(e.target.value) || 0 })} />
               </div>
               <div className="col-span-2">
-                <label className="erp-label">Labour (₹)</label>
-                <input type="number" placeholder="0" className="w-full text-right font-data" value={manualItem.making_charges || ''} onChange={(e) => setManualItem({ ...manualItem, making_charges: parseFloat(e.target.value) || 0 })} />
+                <label className="erp-label text-[10px]">Labour (₹)</label>
+                <input type="number" placeholder="0" className="w-full h-8 text-xs text-right font-mono px-2" value={manualItem.making_charges || ''} onChange={(e) => setManualItem({ ...manualItem, making_charges: parseFloat(e.target.value) || 0 })} />
               </div>
               <div className="col-span-2">
-                <label className="erp-label">Rate /g</label>
-                <input type="number" placeholder="0" className="w-full text-right font-data" value={manualItem.rate || ''} onChange={(e) => setManualItem({ ...manualItem, rate: parseFloat(e.target.value) || 0 })} />
+                <label className="erp-label text-[10px]">Rate /g</label>
+                <input type="number" placeholder="0" className="w-full h-8 text-xs text-right font-mono px-2" value={manualItem.rate || ''} onChange={(e) => setManualItem({ ...manualItem, rate: parseFloat(e.target.value) || 0 })} />
               </div>
               <div className="col-span-2">
-                <button onClick={handleAddManualItem} className="w-full h-8 bg-primary text-white font-bold rounded-lg text-xs uppercase shadow-premium hover:shadow-elevated transition-all active:scale-95">
-                  Add Item
+                <button onClick={handleAddManualItem} className="w-full h-8 bg-primary text-primary-foreground font-bold rounded-md text-[11px] uppercase shadow-xs hover:bg-primary/90 transition-all cursor-pointer">
+                  + Add Item
                 </button>
               </div>
             </div>
           </div>
 
           {/* ITEM LIST */}
-          <div className="flex-1 erp-table-container">
-            <table className="ag-grid-dense-table">
-              <thead>
-                <tr>
-                  <th className="w-[40%]">Jewelry Description</th>
-                  <th className="text-right">Net Weight</th>
-                  <th className="text-right">Making Chg</th>
-                  <th className="text-right">Metal Rate</th>
-                  <th className="text-right">Line Total</th>
-                  <th className="w-12"></th>
-                </tr>
-              </thead>
-              <tbody className="bg-white dark:bg-slate-900 font-medium">
-                {cart.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-20 text-center">
-                      <div className="flex flex-col items-center gap-2 opacity-20">
-                        <ShoppingCart className="h-12 w-12" />
-                        <p className="text-sm font-bold uppercase tracking-widest">No Ornaments in Cart</p>
-                      </div>
-                    </td>
+          <div className="flex-1 erp-table-container rounded-lg border border-border overflow-hidden bg-card flex flex-col">
+            <div className="flex-1 overflow-y-auto">
+              <table className="ag-grid-dense-table w-full text-xs">
+                <thead className="sticky top-0 bg-secondary/80 backdrop-blur-xs z-10">
+                  <tr className="border-b border-border text-[10.5px] uppercase tracking-wider text-muted-foreground">
+                    <th className="py-2 px-3 text-left w-[38%]">Jewelry Description</th>
+                    <th className="py-2 px-3 text-right">Net Wt</th>
+                    <th className="py-2 px-3 text-right">Labour</th>
+                    <th className="py-2 px-3 text-right">Metal Rate</th>
+                    <th className="py-2 px-3 text-right">Line Total</th>
+                    <th className="py-2 px-2 text-center w-10"></th>
                   </tr>
-                ) : (
-                  cart.map((item, index) => (
-                    <tr key={index} className="group">
-                      <td className="font-semibold">{item.product_name}</td>
-                      <td className="text-right font-data text-muted-foreground">{item.net_weight.toFixed(3)}g</td>
-                      <td className="text-right font-data text-muted-foreground">₹{item.making_charges.toLocaleString()}</td>
-                      <td className="text-right font-data text-muted-foreground">₹{item.rate.toLocaleString()}</td>
-                      <td className="text-right font-bold text-foreground">₹{Math.round(item.subtotal).toLocaleString()}</td>
-                      <td className="text-center">
-                        <button onClick={() => setCart(cart.filter((_, i) => i !== index))} className="p-1.5 text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all">
-                          <Trash className="h-4 w-4" />
-                        </button>
+                </thead>
+                <tbody className="divide-y divide-border/40 font-medium">
+                  {cart.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-14 text-center">
+                        <div className="flex flex-col items-center gap-1.5 opacity-30">
+                          <ShoppingCart className="h-8 w-8" />
+                          <p className="text-[11px] font-bold uppercase tracking-widest">No Items Added Yet</p>
+                        </div>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    cart.map((item, index) => (
+                      <tr key={index} className="hover:bg-muted/40 transition-colors">
+                        <td className="py-1.5 px-3 font-semibold text-foreground">
+                          {item.product_name}
+                          <span className="ml-2 text-[10px] text-muted-foreground uppercase">{item.purity}</span>
+                        </td>
+                        <td className="py-1.5 px-3 text-right font-mono text-muted-foreground tabular-nums">{item.net_weight.toFixed(3)}g</td>
+                        <td className="py-1.5 px-3 text-right font-mono text-muted-foreground tabular-nums">₹{item.making_charges.toLocaleString()}</td>
+                        <td className="py-1.5 px-3 text-right font-mono text-muted-foreground tabular-nums">₹{item.rate.toLocaleString()}</td>
+                        <td className="py-1.5 px-3 text-right font-mono font-bold text-foreground tabular-nums">₹{Math.round(item.subtotal).toLocaleString()}</td>
+                        <td className="py-1.5 px-2 text-center">
+                          <button onClick={() => setCart(cart.filter((_, i) => i !== index))} className="p-1 text-muted-foreground/40 hover:text-destructive hover:bg-destructive/10 rounded transition-all cursor-pointer">
+                            <Trash className="h-3.5 w-3.5" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
         {/* RIGHT COLUMN: SUMMARY & POSTING */}
-        <div className="w-96 flex flex-col gap-6 shrink-0 overflow-y-auto">
+        <div className="w-80 xl:w-88 flex flex-col gap-2.5 shrink-0 overflow-y-auto">
           
           {/* CUSTOMER LEDGER */}
-          <div className="surface-premium p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h4 className="text-sm font-bold tracking-tight flex items-center gap-2">
-                <User className="h-4 w-4 text-primary" /> Customer Account
+          <div className="p-3 bg-card rounded-lg border border-border shadow-2xs">
+            <div className="flex items-center justify-between mb-2.5">
+              <h4 className="text-xs font-bold tracking-tight flex items-center gap-1.5 uppercase text-foreground">
+                <User className="h-3.5 w-3.5 text-primary" /> Customer Account
               </h4>
-              <button onClick={() => setNewCustForm(!newCustForm)} className="text-[10px] font-extrabold text-primary uppercase tracking-widest hover:underline">
-                {newCustForm ? 'Cancel' : '+ Create New'}
+              <button onClick={() => setNewCustForm(!newCustForm)} className="text-[10px] font-bold text-primary uppercase tracking-wider hover:underline cursor-pointer">
+                {newCustForm ? 'Cancel' : '+ Add New'}
               </button>
             </div>
 
             {newCustForm ? (
-              <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="space-y-2 animate-in fade-in duration-200">
                 <div>
-                  <label className="erp-label">Full Name</label>
-                  <input type="text" placeholder="Customer name..." className="w-full" value={newCustData.name} onChange={(e) => setNewCustData({ ...newCustData, name: e.target.value })} />
+                  <label className="erp-label text-[10px]">Full Name</label>
+                  <input type="text" placeholder="Customer name..." className="w-full h-7.5 text-xs px-2" value={newCustData.name} onChange={(e) => setNewCustData({ ...newCustData, name: e.target.value })} />
                 </div>
                 <div>
-                  <label className="erp-label">Mobile</label>
-                  <input type="text" placeholder="Contact number..." className="w-full" value={newCustData.mobile} onChange={(e) => setNewCustData({ ...newCustData, mobile: e.target.value })} />
+                  <label className="erp-label text-[10px]">Mobile</label>
+                  <input type="text" placeholder="Contact number..." className="w-full h-7.5 text-xs px-2" value={newCustData.mobile} onChange={(e) => setNewCustData({ ...newCustData, mobile: e.target.value })} />
                 </div>
                 <button onClick={async () => {
                   const created = await createCustomer({ company_id: selectedCompany!.id, ...newCustData, loyalty_points: 0 });
                   setSelectedCustomer(created);
                   setNewCustForm(false);
-                }} className="w-full py-2 bg-slate-900 text-white rounded-lg text-xs font-bold uppercase">Create & Associate</button>
+                }} className="w-full py-1.5 bg-primary text-primary-foreground rounded-md text-[11px] font-bold uppercase cursor-pointer">Save & Select</button>
               </div>
             ) : (
               <div>
-                <label className="erp-label">Select Ledger</label>
-                <select className="w-full font-bold text-sm" value={selectedCustomer?.id || ''} onChange={(e) => setSelectedCustomer(customers.find(c => c.id === e.target.value) || null)}>
+                <label className="erp-label text-[10px]">Select Customer Ledger</label>
+                <select className="w-full h-8 text-xs font-semibold px-2 bg-background border border-border rounded-md" value={selectedCustomer?.id || ''} onChange={(e) => setSelectedCustomer(customers.find(c => c.id === e.target.value) || null)}>
                   <option value="">Walk-in Cash Customer</option>
                   {customers.map(c => <option key={c.id} value={c.id}>{c.name} ({c.mobile})</option>)}
                 </select>
                 {selectedCustomer && (
-                  <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/10 flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Credit Balance:</span>
-                    <span className="text-sm font-data font-bold text-primary">₹0.00</span>
+                  <div className="mt-2 p-2 bg-primary/5 rounded border border-primary/15 flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-primary uppercase">Ledger Status:</span>
+                    <span className="text-xs font-mono font-bold text-primary">Regular Buyer</span>
                   </div>
                 )}
               </div>
@@ -374,82 +382,84 @@ export default function BillingView() {
           </div>
 
           {/* ACCOUNTING SUMMARY */}
-          <div className="surface-premium p-6 flex-1 flex flex-col">
-            <h4 className="text-sm font-bold tracking-tight mb-6">Financial Summary</h4>
-            
-            <div className="space-y-4 mb-8">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground font-medium">Gross Metal Value</span>
-                <span className="font-data font-semibold">₹{grossAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground font-medium">Making Charges</span>
-                <span className="font-data font-semibold">₹{makingChargesTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-              </div>
-              {invoiceType !== 'Estimate' && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground font-medium">GST Amount (3.0%)</span>
-                  <span className="font-data font-semibold text-primary">₹{taxAmountTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+          <div className="p-3 bg-card rounded-lg border border-border shadow-2xs flex-1 flex flex-col justify-between">
+            <div>
+              <h4 className="text-xs font-bold tracking-tight mb-2.5 uppercase text-foreground">Financial Summary</h4>
+              
+              <div className="space-y-2 mb-4 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Gross Metal Value</span>
+                  <span className="font-mono font-semibold tabular-nums">₹{grossAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
-              )}
-              <div className="border-t border-dashed border-border pt-4 flex justify-between items-center">
-                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Net Amount</span>
-                <span className="text-3xl font-data font-extrabold text-foreground tracking-tighter">
-                  ₹{netAmount.toLocaleString()}
-                </span>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Making Charges</span>
+                  <span className="font-mono font-semibold tabular-nums">₹{makingChargesTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                </div>
+                {invoiceType !== 'Estimate' && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">GST (3.0%)</span>
+                    <span className="font-mono font-semibold text-primary tabular-nums">₹{taxAmountTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                  </div>
+                )}
+                <div className="border-t border-dashed border-border pt-2.5 flex justify-between items-baseline">
+                  <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Net Amount</span>
+                  <span className="text-xl lg:text-2xl font-mono font-extrabold text-foreground tracking-tight tabular-nums">
+                    ₹{netAmount.toLocaleString()}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div className="space-y-4 mt-auto">
-              <label className="erp-label">Payment Method</label>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { id: 'Cash', icon: Banknote },
-                  { id: 'UPI', icon: Wallet },
-                  { id: 'Bank', icon: Landmark },
-                  { id: 'Card', icon: CreditCard },
-                ].map((mode) => (
-                  <button
-                    key={mode.id}
-                    onClick={() => setPaymentMode(mode.id as any)}
-                    className={`flex items-center gap-2 p-3 rounded-xl border transition-all ${paymentMode === mode.id ? 'bg-primary/10 border-primary text-primary shadow-premium' : 'bg-secondary/50 border-border text-muted-foreground hover:border-muted-foreground/30'}`}
-                  >
-                    <mode.icon className="h-4 w-4" />
-                    <span className="text-xs font-bold">{mode.id}</span>
-                  </button>
-                ))}
+            <div className="space-y-3 pt-2 border-t border-border/50">
+              <div>
+                <label className="erp-label text-[10px] mb-1">Payment Mode</label>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {[
+                    { id: 'Cash', icon: Banknote },
+                    { id: 'UPI', icon: Wallet },
+                    { id: 'Bank', icon: Landmark },
+                    { id: 'Card', icon: CreditCard },
+                  ].map((mode) => (
+                    <button
+                      key={mode.id}
+                      onClick={() => setPaymentMode(mode.id as any)}
+                      className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md border text-xs font-semibold transition-all cursor-pointer ${paymentMode === mode.id ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-secondary/40 border-border text-muted-foreground hover:text-foreground'}`}
+                    >
+                      <mode.icon className="h-3.5 w-3.5" />
+                      <span>{mode.id}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <button
                 disabled={cart.length === 0}
                 onClick={handleSaveInvoice}
-                className="w-full py-4 bg-primary text-white rounded-xl shadow-premium hover:shadow-elevated hover:bg-primary/90 transition-all active:scale-95 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
+                className="w-full py-2.5 bg-primary text-primary-foreground rounded-lg shadow-sm hover:bg-primary/90 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer group"
               >
-                <div className="flex flex-col items-center">
-                  <span className="text-sm font-bold uppercase tracking-widest flex items-center gap-2">
-                    Save & Post Ledger <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                  <span className="text-[10px] opacity-60 font-medium">Automatic Stock Sync & Vouchers</span>
-                </div>
+                <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  Save & Post Invoice <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+                </span>
+                <span className="text-[9.5px] bg-primary-foreground/20 px-1.5 py-0.5 rounded font-mono font-semibold">F2</span>
               </button>
             </div>
           </div>
 
           {/* SAVED NOTIFICATION */}
           {savedInvoice && (
-            <div className="p-5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl animate-in zoom-in-95 duration-300">
-              <div className="flex items-start gap-4">
-                <div className="p-2 bg-emerald-500 text-white rounded-lg">
-                  <Check className="h-5 w-5" />
+            <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg animate-in zoom-in-95 duration-200">
+              <div className="flex items-start gap-2.5">
+                <div className="p-1 bg-emerald-500 text-white rounded">
+                  <Check className="h-4 w-4" />
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-emerald-900 dark:text-emerald-400">Invoice #{savedInvoice.invoice_number} Saved</p>
-                  <p className="text-[11px] text-emerald-800/60 dark:text-emerald-400/60 mt-1 font-medium">Stock records and accounting ledgers have been updated successfully.</p>
-                  <div className="flex gap-3 mt-4">
-                    <button onClick={() => window.print()} className="flex items-center gap-2 px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-all shadow-premium">
-                      <Printer className="h-3.5 w-3.5" /> Print Bill
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300 truncate">Invoice #{savedInvoice.invoice_number} Posted</p>
+                  <p className="text-[10px] text-emerald-700/70 dark:text-emerald-400/70 mt-0.5">Stock & ledger vouchers synchronized.</p>
+                  <div className="flex gap-2 mt-2">
+                    <button onClick={() => window.print()} className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-600 text-white rounded text-[11px] font-bold hover:bg-emerald-700 cursor-pointer">
+                      <Printer className="h-3 w-3" /> Print
                     </button>
-                    <button onClick={() => setSavedInvoice(null)} className="px-4 py-1.5 bg-white border border-border text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all">
+                    <button onClick={() => setSavedInvoice(null)} className="px-2.5 py-1 bg-card border border-border text-foreground rounded text-[11px] font-bold hover:bg-secondary cursor-pointer">
                       Dismiss
                     </button>
                   </div>

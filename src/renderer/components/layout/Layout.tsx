@@ -257,33 +257,35 @@ export default function Layout() {
     <div className="flex flex-col h-screen bg-background text-foreground font-sans overflow-hidden select-none no-print">
 
       {/* PREMIUM TOP BAR (Unified Win11 Header) */}
-      <header className="h-12 bg-card/85 backdrop-blur-md border-b border-border flex items-center justify-between px-6 z-50 shrink-0 text-card-foreground transition-colors duration-200">
-        <div className="flex items-center gap-8">
+      <header className="h-11 bg-card/90 backdrop-blur-md border-b border-border flex items-center justify-between px-4 lg:px-5 z-50 shrink-0 text-card-foreground transition-colors duration-200">
+        <div className="flex items-center gap-6">
           {/* Refined Branding */}
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-premium">
-              <Sparkles className="h-5 w-5 text-white" />
+            <div className="w-7 h-7 bg-gradient-to-br from-amber-500 to-amber-600 rounded-md flex items-center justify-center shadow-sm">
+              <Sparkles className="h-4 w-4 text-slate-950 font-bold" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="text-[14px] font-bold tracking-tight font-luxury text-primary">JEWEL ACC</span>
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">Enterprise Pro</span>
+              <span className="text-[13px] font-bold tracking-tight font-luxury text-primary">SWARNPRO ERP</span>
+              <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">Professional Edition</span>
             </div>
           </div>
 
           {/* Integrated Menu System */}
-          <nav className="flex items-center gap-1">
+          <nav className="flex items-center gap-0.5">
             {['File', 'Masters', 'Transactions', 'Reports', 'System'].map((menu) => (
               <div key={menu} className="menu-dropdown">
-                <button className="px-3 py-1.5 text-sm font-medium hover:bg-secondary rounded-md transition-all text-muted-foreground hover:text-foreground">
+                <button className="px-2.5 py-1 text-xs font-semibold hover:bg-secondary rounded-md transition-all text-muted-foreground hover:text-foreground">
                   {menu}
                 </button>
                 <div className="menu-dropdown-content surface-elevated">
-                  {/* Menu items would go here, using menu-dropdown-item class */}
                   <button onClick={() => addTab({ title: 'Company Settings', type: 'company_settings' })} className="menu-dropdown-item">
                     <SettingsIcon className="h-4 w-4" /> Company Settings
                   </button>
                   <button onClick={() => addTab({ title: 'User Rights', type: 'users' })} className="menu-dropdown-item">
                     <Users className="h-4 w-4" /> User Rights
+                  </button>
+                  <button onClick={() => addTab({ title: 'Licensing Portal', type: 'licensing' })} className="menu-dropdown-item">
+                    <Shield className="h-4 w-4" /> License & Evaluation
                   </button>
                   <div className="menu-divider" />
                   <button onClick={handleExit} className="menu-dropdown-item text-destructive hover:bg-destructive/10">
@@ -296,54 +298,54 @@ export default function Layout() {
         </div>
 
         {/* Global Utilities */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           {/* Profit Fine Tracker */}
-          <div className="hidden lg:flex items-center gap-3 bg-secondary/30 px-3 py-1.5 rounded-lg border border-border shadow-sm">
-            <div className="flex flex-col items-end">
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Initial Fine</span>
-              <span className="text-[11px] font-mono font-bold text-amber-600 dark:text-amber-500">{initialFine.toFixed(3)}g</span>
+          <div className="hidden xl:flex items-center gap-2.5 bg-secondary/40 px-2.5 py-1 rounded-md border border-border shadow-xs">
+            <div className="flex flex-col items-end leading-tight">
+              <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">Init Fine</span>
+              <span className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400">{initialFine.toFixed(3)}g</span>
             </div>
-            <div className="w-px h-6 bg-border"></div>
-            <div className="flex flex-col items-end">
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Total Fine</span>
-              <span className="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400">{totalFine.toFixed(3)}g</span>
+            <div className="w-px h-5 bg-border"></div>
+            <div className="flex flex-col items-end leading-tight">
+              <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">Total Fine</span>
+              <span className="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400">{totalFine.toFixed(3)}g</span>
             </div>
-            <div className="w-px h-6 bg-border"></div>
-            <div className="flex flex-col items-end">
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
+            <div className="w-px h-5 bg-border"></div>
+            <div className="flex flex-col items-end leading-tight">
+              <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">
                 {profitFine >= 0 ? 'Profit PG' : 'Loss PG'}
               </span>
-              <span className={`text-xs font-mono font-extrabold ${profitFine >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-500'}`}>
+              <span className={`text-[10px] font-mono font-extrabold ${profitFine >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                 {profitFine > 0 ? '+' : (profitFine < 0 ? '-' : '')}{Math.abs(profitFine).toFixed(3)}g
               </span>
             </div>
           </div>
 
           {/* Quick Search */}
-          <div className="hidden md:flex items-center bg-secondary/50 border border-border px-3 py-1.5 rounded-lg gap-2 w-64 focus-within:ring-2 focus-within:ring-primary/20 transition-all">
-            <Search className="h-4 w-4 text-muted-foreground" />
-            <input type="text" placeholder="Search masters or bills..." className="bg-transparent border-none p-0 h-auto text-sm focus:ring-0 w-full" />
-            <span className="text-[10px] font-bold text-muted-foreground/60 border border-border px-1.5 py-0.5 rounded flex items-center gap-0.5">
-              <Command className="h-2.5 w-2.5" /> K
-            </span>
+          <div className="hidden lg:flex items-center bg-secondary/50 border border-border px-2.5 py-1 rounded-md gap-2 w-52 focus-within:ring-1 focus-within:ring-primary/30 transition-all">
+            <Search className="h-3.5 w-3.5 text-muted-foreground" />
+            <input type="text" placeholder="Quick search (Ctrl+K)..." className="bg-transparent border-none p-0 h-auto text-xs focus:ring-0 w-full font-medium" />
           </div>
 
-          <div className="flex items-center gap-3">
-            <button onClick={toggleTheme} className="p-2 hover:bg-secondary rounded-full transition-all text-muted-foreground hover:text-primary">
-              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+          <div className="flex items-center gap-2">
+            <button onClick={toggleTheme} className="p-1.5 hover:bg-secondary rounded-md transition-all text-muted-foreground hover:text-primary cursor-pointer" title="Toggle Theme">
+              {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             </button>
-            <button className="p-2 hover:bg-secondary rounded-full transition-all text-muted-foreground relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white dark:border-slate-950"></span>
+            <button className="p-1.5 hover:bg-secondary rounded-md transition-all text-muted-foreground relative cursor-pointer" title="Notifications">
+              <Bell className="h-4 w-4" />
+              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
             </button>
-            <div className="h-8 w-px bg-border mx-1"></div>
-            <div className="flex items-center gap-3 pl-1">
-              <div className="flex flex-col items-end">
-                <span className="text-sm font-bold text-foreground leading-none">{selectedCompany?.name || 'Select Company'}</span>
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mt-1">Administrator</span>
+            <div className="h-6 w-px bg-border mx-1"></div>
+            <div className="flex items-center gap-2 pl-0.5">
+              <div className="flex flex-col items-end leading-tight">
+                <span className="text-xs font-bold text-foreground truncate max-w-[160px]">{selectedCompany?.name || 'Select Company'}</span>
+                <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Active
+                </span>
               </div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/40 border border-primary/20 flex items-center justify-center text-primary font-bold text-sm">
-                A
+              <div className="w-7 h-7 rounded-md bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xs font-luxury">
+                SP
               </div>
             </div>
           </div>
@@ -351,45 +353,54 @@ export default function Layout() {
       </header>
 
       {/* QUICK ACTIONS RIBBON */}
-      <section className="h-16 bg-card text-card-foreground border-b border-border flex items-center justify-between px-6 shrink-0 shadow-premium transition-colors duration-200">
-        <div className="flex items-center gap-2">
+      <section className="h-11 bg-card text-card-foreground border-b border-border flex items-center justify-between px-4 lg:px-5 shrink-0 shadow-xs transition-colors duration-200">
+        <div className="flex items-center gap-1.5">
           {[
             { label: 'Sales Bill', icon: ShoppingCart, type: 'billing', key: 'F3' },
+            { label: 'Tax Invoice', icon: FileText, type: 'sales', key: 'F8' },
             { label: 'Voucher', icon: FileSpreadsheet, type: 'accounting', key: 'F4' },
-            { label: 'Stock', icon: Layers, type: 'inventory', key: 'F5' },
+            { label: 'Stock Master', icon: Layers, type: 'inventory', key: 'F5' },
             { label: 'Reports', icon: TrendingUp, type: 'reports', key: 'F6' },
           ].map((item) => (
             <button
               key={item.label}
               onClick={() => addTab({ title: item.label, type: item.type })}
-              className="flex flex-col items-center justify-center h-12 w-20 hover:bg-secondary rounded-lg transition-all group relative active:scale-95"
+              className="flex items-center gap-1.5 px-2.5 py-1 h-7.5 hover:bg-secondary rounded-md transition-all group relative active:scale-95 border border-transparent hover:border-border cursor-pointer"
             >
-              <item.icon className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
-              <span className="text-[10px] font-bold text-muted-foreground group-hover:text-foreground mt-1 uppercase tracking-tight">{item.label}</span>
-              <span className="absolute top-0 right-1 text-[8px] font-bold text-primary/40 group-hover:text-primary transition-colors">{item.key}</span>
+              <item.icon className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+              <span className="text-[11px] font-semibold text-muted-foreground group-hover:text-foreground tracking-tight">{item.label}</span>
+              <span className="text-[9px] font-mono font-bold text-primary/60 group-hover:text-primary bg-primary/5 px-1 rounded ml-0.5">{item.key}</span>
             </button>
           ))}
-          <div className="h-10 w-px bg-border mx-4"></div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg shadow-premium hover:shadow-elevated hover:bg-primary/90 transition-all active:scale-95 font-semibold text-sm">
-            <Plus className="h-4 w-4" /> New Transaction
+          <div className="h-6 w-px bg-border mx-2"></div>
+          <button
+            onClick={() => addTab({ title: 'Sales Billing Desk', type: 'billing' })}
+            className="flex items-center gap-1.5 px-3 py-1 h-7.5 bg-primary text-slate-950 font-bold rounded-md shadow-xs hover:bg-primary/90 transition-all active:scale-95 text-xs cursor-pointer"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>New Sale</span>
           </button>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex flex-col items-end mr-2">
-            <span className="erp-label !mb-0 text-primary">Active Workspace</span>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Workspace:</span>
             <div className="relative workspace-dropdown-container">
               <button
                 type="button"
                 onClick={() => setWorkspaceDropdownOpen(!workspaceDropdownOpen)}
-                className="flex items-center gap-1 bg-transparent border-none text-sm font-bold focus:outline-none cursor-pointer h-auto p-0 text-right text-foreground hover:text-primary transition-all duration-200"
+                className="flex items-center gap-1.5 bg-secondary/60 hover:bg-secondary px-2.5 py-1 rounded-md text-xs font-bold text-foreground hover:text-primary transition-all duration-200 cursor-pointer border border-border"
               >
-                <span>{selectedCompany?.name || 'Select Company'}</span>
-                <ChevronDown className={`h-4 w-4 text-muted-foreground/60 transition-transform duration-200 ${workspaceDropdownOpen ? 'rotate-180' : ''}`} />
+                <FolderOpen className="h-3.5 w-3.5 text-primary" />
+                <span className="max-w-[180px] truncate">{selectedCompany?.name || 'Select Company'}</span>
+                <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 ${workspaceDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {workspaceDropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-56 bg-card border border-border rounded-lg shadow-elevated z-50 py-1.5 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute right-0 top-full mt-1.5 w-64 bg-card border border-border rounded-lg shadow-elevated z-50 py-1 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="px-3 py-1.5 text-[9px] font-bold text-muted-foreground uppercase tracking-wider border-b border-border">
+                    Available Company Workspaces
+                  </div>
                   {companies.map((c) => {
                     const isActive = selectedCompany?.id === c.id;
                     return (
@@ -400,21 +411,29 @@ export default function Layout() {
                           setSelectedCompany(c);
                           setWorkspaceDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2 text-xs font-semibold flex items-center justify-between hover:bg-secondary/60 transition-colors ${
+                        className={`w-full text-left px-3 py-2 text-xs font-semibold flex items-center justify-between hover:bg-secondary/60 transition-colors cursor-pointer ${
                           isActive ? 'text-primary bg-primary/5 font-bold' : 'text-foreground/80'
                         }`}
                       >
-                        <span>{c.name}</span>
-                        {isActive && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                        <span className="truncate">{c.name}</span>
+                        {isActive && <div className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />}
                       </button>
                     );
                   })}
+                  <div className="border-t border-border mt-1 pt-1">
+                    <button
+                      onClick={() => {
+                        addTab({ title: 'Company Master', type: 'company' });
+                        setWorkspaceDropdownOpen(false);
+                      }}
+                      className="w-full text-left px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary/5 flex items-center gap-2 cursor-pointer"
+                    >
+                      <Plus className="h-3.5 w-3.5" /> Manage Companies
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
-          </div>
-          <div className="p-2 bg-secondary rounded-lg">
-            <FolderOpen className="h-5 w-5 text-primary" />
           </div>
         </div>
       </section>
@@ -424,9 +443,9 @@ export default function Layout() {
 
         {/* MICA SIDEBAR */}
         <aside
-          className={`bg-sidebar-bg border-r border-sidebar-border text-sidebar-text flex flex-col transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'}`}
+          className={`bg-sidebar-bg border-r border-sidebar-border text-sidebar-text flex flex-col transition-all duration-300 ${sidebarCollapsed ? 'w-14' : 'w-56'}`}
         >
-          <div className="flex-1 overflow-y-auto py-6 space-y-6">
+          <div className="flex-1 overflow-y-auto py-3 space-y-4">
             {menuGroups.map((g, idx) => (
               <div key={idx} className="px-4">
                 {!sidebarCollapsed && (
@@ -464,26 +483,26 @@ export default function Layout() {
         {/* WORKSPACE AREA */}
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* MODERN TAB BAR */}
-          <div className="bg-card/45 backdrop-blur-sm border-b border-border h-12 flex items-end px-6 shrink-0 transition-colors duration-200">
-            <div className="flex gap-2 overflow-x-auto h-full items-end scrollbar-none">
+          <div className="bg-card/60 backdrop-blur-sm border-b border-border h-9.5 flex items-end px-3 lg:px-4 shrink-0 transition-colors duration-200">
+            <div className="flex gap-1.5 overflow-x-auto h-full items-end scrollbar-none">
               {tabs.map((t) => {
                 const isActive = t.id === activeTabId;
                 return (
                   <div
                     key={t.id}
                     onClick={() => setActiveTab(t.id)}
-                    className={`flex items-center gap-3 px-5 h-10 rounded-t-xl transition-all cursor-pointer text-sm font-medium relative ${isActive
-                      ? 'bg-background text-primary shadow-[0_-4px_10px_-5px_rgba(0,0,0,0.1)] z-10 before:content-[""] before:absolute before:bottom-[-1px] before:left-0 before:right-0 before:h-[2px] before:bg-primary'
-                      : 'text-foreground/75 hover:text-foreground hover:bg-secondary/40'
+                    className={`flex items-center gap-2 px-3.5 h-8 rounded-t-lg transition-all cursor-pointer text-xs font-semibold relative ${isActive
+                      ? 'bg-background text-primary shadow-xs z-10 before:content-[""] before:absolute before:bottom-[-1px] before:left-0 before:right-0 before:h-[2px] before:bg-primary'
+                      : 'text-foreground/70 hover:text-foreground hover:bg-secondary/50'
                       }`}
                   >
                     <span>{t.title}</span>
                     {t.id !== 'dashboard' && (
                       <button
                         onClick={(e) => { e.stopPropagation(); closeTab(t.id); }}
-                        className="p-1 rounded-md hover:bg-muted text-foreground/40 hover:text-destructive transition-colors"
+                        className="p-0.5 rounded hover:bg-muted text-foreground/40 hover:text-destructive transition-colors ml-0.5 cursor-pointer"
                       >
-                        <X className="h-3.5 w-3.5" />
+                        <X className="h-3 w-3" />
                       </button>
                     )}
                   </div>
@@ -493,13 +512,13 @@ export default function Layout() {
           </div>
 
           {/* VIEWPORT CANVAS */}
-          <div className="flex-1 overflow-hidden relative p-6">
+          <div className="flex-1 overflow-hidden relative p-2 sm:p-2.5 lg:p-3">
             {tabs.map((t) => (
               <div
                 key={t.id}
-                className={`h-full ${t.id === activeTabId ? 'block animate-in fade-in zoom-in-95 duration-300' : 'hidden'}`}
+                className={`h-full ${t.id === activeTabId ? 'block animate-in fade-in zoom-in-95 duration-200' : 'hidden'}`}
               >
-                <div className="h-full surface-premium overflow-hidden">
+                <div className="h-full surface-premium overflow-hidden border border-border/80 shadow-xs">
                   {renderActiveView(t.type)}
                 </div>
               </div>
