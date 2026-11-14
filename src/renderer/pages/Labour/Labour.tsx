@@ -6,7 +6,7 @@ import { useLabourStore } from '../../store/useLabourStore';
 import { useRateStore } from '../../store/useRateStore';
 import { useTabStore } from '../../store/useTabStore';
 import type { Party, PartyWiseLabour } from '../../../shared/ipc-api';
-import { Printer, Save, Undo2, Trash2, LogOut, ArrowUpDown } from 'lucide-react';
+import { Printer, Save, Undo2, Trash2, LogOut, ArrowUpDown, Coins } from 'lucide-react';
 import { useDialog } from '../../components/ui/DialogProvider';
 
 interface GridRow {
@@ -187,10 +187,10 @@ export default function LabourView() {
     <div className="p-3 bg-background text-foreground h-full overflow-hidden flex flex-col font-sans select-none no-print transition-colors duration-200">
       
       {/* 1. MASTER HEADER PANEL */}
-      <div className="bg-card text-card-foreground border border-border rounded-lg p-3 shadow-sm flex flex-col gap-2 shrink-0 transition-colors duration-200">
+      <div className="bg-card text-card-foreground border border-border rounded-none p-3 shadow-none flex flex-col gap-2 shrink-0 transition-colors duration-200">
         <div className="flex justify-between items-center border-b border-border/60 pb-1.5">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-primary font-luxury flex items-center gap-1.5">
-            <Coins className="h-4.5 w-4.5 text-primary" /> Party Wise Labour Settings
+          <span className="text-xs font-extrabold uppercase tracking-widest text-[#FFC000] font-luxury flex items-center gap-1.5">
+            <Coins className="h-4.5 w-4.5 text-[#FFC000]" /> Party Wise Labour Settings
           </span>
           <span className="text-[9.5px] font-bold text-muted-foreground font-data">PARTY-PRODUCT RATE CONFIG</span>
         </div>
@@ -200,7 +200,7 @@ export default function LabourView() {
           <div className="col-span-4 flex items-center gap-1.5">
             <label className="text-[9.5px] font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Select Party</label>
             <select
-              className="w-full px-2 py-0.5 border border-border rounded text-xs text-foreground bg-card h-7 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 font-bold cursor-pointer"
+              className="w-full px-2 py-0.5 border border-border rounded-none text-xs text-foreground bg-card h-7 focus:outline-none focus:border-[#FFC000] font-bold cursor-pointer"
               value={selectedPartyId}
               onChange={(e) => setSelectedPartyId(e.target.value)}
             >
@@ -219,7 +219,7 @@ export default function LabourView() {
             <input
               type="text"
               readOnly
-              className="w-full px-2 py-0.5 border border-border rounded text-xs text-muted-foreground bg-muted/50 h-7 text-center font-bold font-data focus:outline-none"
+              className="w-full px-2 py-0.5 border border-border rounded-none text-xs text-muted-foreground bg-muted/50 h-7 text-center font-bold font-data focus:outline-none"
               value={selectedParty?.code || ''}
             />
           </div>
@@ -229,7 +229,7 @@ export default function LabourView() {
             <input
               type="text"
               readOnly
-              className="w-full px-2 py-0.5 border border-border rounded text-xs text-muted-foreground bg-muted/50 h-7 font-sans font-bold focus:outline-none"
+              className="w-full px-2 py-0.5 border border-border rounded-none text-xs text-muted-foreground bg-muted/50 h-7 font-sans font-bold focus:outline-none"
               value={selectedParty?.name || ''}
             />
           </div>
@@ -239,7 +239,7 @@ export default function LabourView() {
             <input
               type="text"
               placeholder="Search product..."
-              className="w-full px-2 py-0.5 border border-border rounded text-xs text-foreground bg-card h-7 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+              className="w-full px-2 py-0.5 border border-border rounded-none text-xs text-foreground bg-card h-7 focus:outline-none focus:border-[#FFC000]"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               disabled={!selectedPartyId}
@@ -249,7 +249,7 @@ export default function LabourView() {
       </div>
 
       {/* 2. SPREADSHEET LABOUR GRID */}
-      <div className="flex-1 bg-card text-card-foreground border border-border rounded-lg shadow-sm flex flex-col overflow-hidden my-2.5 transition-colors duration-200">
+      <div className="flex-1 bg-card text-card-foreground border border-border rounded-none shadow-none flex flex-col overflow-hidden my-2.5 transition-colors duration-200">
         <div className="bg-secondary/40 px-3 py-1.5 border-b border-border flex justify-between items-center shrink-0">
           <span className="text-[10px] font-bold uppercase tracking-wider font-luxury text-foreground/80">Configuration Matrix</span>
           {isLoading && (
@@ -386,12 +386,12 @@ export default function LabourView() {
         </div>
 
         {/* BOTTOM ACTION BAR */}
-        <div className="bg-muted/35 border border-border px-4 py-2 flex items-center justify-end shrink-0 select-none gap-2.5 rounded-lg">
+        <div className="bg-secondary/40 border-t border-border px-4 py-2 flex items-center justify-end shrink-0 select-none gap-2.5 rounded-none">
           <button
             type="button"
             onClick={handlePrint}
             disabled={!selectedPartyId}
-            className="flex items-center gap-1.5 px-4 py-1.5 bg-card hover:bg-muted text-foreground disabled:opacity-40 disabled:hover:bg-card border border-border hover:border-border/80 rounded font-semibold uppercase shadow-sm transition-all text-xs active:scale-[0.98] cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-1.5 bg-card hover:bg-secondary text-foreground disabled:opacity-40 disabled:hover:bg-card border border-border rounded-none font-bold uppercase transition-all text-xs cursor-pointer"
           >
             <Printer className="h-3.5 w-3.5 text-muted-foreground" />
             <span>Print</span>
@@ -401,9 +401,9 @@ export default function LabourView() {
             type="button"
             onClick={handleSave}
             disabled={!selectedPartyId}
-            className="flex items-center gap-1.5 px-4 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground border border-transparent rounded font-semibold uppercase shadow-sm transition-all text-xs active:scale-[0.98] cursor-pointer disabled:opacity-40 disabled:hover:bg-primary disabled:active:scale-100"
+            className="flex items-center gap-1.5 px-4 py-1.5 bg-[#FFC000] hover:bg-[#917300] text-black border-none rounded-none font-extrabold uppercase transition-all text-xs cursor-pointer disabled:opacity-40 disabled:hover:bg-[#FFC000]"
           >
-            <Save className="h-3.5 w-3.5" />
+            <Save className="h-3.5 w-3.5 stroke-[2.5]" />
             <span>Save</span>
           </button>
 
@@ -411,7 +411,7 @@ export default function LabourView() {
             type="button"
             onClick={handleCancel}
             disabled={!selectedPartyId}
-            className="flex items-center gap-1.5 px-4 py-1.5 bg-card hover:bg-muted text-foreground border border-border hover:border-border/80 rounded font-semibold uppercase shadow-sm transition-all text-xs active:scale-[0.98] cursor-pointer disabled:opacity-40 disabled:hover:bg-card disabled:active:scale-100"
+            className="flex items-center gap-1.5 px-4 py-1.5 bg-card hover:bg-secondary text-foreground border border-border rounded-none font-bold uppercase transition-all text-xs cursor-pointer disabled:opacity-40 disabled:hover:bg-card"
           >
             <Undo2 className="h-3.5 w-3.5 text-muted-foreground" />
             <span>Cancel</span>
@@ -421,7 +421,7 @@ export default function LabourView() {
             type="button"
             onClick={handleDelete}
             disabled={!selectedPartyId}
-            className="flex items-center gap-1.5 px-4 py-1.5 bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/20 hover:border-destructive/30 rounded font-semibold uppercase shadow-sm transition-all text-xs active:scale-[0.98] cursor-pointer disabled:opacity-40 disabled:hover:bg-destructive/10 disabled:active:scale-100"
+            className="flex items-center gap-1.5 px-4 py-1.5 bg-rose-600/10 hover:bg-rose-600/20 text-rose-500 border border-rose-500/30 rounded-none font-bold uppercase transition-all text-xs cursor-pointer disabled:opacity-40"
           >
             <Trash2 className="h-3.5 w-3.5" />
             <span>Delete</span>
@@ -432,7 +432,7 @@ export default function LabourView() {
           <button
             type="button"
             onClick={handleExit}
-            className="flex items-center gap-1.5 px-4 py-1.5 bg-secondary hover:bg-secondary/80 text-secondary-foreground border border-border rounded font-semibold uppercase shadow-sm transition-all text-xs active:scale-[0.98] cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-1.5 bg-secondary hover:bg-secondary/80 text-foreground border border-border rounded-none font-bold uppercase transition-all text-xs cursor-pointer"
           >
             <LogOut className="h-3.5 w-3.5" />
             <span>Exit</span>
@@ -441,17 +441,17 @@ export default function LabourView() {
       </div>
 
       {/* STATUS FOOTER BAR */}
-      <footer className="bg-amber-600/90 dark:bg-amber-700/80 backdrop-blur-md border-t border-amber-500/20 text-white px-4 py-1.5 flex items-center justify-between text-[11.5px] font-semibold shadow-premium shrink-0 select-none mt-2 rounded-lg transition-all duration-200">
+      <footer className="bg-secondary border border-border text-foreground px-4 py-1.5 flex items-center justify-between text-[11px] font-semibold shrink-0 select-none mt-2 rounded-none">
         <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1 bg-amber-800/40 border border-amber-500/30 px-2 py-0.5 rounded uppercase text-[9px] tracking-wider">Live Rate Footer</span>
-          <span>Fine Gold (999): <strong className="text-amber-100 font-data">₹{currentRates?.gold_rate_24k || '54,669'}</strong></span>
+          <span className="flex items-center gap-1 bg-[#FFC000]/10 border border-[#FFC000]/30 text-[#FFC000] px-2 py-0.5 rounded-none uppercase text-[9px] font-black tracking-wider">Live Rate</span>
+          <span>Fine Gold (24K): <strong className="text-[#FFC000] font-data">₹{currentRates?.gold_rate_24k || '54,669'}</strong></span>
           <span className="opacity-40">|</span>
-          <span>Fine Gold (22K): <strong className="text-amber-100 font-data">₹{currentRates?.gold_rate_22k || '50,113'}</strong></span>
+          <span>Fine Gold (22K): <strong className="text-[#FFC000] font-data">₹{currentRates?.gold_rate_22k || '50,113'}</strong></span>
           <span className="opacity-40">|</span>
-          <span>Fine Silver: <strong className="text-amber-100 font-data">₹{currentRates?.silver_rate || '74,277'}</strong></span>
+          <span>Fine Silver: <strong className="text-[#FFC000] font-data">₹{currentRates?.silver_rate || '74,277'}</strong></span>
         </div>
         <div>
-          <span>Rate Date: <span className="font-data text-amber-100">{currentRates?.rate_date || new Date().toLocaleDateString()}</span></span>
+          <span>Rate Date: <span className="font-data text-muted-foreground">{currentRates?.rate_date || new Date().toLocaleDateString()}</span></span>
         </div>
       </footer>
 

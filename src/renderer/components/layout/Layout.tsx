@@ -14,6 +14,7 @@ import { useTagOpeningStore } from '../../store/useTagOpeningStore';
 import { useItStkLimitStore } from '../../store/useItStkLimitStore';
 import { debounce } from '../../utils/debounce';
 import { useDialog } from '../ui/DialogProvider';
+import { ViewErrorBoundary } from '../ui/ViewErrorBoundary';
 
 // Views
 import Dashboard from '../../pages/Dashboard/Dashboard';
@@ -520,7 +521,9 @@ export default function Layout() {
                 className={`h-full ${t.id === activeTabId ? 'block' : 'hidden'}`}
               >
                 <div className="h-full bg-card border border-border rounded-none overflow-hidden text-foreground">
-                  {renderActiveView(t.type)}
+                  <ViewErrorBoundary viewName={t.title}>
+                    {renderActiveView(t.type)}
+                  </ViewErrorBoundary>
                 </div>
               </div>
             ))}
