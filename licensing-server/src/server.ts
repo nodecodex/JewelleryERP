@@ -750,6 +750,26 @@ app.post('/api/v1/admin/customers', adminAuth, async (req: Request, res: Respons
   }
 });
 
+// DELETE /admin/customers/:id - Delete customer and their associated licenses
+app.delete('/api/v1/admin/customers/:id', adminAuth, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const customer = await Customer.findById(req.params.id);
+    if (!customer) {
+      return res.status(404).json({ success: false, error: 'Customer not found' });
+    }
+    await Customer.findByIdAndDelete(req.params.id);
+    await License.deleteMany({ customer_id: req.params.id });
+    await AuditLog.create({
+      action_type: 'CUSTOMER_DELETED',
+      details: `Deleted customer: ${customer.name} (${customer.mobile})`,
+      performed_by: 'admin'
+    });
+    res.json({ success: true, message: 'Customer record deleted successfully.' });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /admin/licenses
 app.get('/api/v1/admin/licenses', adminAuth, async (req: Request, res: Response) => {
   try {
