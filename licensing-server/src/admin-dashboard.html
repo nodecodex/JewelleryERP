@@ -377,8 +377,8 @@
         <div class="panel">
           <div class="panel-header"><span class="panel-title">&#9200; Trial Users Registry</span><span id="trial-count" class="tag tag-blue">0</span></div>
           <div class="panel-body" style="padding:0">
-            <table><thead><tr><th>Device Fingerprint Hash</th><th>Platform</th><th>Installed</th><th>Expires</th><th>Status</th></tr></thead>
-            <tbody id="trials-tbody"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody></table>
+            <table><thead><tr><th>Device Fingerprint Hash</th><th>Platform</th><th>Installed</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="trials-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody></table>
           </div>
         </div>
       </div>
@@ -687,7 +687,7 @@
   function renderTrials() {
     const el = document.getElementById('trials-tbody');
     document.getElementById('trial-count').textContent = allTrials.length;
-    if (!allTrials.length) { el.innerHTML = '<tr><td colspan="5" class="empty">No trial records.</td></tr>'; return; }
+    if (!allTrials.length) { el.innerHTML = '<tr><td colspan="6" class="empty">No trial records.</td></tr>'; return; }
     el.innerHTML = allTrials.map(t => {
       const expired = t.is_expired || (new Date() > new Date(t.expiry_date));
       return `<tr>
@@ -695,7 +695,14 @@
         <td style="text-transform:uppercase;color:var(--muted)">${esc(t.os_platform)}</td>
         <td style="color:var(--muted)">${fmtDate(t.installation_date)}</td>
         <td style="font-weight:700">${fmtDate(t.expiry_date)}</td>
-        <td>${expired?'<span class="tag tag-red">Expired</span>':'<span class="tag tag-blue">Active</span>'}</td></tr>`;
+        <td>${expired?'<span class="tag tag-red">Expired</span>':'<span class="tag tag-green">Active</span>'}</td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-green" style="padding:4px 8px;font-size:10px" onclick="extendTrial('${t._id}')">+7 Days</button>
+            <button class="btn btn-red" style="padding:4px 8px;font-size:10px" onclick="deleteTrial('${t._id}')">Reset</button>
+          </div>
+        </td>
+      </tr>`;
     }).join('');
   }
 
@@ -760,6 +767,36 @@
     if(btn){btn.classList.add('btn-loading');btn.disabled=true;}
     try {const data=await api('/api/v1/admin/transfers/reject','POST',{requestId:id,adminNote:note});if(data.success){await fetchTransfers();fetchStats();renderTransfers();renderDashTransfers();renderStats();}else alert(data.error||'Failed');}
     catch(e){alert('Error: '+e.message);}
+  }
+
+  async function extendTrial(id) {
+    if (!confirm('Extend this trial by 7 days?')) return;
+    try {
+      const res = await api(`/api/v1/admin/trials/${id}/extend`, 'POST', { days: 7 });
+      if (res.success) {
+        await fetchTrials();
+        renderTrials();
+        await fetchStats();
+        renderStats();
+      } else {
+        alert(res.error || 'Failed to extend trial.');
+      }
+    } catch(e) { alert('Error: ' + e.message); }
+  }
+
+  async function deleteTrial(id) {
+    if (!confirm('Reset this trial record? The device hardware will be able to start a fresh trial.')) return;
+    try {
+      const res = await api(`/api/v1/admin/trials/${id}`, 'DELETE');
+      if (res.success) {
+        await fetchTrials();
+        renderTrials();
+        await fetchStats();
+        renderStats();
+      } else {
+        alert(res.error || 'Failed to reset trial.');
+      }
+    } catch(e) { alert('Error: ' + e.message); }
   }
 
   function toggleExpiry() {

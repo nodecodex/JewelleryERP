@@ -915,6 +915,52 @@ app.get('/api/v1/admin/trials', adminAuth, async (req: Request, res: Response) =
   }
 });
 
+// DELETE /admin/trials/:id - Reset trial record so device can get a fresh trial
+app.delete('/api/v1/admin/trials/:id', adminAuth, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const trial = await TrialUser.findById(req.params.id);
+    if (!trial) {
+      return res.status(404).json({ success: false, error: 'Trial record not found' });
+    }
+    await TrialUser.findByIdAndDelete(req.params.id);
+    await AuditLog.create({
+      action_type: 'TRIAL_RESET',
+      details: `Admin reset/deleted trial record for device ID: ${trial.device_id}`,
+      performed_by: 'admin'
+    });
+    res.json({ success: true, message: 'Trial record removed. Device can now start a fresh trial.' });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /admin/trials/:id/extend - Extend trial validity by X days
+app.post('/api/v1/admin/trials/:id/extend', adminAuth, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const trial = await TrialUser.findById(req.params.id);
+    if (!trial) {
+      return res.status(404).json({ success: false, error: 'Trial record not found' });
+    }
+    const daysToAdd = parseInt(req.body.days) || 7;
+    const baseDate = new Date(trial.expiry_date) > new Date() ? new Date(trial.expiry_date) : new Date();
+    baseDate.setDate(baseDate.getDate() + daysToAdd);
+
+    trial.expiry_date = baseDate;
+    trial.is_expired = false;
+    await trial.save();
+
+    await AuditLog.create({
+      action_type: 'TRIAL_EXTENDED',
+      details: `Admin extended trial by ${daysToAdd} days until ${baseDate.toISOString()}`,
+      performed_by: 'admin'
+    });
+
+    res.json({ success: true, message: `Trial extended by ${daysToAdd} days.`, expiryDate: baseDate.toISOString() });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /admin/audit-logs
 app.get('/api/v1/admin/audit-logs', adminAuth, async (req: Request, res: Response) => {
   try {
