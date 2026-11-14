@@ -37,8 +37,10 @@ export default function LicensingView() {
       const status = await (window as any).api.getLicenseStatus();
       setLicenseStatus(status);
 
+      const isTrialValid = status.isTrialActive || (status.isTrial && (status.trialDaysRemaining ?? 0) > 0);
+
       // Auto redirect tabs based on state
-      if (status.isTrialActive) {
+      if (isTrialValid) {
         setActiveTab('activate');
       } else if (!status.activated && status.expiryDate) {
         // Trial expired
@@ -68,9 +70,10 @@ export default function LicensingView() {
     try {
       const status = await (window as any).api.startTrial();
       setLicenseStatus(status);
-      if (status.isTrialActive) {
+      const isTrialValid = status.isTrialActive || (status.isTrial && (status.trialDaysRemaining ?? 0) > 0);
+      if (isTrialValid) {
         setMsg(status.statusMessage);
-        setTimeout(() => window.location.reload(), 1500);
+        setTimeout(() => window.location.reload(), 1000);
       } else {
         setErrorMsg(status.statusMessage);
       }
@@ -163,26 +166,28 @@ export default function LicensingView() {
 
   const showActiveState = licenseStatus.activated || licenseStatus.isTrialActive;
 
+  const isTrialValid = licenseStatus?.isTrialActive || (licenseStatus?.isTrial && (licenseStatus?.trialDaysRemaining ?? 0) > 0);
+
   return (
     <div className="space-y-6 font-sans select-text text-slate-300">
 
       {/* Alert banner */}
       <div className={`p-4 rounded-xl border flex items-start gap-3.5 backdrop-blur-md transition-all duration-300 ${licenseStatus.activated
         ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-        : licenseStatus.isTrialActive
+        : isTrialValid
           ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
           : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
         }`}>
         {licenseStatus.activated ? (
           <ShieldCheck className="h-5 w-5 shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-        ) : licenseStatus.isTrialActive ? (
+        ) : isTrialValid ? (
           <Clock className="h-5 w-5 shrink-0 mt-0.5 animate-pulse drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
         ) : (
           <ShieldAlert className="h-5 w-5 shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)] animate-pulse" />
         )}
         <div className="text-xs space-y-1 w-full">
           <p className="font-extrabold uppercase tracking-widest font-luxury text-[11px] text-slate-100">
-            {licenseStatus.activated ? 'Premium Lifetime Active' : licenseStatus.isTrialActive ? 'Active Trial Period' : 'System Secure Lock'}
+            {licenseStatus.activated ? 'Premium Lifetime Active' : isTrialValid ? 'Active Trial Period' : 'System Secure Lock'}
           </p>
           <p className="font-medium text-slate-300">{licenseStatus.statusMessage}</p>
           {licenseStatus.expiryDate && (
@@ -293,22 +298,30 @@ export default function LicensingView() {
             {activeTab === 'trial' && (
               <div className="space-y-4">
                 <p className="text-slate-400 leading-relaxed text-[11px]">
-                  Start a free trial to evaluate features offline for 3 days. After expiration, licensing is mandatory.
+                  Start a free trial to evaluate features offline for 7 days. After expiration, licensing is mandatory.
                 </p>
 
-                {licenseStatus.isTrialActive ? (
-                  <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl text-center space-y-2 shadow-inner">
+                {isTrialValid ? (
+                  <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl text-center space-y-3 shadow-inner">
                     <Clock className="h-8 w-8 text-amber-500 mx-auto animate-pulse drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
                     <p className="font-bold text-amber-400 text-sm tracking-wide">Your trial is active!</p>
                     <p className="text-slate-400 font-medium text-[10px] tracking-wider uppercase">Expires on: {new Date(licenseStatus.expiryDate).toLocaleDateString()}</p>
+                    <button
+                      type="button"
+                      onClick={() => window.location.reload()}
+                      className="mt-2 w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold uppercase tracking-wider rounded-lg shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                    >
+                      <span>Enter ERP Workspace</span>
+                      <span>→</span>
+                    </button>
                   </div>
                 ) : (
                   <button
                     onClick={handleStartTrial}
                     disabled={licenseStatus.activated}
-                    className="w-full py-2.5 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white font-extrabold uppercase tracking-wider rounded-lg shadow-md border border-slate-600 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+                    className="w-full py-2.5 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white font-extrabold uppercase tracking-wider rounded-lg shadow-md border border-slate-600 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                   >
-                    Start 3-Day Free Trial
+                    Start Free Trial
                   </button>
                 )}
               </div>

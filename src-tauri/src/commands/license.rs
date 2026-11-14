@@ -42,6 +42,7 @@ pub fn get_license_status(db: State<'_, DbState>) -> Result<LicenseStatus, Strin
             license_key: None,
             expiry_date: None,
             is_trial: false,
+            is_trial_active: false,
             trial_days_remaining: None,
             status_message: "No license activated. Please activate or start a free trial.".to_string(),
         }),
@@ -57,6 +58,7 @@ pub fn get_license_status(db: State<'_, DbState>) -> Result<LicenseStatus, Strin
                                 license_key: lic_key,
                                 expiry_date: trial_exp,
                                 is_trial: true,
+                                is_trial_active: false,
                                 trial_days_remaining: Some(0),
                                 status_message: "Free evaluation trial has expired. Commercial license activation is required.".to_string(),
                             });
@@ -69,6 +71,7 @@ pub fn get_license_status(db: State<'_, DbState>) -> Result<LicenseStatus, Strin
                                 license_key: lic_key,
                                 expiry_date: trial_exp,
                                 is_trial: true,
+                                is_trial_active: true,
                                 trial_days_remaining: Some(days),
                                 status_message: format!("Trial Mode: {} days remaining.", days),
                             });
@@ -83,6 +86,7 @@ pub fn get_license_status(db: State<'_, DbState>) -> Result<LicenseStatus, Strin
                 license_key: lic_key,
                 expiry_date: exp_date,
                 is_trial: false,
+                is_trial_active: false,
                 trial_days_remaining: None,
                 status_message: "Lifetime Premium License Active".to_string(),
             })

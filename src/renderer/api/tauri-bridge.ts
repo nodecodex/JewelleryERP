@@ -62,32 +62,54 @@ export const tauriApi: IpcApi = {
 
   // Licensing
   getDeviceId: () => callTauri('get_device_id_command', undefined, 'TEST-DEVICE-ID-12345'),
-  getLicenseStatus: () => callTauri('get_license_status', undefined, {
-    activated: false,
-    deviceId: 'TEST-DEVICE-ID-12345',
-    isTrial: false,
-    statusMessage: 'No license activated. Please activate or start a trial.'
-  } as any),
-  activateLicense: (key) => callTauri('activate_license', { key }, {
-    activated: true,
-    deviceId: 'TEST-DEVICE-ID-12345',
-    licenseKey: key,
-    isTrial: false,
-    statusMessage: 'Lifetime Premium License Active'
-  } as any),
-  startTrial: () => callTauri('start_trial', undefined, {
-    activated: false,
-    deviceId: 'TEST-DEVICE-ID-12345',
-    isTrial: true,
-    isTrialActive: true,
-    trialDaysRemaining: 7,
-    statusMessage: 'Trial Mode: 7 days remaining.'
-  } as any),
+  getLicenseStatus: async () => {
+    const res = await callTauri('get_license_status', undefined, {
+      activated: false,
+      deviceId: 'TEST-DEVICE-ID-12345',
+      isTrial: false,
+      isTrialActive: false,
+      trialDaysRemaining: 0,
+      statusMessage: 'No license activated. Please activate or start a trial.'
+    } as any);
+    return {
+      ...res,
+      isTrialActive: res?.isTrialActive ?? (res?.isTrial && (res?.trialDaysRemaining ?? 0) > 0)
+    };
+  },
+  activateLicense: async (key) => {
+    const res = await callTauri('activate_license', { key }, {
+      activated: true,
+      deviceId: 'TEST-DEVICE-ID-12345',
+      licenseKey: key,
+      isTrial: false,
+      isTrialActive: false,
+      statusMessage: 'Lifetime Premium License Active'
+    } as any);
+    return {
+      ...res,
+      isTrialActive: false
+    };
+  },
+  startTrial: async () => {
+    const res = await callTauri('start_trial', undefined, {
+      activated: false,
+      deviceId: 'TEST-DEVICE-ID-12345',
+      isTrial: true,
+      isTrialActive: true,
+      trialDaysRemaining: 7,
+      statusMessage: 'Trial Mode: 7 days remaining.'
+    } as any);
+    return {
+      ...res,
+      isTrialActive: res?.isTrialActive ?? true
+    };
+  },
   recoverLicense: (key, mobile) => callTauri('recover_license', { key, mobile }, {
     activated: true,
     deviceId: 'TEST-DEVICE-ID-12345',
     licenseKey: key,
     isTrial: false,
+    isTrialActive: false,
     statusMessage: 'License Recovered'
   } as any),
   requestTransfer: (key, reason) => callTauri('request_transfer', { key, reason }, true),
