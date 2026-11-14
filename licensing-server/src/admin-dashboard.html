@@ -332,7 +332,7 @@
           <div class="panel">
             <div class="panel-header"><span class="panel-title">&#128203; Registered Licenses</span><span id="lic-count" class="tag tag-amber">0</span></div>
             <div class="panel-body" style="padding:0">
-              <table><thead><tr><th>Customer</th><th>License Key</th><th>Type</th><th>Status</th><th>Action</th></tr></thead>
+              <table><thead><tr><th>Customer</th><th>License Key</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody id="licenses-tbody"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody></table>
             </div>
           </div>
@@ -633,7 +633,12 @@
       <td class="mono" style="color:var(--amber);user-select:all;font-size:11px">${esc(l.license_key)}</td>
       <td style="text-transform:uppercase;font-size:10px;color:var(--muted)">${l.license_type}</td>
       <td>${statusTag(l.status)}</td>
-      <td>${l.status!=='suspended'?`<button class="btn btn-red" style="font-size:9px;padding:4px 10px" onclick="suspendLicense('${l._id}')">Suspend</button>`:'<span style="color:var(--muted);font-size:10px">Suspended</span>'}</td></tr>`).join('');
+      <td>
+        <div style="display:flex;gap:6px;align-items:center">
+          ${l.status!=='suspended'?`<button class="btn btn-amber" style="font-size:9px;padding:3px 8px" onclick="suspendLicense('${l._id}')">Suspend</button>`:'<span style="color:var(--muted);font-size:10px">Suspended</span>'}
+          <button class="btn btn-red" style="font-size:9px;padding:3px 8px" onclick="deleteLicense('${l._id}','${esc(l.license_key)}')">Delete</button>
+        </div>
+      </td></tr>`).join('');
   }
 
   function renderTransfers() {
@@ -751,6 +756,27 @@
     if(btn){btn.classList.add('btn-loading');btn.disabled=true;}
     try {await api('/api/v1/admin/licenses/deactivate','POST',{licenseId:id});await fetchLicenses();renderLicenses();await fetchStats();renderStats();}
     catch(e){alert('Error: '+e.message);if(btn){btn.classList.remove('btn-loading');btn.disabled=false;}}
+  }
+
+  async function deleteLicense(id, key) {
+    if (!confirm(`⚠️ PERMANENT DELETE CONFIRMATION:\n\nAre you sure you want to permanently delete license key:\n"${key}"?\n\nThis will remove the license from the system. This action cannot be undone.`)) return;
+    const btn = event.target;
+    if (btn) { btn.classList.add('btn-loading'); btn.disabled = true; }
+    try {
+      const data = await api(`/api/v1/admin/licenses/${id}`, 'DELETE');
+      if (data.success) {
+        await fetchLicenses();
+        renderLicenses();
+        await fetchStats();
+        renderStats();
+      } else {
+        alert(data.error || 'Failed to delete license.');
+      }
+    } catch(e) {
+      alert('Error: ' + e.message);
+    } finally {
+      if (btn) { btn.classList.remove('btn-loading'); btn.disabled = false; }
+    }
   }
 
   async function approveTransfer(id) {

@@ -902,6 +902,26 @@ app.post('/api/v1/admin/licenses/deactivate', adminAuth, async (req: Request, re
   }
 });
 
+// DELETE /admin/licenses/:id - Delete a license and its activations permanently
+app.delete('/api/v1/admin/licenses/:id', adminAuth, async (req: Request, res: Response): Promise<any> => {
+  try {
+    const license = await License.findById(req.params.id);
+    if (!license) {
+      return res.status(404).json({ success: false, error: 'License not found' });
+    }
+    await License.findByIdAndDelete(req.params.id);
+    await LicenseActivation.deleteMany({ license_id: req.params.id });
+    await AuditLog.create({
+      action_type: 'LICENSE_DELETED',
+      details: `Deleted license: ${license.license_key} (ID: ${license._id})`,
+      performed_by: 'admin'
+    });
+    res.json({ success: true, message: 'License permanently deleted.' });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /admin/trials
 app.get('/api/v1/admin/trials', adminAuth, async (req: Request, res: Response) => {
   try {
