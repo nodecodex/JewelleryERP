@@ -236,6 +236,8 @@ pub struct LicenseStatus {
     pub expiry_date: Option<String>,
     #[serde(rename = "isTrial")]
     pub is_trial: bool,
+    #[serde(rename = "isTrialActive")]
+    pub is_trial_active: bool,
     #[serde(rename = "trialDaysRemaining")]
     pub trial_days_remaining: Option<i64>,
     #[serde(rename = "statusMessage")]

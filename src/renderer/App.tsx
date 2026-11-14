@@ -58,8 +58,9 @@ export default function App() {
       const status = await (window as any).api.getLicenseStatus();
       setLicense(status);
       
-      if (status.activated) {
-        // Only load companies if software is licensed
+      const isAllowed = status.activated || status.isTrialActive || (status.isTrial && (status.trialDaysRemaining ?? 0) > 0);
+      if (isAllowed) {
+        // Only load companies if software is licensed or has active trial
         await loadCompanies();
       }
     } catch (e) {
@@ -78,8 +79,10 @@ export default function App() {
     );
   }
 
+  const isUnlocked = license && (license.activated || license.isTrialActive || (license.isTrial && (license.trialDaysRemaining ?? 0) > 0));
+
   // Force licensing screen if not activated and not in active trial
-  if (!license || (!license.activated && !license.isTrialActive)) {
+  if (!isUnlocked) {
     return (
       <div className="h-screen w-screen bg-slate-950 flex items-center justify-center p-4 select-none relative overflow-hidden dark">
         {/* Background Decorative Elements */}
